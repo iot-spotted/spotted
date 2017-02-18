@@ -8,8 +8,6 @@
 import Foundation
 import CloudKit
 import JSQMessagesViewController
-import UzysAssetsPickerController
-import SwiftLocation
 import VIPhotoView
 import MapKit
 import UIImage_Resize
@@ -17,7 +15,7 @@ import Async
 import EVCloudKitDao
 import EVReflection
 
-class ChatViewController: JSQMessagesViewController, UIActionSheetDelegate, UzysAssetsPickerControllerDelegate, MKMapViewDelegate {
+class ChatViewController: JSQMessagesViewController, MKMapViewDelegate {
 
     var chatWithId: String = ""
     var chatWithDisplayName: String = ""
@@ -29,8 +27,6 @@ class ChatViewController: JSQMessagesViewController, UIActionSheetDelegate, Uzys
 
     var localData: [JSQMessage?] = []
 
-    var picker: UzysAssetsPickerController = UzysAssetsPickerController()
-
     var recordIdMeForConnection: String = ""
     var recordIdOtherForConnection: String = ""
     var viewAppeared = false
@@ -38,8 +34,8 @@ class ChatViewController: JSQMessagesViewController, UIActionSheetDelegate, Uzys
     // Start the conversation
     func setContact(_ recordId: String, firstName: String, lastName: String) {
         chatWithId = "42"
-        chatWithFirstName = firstName
-        chatWithLastName = lastName
+        chatWithFirstName = "Spotted"
+        chatWithLastName = "Group"
         chatWithDisplayName = "\(firstName) \(lastName)"
         if dataID != "" {
             EVCloudData.publicDB.disconnect(dataID)
@@ -60,11 +56,6 @@ class ChatViewController: JSQMessagesViewController, UIActionSheetDelegate, Uzys
         self.collectionView!.collectionViewLayout.springinessEnabled = false
         self.showLoadEarlierMessagesHeader = false
         //self.inputToolbar.contentView.leftBarButtonItem
-
-        // configure UzysAssetsPickerController
-        let config = UzysAppearanceConfig()
-        config.finishSelectionButtonColor = UIColor.green
-        UzysAssetsPickerController.setUp(config)
 
         self.senderId = "~"
         self.senderDisplayName = "~"
@@ -103,7 +94,7 @@ class ChatViewController: JSQMessagesViewController, UIActionSheetDelegate, Uzys
         self.senderDisplayName = showNameFor(EVCloudData.publicDB.dao.activeUser)
 
         // The data connection to the conversation
-        EVCloudData.publicDB.connect(Message(), predicate: NSPredicate(format: "From_ID in %@ AND To_ID in %@", [recordIdMeForConnection, recordIdOtherForConnection], [recordIdOtherForConnection, recordIdMeForConnection]), filterId: dataID, configureNotificationInfo: { notificationInfo in
+        EVCloudData.publicDB.connect(Message(), predicate: NSPredicate(format: "To_ID in %@", [recordIdOtherForConnection], [recordIdOtherForConnection, recordIdMeForConnection]), filterId: dataID, configureNotificationInfo: { notificationInfo in
             }, completionHandler: { results, status in
                 EVLog("Conversation message results = \(results.count)")
                 self.localData = [JSQMessage?](repeating: nil, count: results.count)
@@ -218,192 +209,6 @@ class ChatViewController: JSQMessagesViewController, UIActionSheetDelegate, Uzys
                 Helper.showError("Could not send message!  \(error.localizedDescription)")
         })
         self.finishSendingMessage()
-    }
-
-    func showActionSheet() {
-        Async.main {
-            let sheet = UIActionSheet(title: "Media", delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: nil, otherButtonTitles: "Send photo", "Send location", "Send video")
-            sheet.show(from: self.inputToolbar!)
-        }
-    }
-
-    // ------------------------------------------------------------------------
-    // MARK: - Accessory button actions
-    // ------------------------------------------------------------------------
-    func actionSheet(_ actionSheet: UIActionSheet, didDismissWithButtonIndex buttonIndex: Int) {
-        if buttonIndex == actionSheet.cancelButtonIndex {
-            return
-        }
-        switch buttonIndex {
-        case 1:
-            addPhoto()
-        case 2:
-            addLocation()
-        case 3:
-            addVideo()
-        default:
-            EVLog("Can not happen!")
-        }
-    }
-
-    func addPhoto() {
-        picker.delegate = self
-        picker.maximumNumberOfSelectionVideo = 0
-        picker.maximumNumberOfSelectionPhoto = 5
-        self.present(picker, animated:true, completion:nil)
-    }
-
-    func addVideo() {
-        picker.delegate = self
-        picker.maximumNumberOfSelectionVideo = 1
-        picker.maximumNumberOfSelectionPhoto = 0
-        self.present(picker, animated:true, completion:nil)
-    }
-
-    func addLocation() {
-/*        do {
-            try LocationManager.shared.currentLocation(.Room, timeout: 20, onSuccess: { (location) -> Void in
-                if location == nil {
-                    return
-                }
-                print("1. Location found \(location?.localizedDescription)")
-                let message = Message()
-                message.setFromFields(EVCloudData.publicDB.dao.activeUser.userRecordID!.recordName)
-                message.FromFirstName = self.senderDisplayName
-                message.setToFields(self.chatWithId)
-                message.ToFirstName = self.chatWithFirstName
-                message.ToLastName = self.chatWithLastName
-                if location!.course < 0 {
-                    message.Text = "±\(location!.verticalAccuracy)m"
-                } else {
-                    message.Text = "±\(location!.verticalAccuracy)m, \(Int(location!.speed/0.36)/10)kmh \(self.direction(Int(location!.course))) \(location!.course)°"
-                }
-                message.MessageType = MessageTypeEnum.Location.rawValue
-                message.Longitude = (location!.coordinate.longitude as Double)
-                message.Latitude = (location!.coordinate.latitude as Double)
-                EVCloudData.publicDB.saveItem(message, completionHandler: {record in
-                    EVLog("saveItem location Message: \(record.recordID.recordName)");
-                    self.finishSendingMessage()
-                    }, errorHandler: {error in
-                        Helper.showError("Could not send location message!  \(error.localizedDescription)")
-                        self.finishSendingMessage()
-                })
-            }, onFail: { (error) -> Void in
-                Helper.showError("Location authorization has been refused, unable to  send location")
-            })
-        } catch {
-            Helper.showError("Location authorization has been refused, unable to  send location")
-        } */
-    }
-
-    // Get the direction indicator for a degree
-    func direction(_ degree: Int) -> String {
-        switch(degree) {
-        case 338...360:
-            return "N"
-        case 0...22:
-            return "N"
-        case 23...67:
-            return "NO"
-        case 68...112:
-            return "O"
-        case 113...158:
-            return "ZO"
-        case 159...202:
-            return "Z"
-        case 203...248:
-            return "ZW"
-        case 249...292:
-            return "W"
-        case 293...337:
-            return "NW"
-        default:
-            return ""
-        }
-    }
-
-    // Callback from the asset picker
-    public func uzysAssetsPickerController(_ picker: UzysAssetsPickerController!, didFinishPickingAssets assets: [Any]!) {
-        picker.dismiss(animated: true, completion: nil)
-        var i: Int = 0
-        for asset in assets {
-            i += 1
-            let mediaType = (asset as! ALAsset).value(forProperty: "ALAssetPropertyType") as! String
-            if mediaType == "ALAssetTypePhoto" {
-                JSQSystemSoundPlayer.jsq_playMessageSentSound()
-
-                // make sure we have a file with url
-                let docDirPath = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true)[0] as NSString
-                let filePath =  docDirPath.appendingPathComponent("Image_\(i).png")
-                let image = getUIImageFromCTAsset(asset as! ALAsset)
-                if let myData = UIImagePNGRepresentation(image) {
-                    try? myData.write(to: URL(fileURLWithPath: filePath), options: [.atomic])
-                }
-
-                // Create an asset object for the attached image
-                let assetC = Asset()
-                assetC.File = CKAsset(fileURL: URL(fileURLWithPath: filePath))
-                assetC.FileName = "Image_\(i).png"
-                assetC.FileType = "png"
-
-                // Save the asset
-                EVCloudData.publicDB.saveItem(assetC, completionHandler: {record in
-                    EVLog("saveItem Asset: \(record.recordID.recordName)")
-
-                    // rename the image to recordId for a quick cache reference
-                    let filemanager = FileManager.default
-                    let fromFilePath =  docDirPath.appendingPathComponent(record.FileName)
-                    let toPath = docDirPath.appendingPathComponent(record.recordID.recordName + ".png")
-                    do {
-                        try filemanager.moveItem(atPath: fromFilePath, toPath: toPath)
-                    } catch {}
-
-                    // Create the message object that represents the asset
-                    let message = Message()
-                    
-                    if #available(iOS 10.0, *) {
-                        message.setFromFields((EVCloudData.publicDB.dao.activeUser as? CKUserIdentity)?.userRecordID?.recordName ?? "")
-                    } else {
-                        message.setFromFields((EVCloudData.publicDB.dao.activeUser as? CKDiscoveredUserInfo)?.userRecordID?.recordName ?? "")
-                    }
-                   
-                    message.FromFirstName = self.senderDisplayName
-                    message.setToFields(self.chatWithId)
-                    message.ToFirstName = self.chatWithFirstName
-                    message.ToLastName = self.chatWithLastName
-                    message.Text = "<foto>"
-                    message.MessageType = MessageTypeEnum.Picture.rawValue
-                    message.setAssetFields(record.recordID.recordName)
-
-                    EVCloudData.publicDB.saveItem(message, completionHandler: {record in
-                        EVLog("saveItem Message: \(record.recordID.recordName)")
-                        self.finishSendingMessage()
-                    }, errorHandler: {error in
-                        Helper.showError("Could not send picture message!  \(error.localizedDescription)")
-                        self.finishSendingMessage()
-                    })
-
-                }, errorHandler: {error in
-                    Helper.showError("Could not send picture!  \(error.localizedDescription)")
-                    self.finishSendingMessage()
-                })
-            } else if mediaType == "ALAssetTypeVideo" {
-                Helper.showError("Sending video's is not supported yet")
-            } else {
-                Helper.showError("Unknown media type")
-            }
-        }
-    }
-
-    // The image picker will return an CTAsset. We need an UIImage.
-    func getUIImageFromCTAsset(_ asset: ALAsset) -> UIImage {
-        let representation: ALAssetRepresentation = (asset as ALAsset).defaultRepresentation()
-        let img: CGImage = representation.fullResolutionImage().takeUnretainedValue()
-        let scale: CGFloat = CGFloat(representation.scale())
-        let orientation: UIImageOrientation = UIImageOrientation(rawValue: representation.orientation().rawValue)!
-        let image: UIImage = UIImage(cgImage: img, scale: scale, orientation: orientation)
-
-        return image.resizedImageToFit(in: CGSize(width: 640, height: 640), scaleIfSmaller: true)
     }
 
     // ------------------------------------------------------------------------
@@ -586,6 +391,10 @@ class ChatViewController: JSQMessagesViewController, UIActionSheetDelegate, Uzys
         var count: Int = 0
         let lockQueue = DispatchQueue(label: "nl.evict.AppMessage.ChatLockQueue", attributes: [])
         lockQueue.sync {
+            print("!!!!!")
+            print("publicdb.data")
+            print(self.dataID)
+//            print(EVCloudData.publicDB.data[self.dataID])
             count = EVCloudData.publicDB.data[self.dataID]!.count
             if self.localData.count != count {
                 self.localData = [JSQMessage?](repeating: nil, count: count)
