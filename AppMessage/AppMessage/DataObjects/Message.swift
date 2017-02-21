@@ -33,8 +33,7 @@ class Message: CKDataObject {
         self.To_ID = id
         self.To = CKReference(recordID: CKRecordID(recordName: id), action: CKReferenceAction.deleteSelf)
     }
-    var ToFirstName: String = ""
-    var ToLastName: String = ""
+    var GroupChatName: String = ""
 
     // Message text
     var Text: String = ""
@@ -49,7 +48,4 @@ class Message: CKDataObject {
         self.Asset_ID = id
         self.Asset = CKReference(recordID: CKRecordID(recordName: id), action: CKReferenceAction.none)
     }
-
-    var Latitude: Double = 52.8350711
-    var Longitude: Double = 4.8653827
 }

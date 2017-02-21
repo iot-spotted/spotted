@@ -18,9 +18,7 @@ import EVReflection
 class ChatViewController: JSQMessagesViewController, MKMapViewDelegate {
 
     var chatWithId: String = ""
-    var chatWithDisplayName: String = ""
-    var chatWithFirstName: String = ""
-    var chatWithLastName: String = ""
+    var groupChatName: String = ""
     var dataID: String = ""
     var senderFirstName: String = ""
     var senderLastName: String = ""
@@ -32,14 +30,24 @@ class ChatViewController: JSQMessagesViewController, MKMapViewDelegate {
     var viewAppeared = false
 
     // Start the conversation
-    func setContact(_ recordId: String, firstName: String, lastName: String) {
+    func setContact(_ recordId: String, fakeGroupChatName: String) {
         chatWithId = "42"
-        chatWithFirstName = "Spotted"
-        chatWithLastName = "Group"
-        chatWithDisplayName = "\(firstName) \(lastName)"
-        if dataID != "" {
-            EVCloudData.publicDB.disconnect(dataID)
+        groupChatName = "Spotted Group"
+        
+        if #available(iOS 10.0, *) {
+            senderFirstName = (EVCloudData.publicDB.dao.activeUser as? CKUserIdentity)?.nameComponents?.givenName ?? ""
+            senderLastName = (EVCloudData.publicDB.dao.activeUser as? CKUserIdentity)?.nameComponents?.familyName ?? ""
+        } else {
+            senderFirstName = (EVCloudData.publicDB.dao.activeUser as? CKDiscoveredUserInfo)?.firstName ?? ""
+            senderLastName    = (EVCloudData.publicDB.dao.activeUser as? CKDiscoveredUserInfo)?.lastName ?? ""
         }
+        print("names")
+        print(senderFirstName)
+        print(senderLastName)
+        
+//        if dataID != "" {
+//            EVCloudData.publicDB.disconnect(dataID)
+//        }
         dataID =  "Message_\(chatWithId)"
 
         initializeCommunication()
@@ -48,7 +56,7 @@ class ChatViewController: JSQMessagesViewController, MKMapViewDelegate {
     // Setting up the components
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.title = groupChatName
         // configure JSQMessagesViewController
         let defaultAvatarSize: CGSize = CGSize(width: kJSQMessagesCollectionViewAvatarSizeDefault, height: kJSQMessagesCollectionViewAvatarSizeDefault)
         self.collectionView!.collectionViewLayout.incomingAvatarViewSize = defaultAvatarSize //CGSizeZero
@@ -195,12 +203,13 @@ class ChatViewController: JSQMessagesViewController, MKMapViewDelegate {
         } else {
             message.setFromFields((EVCloudData.publicDB.dao.activeUser as? CKDiscoveredUserInfo)?.userRecordID?.recordName ?? "")
         }
-        
-        message.FromFirstName = self.senderFirstName
-        message.FromLastName = self.senderLastName
+        print("didpresssend")
+        print(senderFirstName)
+        print(senderLastName)
+        message.FromFirstName = senderFirstName
+        message.FromLastName = senderLastName
         message.setToFields(chatWithId)
-        message.ToFirstName = chatWithFirstName
-        message.ToLastName = chatWithLastName
+        message.GroupChatName = groupChatName
         message.Text = text
         EVCloudData.publicDB.saveItem(message, completionHandler: { message in
                 self.finishSendingMessage()
@@ -272,6 +281,8 @@ class ChatViewController: JSQMessagesViewController, MKMapViewDelegate {
                 return nil
             }
         }
+        print("top label")
+        print(message.senderDisplayName)
         return NSAttributedString(string: message.senderDisplayName)
     }
 
@@ -312,7 +323,7 @@ class ChatViewController: JSQMessagesViewController, MKMapViewDelegate {
             //initials = "\(Array(arrayLiteral: firstName)[0]) \(Array(arrayLiteral: lastName)[0])"
         } else {
             //initials = "\(Array(arrayLiteral: chatWithFirstName)[0]) \(Array(arrayLiteral: chatWithLastName)[0])"
-            initials = "\(String(describing: chatWithFirstName.characters.first)) \(String(describing: chatWithLastName.characters.first))"
+            initials = "\(String(describing: message.senderDisplayName.characters.first)) \(String(describing: message.senderDisplayName.characters.first))"
         }
 
         let size: CGFloat = 14
@@ -357,20 +368,6 @@ class ChatViewController: JSQMessagesViewController, MKMapViewDelegate {
             photoView?.autoresizingMask = UIViewAutoresizing(rawValue:1 << 6 - 1)
             viewController.view.addSubview(photoView!)
             self.navigationController!.pushViewController(viewController, animated: true)
-        } else if data.MessageType == MessageTypeEnum.Location.rawValue {
-            viewController.title = "Map"
-            let map = MKMapView(frame:self.navigationController!.view.bounds)
-            map.delegate = self
-            map.showsUserLocation = true
-
-            let point = MKPointAnnotation()
-            point.coordinate = CLLocationCoordinate2D(latitude: data.Latitude, longitude: data.Longitude)
-            point.title = "\(data.FromFirstName) \(data.FromLastName)"
-            point.subtitle = data.Text
-
-            map.addAnnotation(point)
-            viewController.view.addSubview(map)
-            self.navigationController!.pushViewController(viewController, animated: true)
         }
     }
 
@@ -391,9 +388,9 @@ class ChatViewController: JSQMessagesViewController, MKMapViewDelegate {
         var count: Int = 0
         let lockQueue = DispatchQueue(label: "nl.evict.AppMessage.ChatLockQueue", attributes: [])
         lockQueue.sync {
-            print("!!!!!")
-            print("publicdb.data")
-            print(self.dataID)
+//            print("!!!!!")
+//            print("publicdb.data")
+//            print(self.dataID)
 //            print(EVCloudData.publicDB.data[self.dataID])
             count = EVCloudData.publicDB.data[self.dataID]!.count
             if self.localData.count != count {
@@ -428,24 +425,16 @@ class ChatViewController: JSQMessagesViewController, MKMapViewDelegate {
         // receiving or sending..
         var sender = self.senderId
         var senderName = self.senderDisplayName
+        //print("getmessageforid")
+        //print(self.senderDisplayName)
         if data.From_ID != self.senderId {
             sender = self.chatWithId
-            senderName = self.chatWithFirstName + " " + self.chatWithLastName
+            senderName = data.FromFirstName + " " + data.FromLastName
         }
 
         // normal, location or media message
         if data.MessageType == MessageTypeEnum.Text.rawValue {
             message = JSQMessage(senderId: sender, senderDisplayName: senderName, date: data.creationDate, text: data.Text)
-        } else if data.MessageType == MessageTypeEnum.Location.rawValue {
-            let location = CLLocation(latitude: CLLocationDegrees(data.Latitude), longitude: CLLocationDegrees(data.Longitude))
-            let locationItem = JSQLocationMediaItem()
-            locationItem.setLocation(location, withCompletionHandler: {
-                self.collectionView!.reloadData()
-//                self.collectionView.reloadItemsAtIndexPaths([NSIndexPath(forItem: id as Int, inSection: 0 as Int)])
-//                self.collectionView.reloadItemsAtIndexPaths(self.collectionView.indexPathsForVisibleItems())
-
-            })
-            message = JSQMessage(senderId: sender, senderDisplayName: senderName, date:data.creationDate, media: locationItem)
         } else if data.MessageType == MessageTypeEnum.Picture.rawValue {
             let docDirPath = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true)[0] as NSString
             let filePath =  docDirPath.appendingPathComponent(data.Asset_ID + ".png")

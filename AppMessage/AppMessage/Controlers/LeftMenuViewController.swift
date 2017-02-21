@@ -118,23 +118,23 @@ class LeftMenuViewController: UIViewController, UITableViewDataSource, UITableVi
 
     func startChat(_ user: AnyObject) {
         if #available(iOS 10.0, *) {
-            let firstName: String = (user as! CKUserIdentity).nameComponents?.givenName ?? ""
-            let lastName: String = (user as! CKUserIdentity).nameComponents?.familyName ?? ""
-            startChat((user as! CKUserIdentity).userRecordID!.recordName, firstName: firstName, lastName: lastName)
+//            let firstName: String = (user as! CKUserIdentity).nameComponents?.givenName ?? ""
+//            let lastName: String = (user as! CKUserIdentity).nameComponents?.familyName ?? ""
+            startChat((user as! CKUserIdentity).userRecordID!.recordName, groupChatName: "lol")
         } else {
-            let firstName: String = (user as! CKDiscoveredUserInfo).firstName ?? ""
-            let lastName: String = (user as! CKDiscoveredUserInfo).lastName ?? ""
-            startChat((user as! CKDiscoveredUserInfo).userRecordID!.recordName, firstName: firstName, lastName: lastName)
+//            let firstName: String = (user as! CKDiscoveredUserInfo).firstName ?? ""
+//            let lastName: String = (user as! CKDiscoveredUserInfo).lastName ?? ""
+            startChat((user as! CKDiscoveredUserInfo).userRecordID!.recordName, groupChatName: "lol")
         }
     }
 
-    func startChat(_ recordId: String, firstName: String, lastName: String) {
+    func startChat(_ recordId: String, groupChatName: String) {
         if self.chatViewController == nil {
             self.chatViewController = self.storyboard?.instantiateViewController(withIdentifier: "chatViewController") as? ChatViewController
         }
         self.sideMenuViewController?.contentViewController = UINavigationController(rootViewController: self.chatViewController!)
         if self.chatViewController!.chatWithId != recordId {
-            chatViewController!.setContact(recordId, firstName: firstName, lastName: lastName)
+            chatViewController!.setContact(recordId, fakeGroupChatName: groupChatName)
         }
         self.sideMenuViewController!.hideMenuViewController()
     }
@@ -204,7 +204,7 @@ class LeftMenuViewController: UIViewController, UITableViewDataSource, UITableVi
                 return status == CompletionStatus.partialResult && results.count < 200 // Continue reading if we have less than 200 records and if there are more.
             }, insertedHandler: { item in
                 EVLog("Message to me inserted \(item)")
-                self.startChat(item.From_ID, firstName: item.ToFirstName, lastName: item.ToLastName)
+                self.startChat(item.From_ID, groupChatName: item.GroupChatName)
             }, updatedHandler: { item, dataIndex in
                 EVLog("Message to me updated \(item)")
             }, deletedHandler: { recordId, dataIndex in

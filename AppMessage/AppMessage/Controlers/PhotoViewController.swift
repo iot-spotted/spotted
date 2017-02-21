@@ -41,6 +41,16 @@ class PhotoViewController: UIViewController {
 
     // MARK: - Action methods
     
+    @IBAction func saver(sender: UIButton) {
+
+        if #available(iOS 10.3, *) {
+            UIApplication.shared.setAlternateIconName("Test1", completionHandler: nil)
+        } else {
+            // Fallback on earlier versions
+        }
+
+        }
+    
     @IBAction func save(sender: UIButton) {
         guard let imageToSave = image else {
             return
@@ -83,10 +93,8 @@ class PhotoViewController: UIViewController {
                 message.setFromFields((EVCloudData.publicDB.dao.activeUser as? CKDiscoveredUserInfo)?.userRecordID?.recordName ?? "")
             }
             
-            message.FromFirstName = "bob" // self.senderDisplayName
             message.setToFields("42") //self.chatWithId)
-            message.ToFirstName = "ToFirst" // self.chatWithFirstName
-            message.ToLastName = "ToLast" // self.chatWithLastName
+            message.GroupChatName = "Spotted Group" // groupChatName
             message.Text = "<foto>"
             message.MessageType = MessageTypeEnum.Picture.rawValue
             message.setAssetFields(record.recordID.recordName)
