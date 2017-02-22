@@ -12,6 +12,7 @@ import AVFoundation
 class HomeViewController: UIViewController {
     
     @IBOutlet var cameraButton:UIButton!
+    @IBOutlet var chatButton:UIButton!
     
     let captureSession = AVCaptureSession()
     
@@ -65,6 +66,7 @@ class HomeViewController: UIViewController {
             
             // Bring the camera button to front
             view.bringSubview(toFront: cameraButton)
+            view.bringSubview(toFront: chatButton)
             captureSession.startRunning()
         } catch {
             print(error)
@@ -87,6 +89,11 @@ class HomeViewController: UIViewController {
         view.addGestureRecognizer(zoomOutGestureRecognizer)
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        UIApplication.shared.statusBarStyle = UIStatusBarStyle.lightContent
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -104,6 +111,11 @@ class HomeViewController: UIViewController {
             }
         })
     }
+    
+    @IBAction func goToChat(sender: UIButton) {
+        NotificationCenter.default.post(name: Notification.Name(rawValue:"loadChat"), object: nil)
+    }
+
     
     // MARK: - Camera methods
     

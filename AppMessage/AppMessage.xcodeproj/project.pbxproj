@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		23AD4DAB1E5E4FFA007EDCA7 /* CameraButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 23AD4DA81E5E4FFA007EDCA7 /* CameraButton.png */; };
+		23AD4DAC1E5E4FFA007EDCA7 /* CameraButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 23AD4DA91E5E4FFA007EDCA7 /* CameraButton@2x.png */; };
+		23AD4DAD1E5E4FFA007EDCA7 /* CameraButton@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 23AD4DAA1E5E4FFA007EDCA7 /* CameraButton@3x.png */; };
+		23AD4DAF1E5E517C007EDCA7 /* chatIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 23AD4DAE1E5E517C007EDCA7 /* chatIcon.png */; };
 		23C044031E5C9E8C0054C986 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23C044021E5C9E8C0054C986 /* MainViewController.swift */; };
 		2D064A7E1E5BDAB0001902B9 /* Test1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D064A7D1E5BDAB0001902B9 /* Test1@2x.png */; };
 		2D0932101E57B176004900EE /* PhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D09320F1E57B176004900EE /* PhotoViewController.swift */; };
@@ -47,6 +51,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		23AD4DA81E5E4FFA007EDCA7 /* CameraButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CameraButton.png; sourceTree = "<group>"; };
+		23AD4DA91E5E4FFA007EDCA7 /* CameraButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "CameraButton@2x.png"; sourceTree = "<group>"; };
+		23AD4DAA1E5E4FFA007EDCA7 /* CameraButton@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "CameraButton@3x.png"; sourceTree = "<group>"; };
+		23AD4DAE1E5E517C007EDCA7 /* chatIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = chatIcon.png; sourceTree = "<group>"; };
 		23C044021E5C9E8C0054C986 /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		2D064A7D1E5BDAB0001902B9 /* Test1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Test1@2x.png"; sourceTree = "<group>"; };
 		2D09320F1E57B176004900EE /* PhotoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoViewController.swift; sourceTree = "<group>"; };
@@ -191,6 +199,9 @@
 		7FC46F6819813282000A875F /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				23AD4DA81E5E4FFA007EDCA7 /* CameraButton.png */,
+				23AD4DA91E5E4FFA007EDCA7 /* CameraButton@2x.png */,
+				23AD4DAA1E5E4FFA007EDCA7 /* CameraButton@3x.png */,
 				2D064A7D1E5BDAB0001902B9 /* Test1@2x.png */,
 				7F5DFB511A86C04100628235 /* JSQMessagesViewController.xib */,
 				7F5DFB4F1A86BC8200628235 /* UzysAssetPickerController.bundle */,
@@ -199,6 +210,7 @@
 				7FD051C019C591B2009B7FEE /* image-not-available.jpg */,
 				7FC46F9319825B33000A875F /* Default-568h@2x.png */,
 				7FC46F641981259A000A875F /* test.png */,
+				23AD4DAE1E5E517C007EDCA7 /* chatIcon.png */,
 				7F61CA3719829CC7005EF254 /* MessageBubble@2x.png */,
 				7F61CA3819829CC7005EF254 /* MessageIncoming.aiff */,
 				7F61CA3919829CC7005EF254 /* MessageOutgoing.aiff */,
@@ -333,13 +345,17 @@
 				7F61CA3B19829CC7005EF254 /* MessageIncoming.aiff in Resources */,
 				7F434A3019628D490081F35C /* Images.xcassets in Resources */,
 				7F61CA3A19829CC7005EF254 /* MessageBubble@2x.png in Resources */,
+				23AD4DAC1E5E4FFA007EDCA7 /* CameraButton@2x.png in Resources */,
 				7F7C03621A382C3C00054ED7 /* Localizable.strings in Resources */,
+				23AD4DAD1E5E4FFA007EDCA7 /* CameraButton@3x.png in Resources */,
 				7FC46F651981259A000A875F /* test.png in Resources */,
 				7FC46F7B198134C8000A875F /* Storyboard.storyboard in Resources */,
 				7FC46F9419825B33000A875F /* Default-568h@2x.png in Resources */,
 				7FEC7BFD1AEA5EE50004F81D /* LaunchScreen.xib in Resources */,
 				2D064A7E1E5BDAB0001902B9 /* Test1@2x.png in Resources */,
+				23AD4DAF1E5E517C007EDCA7 /* chatIcon.png in Resources */,
 				7FD051C119C591B2009B7FEE /* image-not-available.jpg in Resources */,
+				23AD4DAB1E5E4FFA007EDCA7 /* CameraButton.png in Resources */,
 				7F5DFB4E1A86B95600628235 /* UzysAssetsPickerController.xib in Resources */,
 				7F5DFB501A86BC8200628235 /* UzysAssetPickerController.bundle in Resources */,
 			);

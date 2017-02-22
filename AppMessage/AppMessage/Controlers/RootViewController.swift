@@ -53,7 +53,7 @@ class RootViewController: UIViewController {
                 EVLog("discoverUserInfo : \(showNameFor(user))")
                 Async.main {
                     let storyboard = UIStoryboard(name: "Storyboard", bundle: nil);
-                     self.viewController = storyboard.instantiateViewController(withIdentifier: "menuViewController")
+                     self.viewController = storyboard.instantiateViewController(withIdentifier: "mainViewController")
                         self.present(self.viewController!, animated: false, completion: nil)
                     
                 }

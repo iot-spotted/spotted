@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12100" systemVersion="16E144f" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="q2B-Gd-WuU">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12100" systemVersion="16E144f" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="ljn-E3-VY4">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -86,7 +86,6 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </toolbar>
                     <connections>
-                        <segue destination="ehf-XS-QDs" kind="relationship" relationship="rootViewController" id="PY5-w1-6ug"/>
                         <segue destination="hE7-GG-b0k" kind="show" identifier="ToHome" id="H4q-cQ-a0s"/>
                         <segue destination="ezV-0U-QD4" kind="show" identifier="ToContacts" id="KhY-az-Qop"/>
                         <segue destination="3HD-e9-ogD" kind="show" identifier="toSettings" id="T5H-wl-wup"/>
@@ -101,7 +100,7 @@
         <!--Main View Controller-->
         <scene sceneID="iL2-Rw-u96">
             <objects>
-                <viewController id="q2B-Gd-WuU" customClass="MainViewController" customModule="AppMessage" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="mainViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="q2B-Gd-WuU" customClass="MainViewController" customModule="AppMessage" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y9q-2b-8xV"/>
                         <viewControllerLayoutGuide type="bottom" id="vnO-3K-ksQ"/>
@@ -110,7 +109,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" bounces="NO" pagingEnabled="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HOc-HV-8W5">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" bounces="NO" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HOc-HV-8W5">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </scrollView>
@@ -137,12 +136,20 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2kh-bf-icf" userLabel="Camera Button">
-                                <rect key="frame" x="164" y="546" width="46" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2kh-bf-icf" userLabel="Camera Button">
+                                <rect key="frame" x="147" y="514" width="80" height="80"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button"/>
+                                <state key="normal" image="CameraButton.png"/>
                                 <connections>
                                     <action selector="captureWithSender:" destination="ehf-XS-QDs" eventType="touchUpInside" id="1ih-Un-ve0"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K8f-ZH-4wN">
+                                <rect key="frame" x="320" y="35" width="29" height="26"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" image="chatIcon.png"/>
+                                <connections>
+                                    <action selector="goToChatWithSender:" destination="ehf-XS-QDs" eventType="touchUpInside" id="4Qo-Gf-xfm"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -151,12 +158,13 @@
                     <navigationItem key="navigationItem" title="Home" id="LJF-xa-pKE"/>
                     <connections>
                         <outlet property="cameraButton" destination="2kh-bf-icf" id="XTy-yG-Cbj"/>
+                        <outlet property="chatButton" destination="K8f-ZH-4wN" id="o7j-dA-Tip"/>
                         <segue destination="MKz-K3-d4L" kind="presentation" identifier="showPhoto" id="zve-eu-mh8"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IyL-cy-EXl" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2359.2000000000003" y="-630.13493253373315"/>
+            <point key="canvasLocation" x="2352.8000000000002" y="-621.13943028485767"/>
         </scene>
         <!--Photo View Controller-->
         <scene sceneID="YCP-Gx-HBG">
@@ -522,6 +530,8 @@
         </scene>
     </scenes>
     <resources>
+        <image name="CameraButton.png" width="122" height="122"/>
         <image name="Default.png" width="320" height="568"/>
+        <image name="chatIcon.png" width="816" height="724"/>
     </resources>
 </document>
