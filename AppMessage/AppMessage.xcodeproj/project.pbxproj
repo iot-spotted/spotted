@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		23C044031E5C9E8C0054C986 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23C044021E5C9E8C0054C986 /* MainViewController.swift */; };
 		2D064A7E1E5BDAB0001902B9 /* Test1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D064A7D1E5BDAB0001902B9 /* Test1@2x.png */; };
 		2D0932101E57B176004900EE /* PhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D09320F1E57B176004900EE /* PhotoViewController.swift */; };
 		437210433C525AAAFE3EB76C /* Pods_AppMessage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 495AC817462253B57CD42BDB /* Pods_AppMessage.framework */; };
@@ -46,6 +47,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		23C044021E5C9E8C0054C986 /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		2D064A7D1E5BDAB0001902B9 /* Test1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Test1@2x.png"; sourceTree = "<group>"; };
 		2D09320F1E57B176004900EE /* PhotoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoViewController.swift; sourceTree = "<group>"; };
 		318A421B62B0803009675CC1 /* Pods_OSXTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OSXTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -211,6 +213,7 @@
 				7FC46F8519813D77000A875F /* RootViewController.swift */,
 				7FC8B3B019E0600900C146AE /* MenuViewController.swift */,
 				7FC46F8F19824285000A875F /* HomeViewController.swift */,
+				23C044021E5C9E8C0054C986 /* MainViewController.swift */,
 				7FC46F8B19814C17000A875F /* LeftMenuViewController.swift */,
 				7FC46F8D19824121000A875F /* RightMenuViewController.swift */,
 				7FC46F91198242A5000A875F /* NewsViewController.swift */,
@@ -397,6 +400,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				23C044031E5C9E8C0054C986 /* MainViewController.swift in Sources */,
 				7FC46F92198242A5000A875F /* NewsViewController.swift in Sources */,
 				7FC46F8E19824121000A875F /* RightMenuViewController.swift in Sources */,
 				7F434A4C1962AE780081F35C /* Message.swift in Sources */,
