@@ -11,11 +11,12 @@ import AVFoundation
 import CloudKit
 import EVCloudKitDao
 import EVReflection
-
+import Async
 
 class CameraViewController: UIViewController {
     
     @IBOutlet var cameraButton:UIButton!
+    @IBOutlet var itUserLabel:UILabel!
     
     let captureSession = AVCaptureSession()
     
@@ -27,7 +28,7 @@ class CameraViewController: UIViewController {
     var stillImage: UIImage?
     
     var cameraPreviewLayer:AVCaptureVideoPreviewLayer?
-    var toggleCameraGestureRecognizer = UISwipeGestureRecognizer()
+    //var toggleCameraGestureRecognizer = UISwipeGestureRecognizer()
     
     var zoomGestureRecognizer = UIPinchGestureRecognizer()
     var initialVideoZoomFactor: CGFloat = 0.0
@@ -68,6 +69,9 @@ class CameraViewController: UIViewController {
             
             // Bring the camera button to front
             view.bringSubview(toFront: cameraButton)
+            
+            view.bringSubview(toFront: itUserLabel)
+
             captureSession.startRunning()
         } catch {
             print(error)
@@ -75,9 +79,9 @@ class CameraViewController: UIViewController {
         
         
         // Toggle Camera recognizer
-        toggleCameraGestureRecognizer.direction = .up
-        toggleCameraGestureRecognizer.addTarget(self, action: #selector(toggleCamera))
-        view.addGestureRecognizer(toggleCameraGestureRecognizer)
+        //toggleCameraGestureRecognizer.direction = .up
+        //toggleCameraGestureRecognizer.addTarget(self, action: #selector(toggleCamera))
+        //view.addGestureRecognizer(toggleCameraGestureRecognizer)
         
         // Zoom In recognizer
         zoomGestureRecognizer.addTarget(self, action: #selector(zoom))
@@ -95,7 +99,6 @@ class CameraViewController: UIViewController {
                 }
                 /// QUERY USER
                 print("It_User_ID2=\(It_User_ID)")
-                var It_User = ""
                 
                 EVCloudData.publicDB.dao.query(GameUser(), predicate: NSPredicate(format: "User_Id == '\(It_User_ID)'"),
                                                completionHandler: { results, stats in
@@ -103,15 +106,16 @@ class CameraViewController: UIViewController {
                                                 if (results.count >= 0) {
                                                     print(results[0].UserFirstName)
                                                     print(results[0].UserLastName)
-                                                    It_User = results[0].UserFirstName + " " + results[0].UserLastName
-                                                    print("It_User1=\(It_User)")
+                                                    DispatchQueue.main.async {
+                                                        self.itUserLabel.text = results[0].UserFirstName + " " + results[0].UserLastName
+                                                        print("It_User1=\(results[0].UserFirstName + " " + results[0].UserLastName)")
+                                                    }
                                                 }
                                                 return true
                 }, errorHandler: { error in
                     EVLog("<--- ERROR query Message")
                 })
                 
-                print("It_User2=\(It_User)")
                 /// END QUERY USER
                 return true
         }, errorHandler: { error in
