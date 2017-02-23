@@ -99,6 +99,8 @@ class ChatViewController: JSQMessagesViewController, MKMapViewDelegate {
 
         // Sender settings for the component
         self.senderId = recordIdMe
+        print("activeUser")
+        print(EVCloudData.publicDB.dao.activeUser)
         self.senderDisplayName = showNameFor(EVCloudData.publicDB.dao.activeUser)
 
         // The data connection to the conversation
