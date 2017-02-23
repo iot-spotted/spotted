@@ -91,14 +91,19 @@ class CameraViewController: UIViewController {
             EVLog("<--- ERROR query Message")
         })
 
-        let topBar: UINavigationBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 60))
+
+    }
+    
+    override func viewDidLayoutSubviews() {
+        let topBar: UINavigationBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 60))
         topBar.barStyle = UIBarStyle.blackOpaque
         self.view.addSubview(topBar)
         let barItem = UINavigationItem(title: "Spotted")
-        let back = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.compose, target: nil, action: #selector(goToChat))
-        barItem.rightBarButtonItem = back
+        let chat = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.compose, target: nil, action: #selector(loadChat))
+        let profile = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.organize, target: nil, action: #selector(loadProfile))
+        barItem.rightBarButtonItem = chat
+        barItem.leftBarButtonItem = profile
         topBar.setItems([barItem], animated: false)
-
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -125,8 +130,11 @@ class CameraViewController: UIViewController {
         })
     }
     
-    @IBAction func goToChat(sender: UIButton) {
+    func loadChat() {
         NotificationCenter.default.post(name: Notification.Name(rawValue:"loadChat"), object: nil)
+    }
+    func loadProfile() {
+        NotificationCenter.default.post(name: Notification.Name(rawValue:"loadProfile"), object: nil)
     }
 
     

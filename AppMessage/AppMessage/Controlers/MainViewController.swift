@@ -28,15 +28,15 @@ class MainViewController: UIViewController {
         NotificationCenter.default.addObserver(forName:Notification.Name(rawValue:"loadCamera"),
                                                object:nil, queue:nil,
                                                using:loadCamera)
-        
-        
-        
+        NotificationCenter.default.addObserver(forName:Notification.Name(rawValue:"loadProfile"),
+                                               object:nil, queue:nil,
+                                               using:loadProfile)
+       
         self.profileViewController = UIStoryboard(name: "Storyboard", bundle: nil).instantiateViewController(withIdentifier: "profileViewController") as! ProfileViewController
         self.cameraViewController = UIStoryboard(name: "Storyboard", bundle: nil).instantiateViewController(withIdentifier: "cameraViewController") as! CameraViewController
         self.chatViewController = UIStoryboard(name: "Storyboard", bundle: nil).instantiateViewController(withIdentifier: "chatViewController") as! ChatViewController
         self.chatViewController?.setContact("", fakeGroupChatName: "lol")
-                
-        
+       
         self.addChildViewController(self.chatViewController!)
         self.scrollView!.addSubview((self.chatViewController?.view)!)
         self.chatViewController?.didMove(toParentViewController: self)
@@ -49,26 +49,34 @@ class MainViewController: UIViewController {
         self.scrollView!.addSubview((self.profileViewController?.view)!)
         self.profileViewController?.didMove(toParentViewController: self)
         
-        var frame :CGRect = UIScreen.main.bounds
-        frame.origin.x = frame.width
-        self.cameraViewController?.view.frame = frame
+    }
+    
+    override func viewDidLayoutSubviews() {
         
-        frame.origin.x = 2*frame.width;
-        self.chatViewController?.view.frame = frame;
+        var profileFrame :CGRect = self.profileViewController!.view.frame
+        profileFrame.origin.x = profileFrame.width
+        self.cameraViewController?.view.frame = profileFrame
         
-        let scrollWidth: CGFloat  = 3 * frame.width
-        let scrollHeight: CGFloat  = frame.height
+        var cameraFrame :CGRect = self.cameraViewController!.view.frame
+        cameraFrame.origin.x = 2*cameraFrame.width;
+        self.chatViewController?.view.frame = cameraFrame;
+        
+        let scrollWidth: CGFloat  = 3 * self.view.frame.width
+        let scrollHeight: CGFloat  = self.view.frame.height
         self.scrollView!.contentSize = CGSize(width: scrollWidth, height: scrollHeight);
         self.scrollView!.keyboardDismissMode = .onDrag
         
-        self.scrollView!.scrollRectToVisible(CGRect(x:frame.width,y:0,width:frame.width,height:frame.height), animated: true)
+        self.scrollView!.scrollRectToVisible(CGRect(x:profileFrame.origin.x,y:0,width:cameraFrame.width,height:cameraFrame.height), animated: false)
     }
     
     func loadChat(notification: Notification) {
-        self.scrollView!.scrollRectToVisible(CGRect(x:(self.cameraViewController?.view.frame.width)!,y:0,width:(self.chatViewController?.view.frame.width)!,height:(self.chatViewController?.view.frame.height)!), animated: true)
+        self.scrollView!.scrollRectToVisible(CGRect(x:(self.chatViewController?.view.frame.origin.x)!,y:0,width:(self.chatViewController?.view.frame.width)!,height:(self.chatViewController?.view.frame.height)!), animated: true)
     }
     func loadCamera(notification: Notification) {
-        self.scrollView!.scrollRectToVisible(CGRect(x:0,y:0,width:(self.cameraViewController?.view.frame.width)!,height:(self.cameraViewController?.view.frame.height)!), animated: true)
+        self.scrollView!.scrollRectToVisible(CGRect(x:(self.cameraViewController?.view.frame.origin.x)!,y:0,width:(self.cameraViewController?.view.frame.origin.x)!,height:(self.cameraViewController?.view.frame.height)!), animated: true)
+    }
+    func loadProfile(notification: Notification) {
+        self.scrollView!.scrollRectToVisible(CGRect(x:0,y:0,width:(self.profileViewController?.view.frame.width)!,height:(self.profileViewController?.view.frame.height)!), animated: true)
     }
 
 }

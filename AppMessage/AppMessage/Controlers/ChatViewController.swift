@@ -61,14 +61,17 @@ class ChatViewController: JSQMessagesViewController, MKMapViewDelegate {
         self.senderId = "~"
         self.senderDisplayName = "~"
         
-        let topBar: UINavigationBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 60))
+
+    }
+    
+    override func viewDidLayoutSubviews() {
+        let topBar: UINavigationBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 60))
         topBar.barStyle = UIBarStyle.blackOpaque
         self.view.addSubview(topBar)
         let barItem = UINavigationItem(title: groupChatName)
         let back = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.camera, target: nil, action: #selector(loadCamera))
         barItem.leftBarButtonItem = back
         topBar.setItems([barItem], animated: false)
-
     }
 
     override func viewDidAppear(_ animated: Bool) {

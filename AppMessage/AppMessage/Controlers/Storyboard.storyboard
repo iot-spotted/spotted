@@ -68,7 +68,7 @@
                             <constraint firstItem="HOc-HV-8W5" firstAttribute="leading" secondItem="i4O-s5-Stb" secondAttribute="leading" id="5X7-NO-2RF"/>
                             <constraint firstAttribute="trailing" secondItem="HOc-HV-8W5" secondAttribute="trailing" id="85J-0p-fxC"/>
                             <constraint firstItem="HOc-HV-8W5" firstAttribute="top" secondItem="i4O-s5-Stb" secondAttribute="top" id="Udw-0M-Qko"/>
-                            <constraint firstItem="vnO-3K-ksQ" firstAttribute="top" secondItem="HOc-HV-8W5" secondAttribute="bottom" id="fxW-9x-kDW"/>
+                            <constraint firstAttribute="bottom" secondItem="HOc-HV-8W5" secondAttribute="bottom" id="dcN-OV-IZn"/>
                         </constraints>
                     </view>
                     <connections>
@@ -91,22 +91,25 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Name" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="40" translatesAutoresizingMaskIntoConstraints="NO" id="ZX1-EA-iwF">
-                                <rect key="frame" x="115" y="111" width="260" height="30"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="thy-U3-OWT">
+                                <rect key="frame" x="0.0" y="101" width="375" height="70"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="40"/>
                                 <nil key="textColor"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="42"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <connections>
+                        <outlet property="label" destination="thy-U3-OWT" id="hqx-fm-x4G"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="akj-pV-1BU" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="898.39999999999998" y="51.724137931034484"/>
         </scene>
-        <!--Home-->
+        <!--Camera View Controller-->
         <scene sceneID="ghA-Fs-G6a">
             <objects>
                 <viewController storyboardIdentifier="cameraViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="ehf-XS-QDs" customClass="CameraViewController" customModule="AppMessage" sceneMemberID="viewController">
@@ -116,7 +119,7 @@
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="OXI-1b-sgV">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2kh-bf-icf" userLabel="Camera Button">
                                 <rect key="frame" x="147.5" y="507" width="80" height="80"/>
@@ -136,7 +139,6 @@
                             <constraint firstItem="2kh-bf-icf" firstAttribute="centerX" secondItem="OXI-1b-sgV" secondAttribute="centerX" id="xe5-x7-D2o"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Home" id="LJF-xa-pKE"/>
                     <connections>
                         <outlet property="cameraButton" destination="2kh-bf-icf" id="XTy-yG-Cbj"/>
                         <segue destination="MKz-K3-d4L" kind="presentation" identifier="showPhoto" id="zve-eu-mh8"/>
@@ -286,7 +288,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="43X-rY-gap" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3663" y="54"/>
+            <point key="canvasLocation" x="2834" y="52"/>
         </scene>
         <!--Testing...-->
         <scene sceneID="BBp-hT-C41">
