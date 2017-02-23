@@ -23,7 +23,7 @@ class TestsViewController: UIViewController {
         getUserInfoTest() // will set the self.userId
 
         ingnoreFieldTest()
-                
+
         removeAllSubscriptionsTest()
 
         getAllContactsTest()

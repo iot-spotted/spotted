@@ -13,10 +13,9 @@ import EVCloudKitDao
 import EVReflection
 
 
-class HomeViewController: UIViewController {
+class CameraViewController: UIViewController {
     
     @IBOutlet var cameraButton:UIButton!
-    @IBOutlet var chatButton:UIButton!
     
     let captureSession = AVCaptureSession()
     
@@ -30,8 +29,8 @@ class HomeViewController: UIViewController {
     var cameraPreviewLayer:AVCaptureVideoPreviewLayer?
     var toggleCameraGestureRecognizer = UISwipeGestureRecognizer()
     
-    var zoomInGestureRecognizer = UISwipeGestureRecognizer()
-    var zoomOutGestureRecognizer = UISwipeGestureRecognizer()
+    var zoomGestureRecognizer = UIPinchGestureRecognizer()
+    var initialVideoZoomFactor: CGFloat = 0.0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,7 +56,6 @@ class HomeViewController: UIViewController {
             // Configure the session with the output for capturing still images
             stillImageOutput = AVCaptureStillImageOutput()
             stillImageOutput?.outputSettings = [AVVideoCodecKey: AVVideoCodecJPEG]
-            
             // Configure the session with the input and the output devices
             captureSession.addInput(captureDeviceInput)
             captureSession.addOutput(stillImageOutput)
@@ -70,7 +68,6 @@ class HomeViewController: UIViewController {
             
             // Bring the camera button to front
             view.bringSubview(toFront: cameraButton)
-            view.bringSubview(toFront: chatButton)
             captureSession.startRunning()
         } catch {
             print(error)
@@ -83,17 +80,9 @@ class HomeViewController: UIViewController {
         view.addGestureRecognizer(toggleCameraGestureRecognizer)
         
         // Zoom In recognizer
-        zoomInGestureRecognizer.direction = .right
-        zoomInGestureRecognizer.addTarget(self, action: #selector(zoomIn))
-        view.addGestureRecognizer(zoomInGestureRecognizer)
-        
-        // Zoom Out recognizer
-        zoomOutGestureRecognizer.direction = .left
-        zoomOutGestureRecognizer.addTarget(self, action: #selector(zoomOut))
-        view.addGestureRecognizer(zoomOutGestureRecognizer)
-        
-        
-        
+        zoomGestureRecognizer.addTarget(self, action: #selector(zoom))
+        view.addGestureRecognizer(zoomGestureRecognizer)
+
         EVCloudData.publicDB.dao.query(GroupState()
             , completionHandler: { results, status in
                 EVLog("query : result count = \(results.count)")
@@ -101,6 +90,15 @@ class HomeViewController: UIViewController {
         }, errorHandler: { error in
             EVLog("<--- ERROR query Message")
         })
+
+        let topBar: UINavigationBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 60))
+        topBar.barStyle = UIBarStyle.blackOpaque
+        self.view.addSubview(topBar)
+        let barItem = UINavigationItem(title: "Spotted")
+        let back = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.compose, target: nil, action: #selector(goToChat))
+        barItem.rightBarButtonItem = back
+        topBar.setItems([barItem], animated: false)
+
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -117,6 +115,7 @@ class HomeViewController: UIViewController {
 
     @IBAction func capture(sender: UIButton) {
         let videoConnection = stillImageOutput?.connection(withMediaType: AVMediaTypeVideo)
+        videoConnection?.videoScaleAndCropFactor = (currentDevice?.videoZoomFactor)!
         stillImageOutput?.captureStillImageAsynchronously(from: videoConnection, completionHandler: { (imageDataSampleBuffer, error) -> Void in
             
             if let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageDataSampleBuffer) {
@@ -161,34 +160,25 @@ class HomeViewController: UIViewController {
         captureSession.commitConfiguration()
     }
     
-    func zoomIn() {
-        if let zoomFactor = currentDevice?.videoZoomFactor {
-            if zoomFactor < 5.0 {
-                let newZoomFactor = min(zoomFactor + 1.0, 5.0)
-                do {
-                    try currentDevice?.lockForConfiguration()
-                    currentDevice?.ramp(toVideoZoomFactor: newZoomFactor, withRate: 1.0)
-                    currentDevice?.unlockForConfiguration()
-                } catch {
-                    print(error)
-                }
+    func zoom(sender: UIPinchGestureRecognizer) {
+        
+        if (sender.state == UIGestureRecognizerState.began) {
+            initialVideoZoomFactor = (currentDevice?.videoZoomFactor)!
+        } else {
+            let scale: CGFloat = min(max(1, initialVideoZoomFactor * sender.scale), 4)
+            CATransaction.begin()
+            CATransaction.setAnimationDuration(0.01)
+            cameraPreviewLayer?.setAffineTransform(CGAffineTransform(scaleX: scale, y: scale))
+            CATransaction.commit()
+            do {
+                try currentDevice?.lockForConfiguration()
+                currentDevice?.videoZoomFactor = scale
+                currentDevice?.unlockForConfiguration()
+            } catch {
+                NSLog("error!")
             }
-        }
-    }
-    
-    func zoomOut() {
-        if let zoomFactor = currentDevice?.videoZoomFactor {
-            if zoomFactor > 1.0 {
-                let newZoomFactor = max(zoomFactor - 1.0, 1.0)
-                do {
-                    try currentDevice?.lockForConfiguration()
-                    currentDevice?.ramp(toVideoZoomFactor: newZoomFactor, withRate: 1.0)
-                    currentDevice?.unlockForConfiguration()
-                } catch {
-                    print(error)
-                }
-            }
-        }
+            
+        }        
     }
     
     // MARK: - Segues

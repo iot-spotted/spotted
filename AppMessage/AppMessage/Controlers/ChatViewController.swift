@@ -58,9 +58,16 @@ class ChatViewController: JSQMessagesViewController, MKMapViewDelegate {
         self.collectionView!.collectionViewLayout.springinessEnabled = false
         self.showLoadEarlierMessagesHeader = false
         //self.inputToolbar.contentView.leftBarButtonItem
-
         self.senderId = "~"
         self.senderDisplayName = "~"
+        
+        let topBar: UINavigationBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 60))
+        topBar.barStyle = UIBarStyle.blackOpaque
+        self.view.addSubview(topBar)
+        let barItem = UINavigationItem(title: groupChatName)
+        let back = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.camera, target: nil, action: #selector(loadCamera))
+        barItem.leftBarButtonItem = back
+        topBar.setItems([barItem], animated: false)
 
     }
 
@@ -68,6 +75,10 @@ class ChatViewController: JSQMessagesViewController, MKMapViewDelegate {
         super.viewDidAppear(animated)
         self.viewAppeared = true
         initializeCommunication()
+    }
+    
+    func loadCamera() {
+        NotificationCenter.default.post(name: Notification.Name(rawValue:"loadCamera"), object: nil)
     }
 
 
