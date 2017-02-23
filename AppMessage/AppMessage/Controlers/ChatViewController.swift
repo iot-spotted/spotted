@@ -41,13 +41,7 @@ class ChatViewController: JSQMessagesViewController, MKMapViewDelegate {
             senderFirstName = (EVCloudData.publicDB.dao.activeUser as? CKDiscoveredUserInfo)?.firstName ?? ""
             senderLastName    = (EVCloudData.publicDB.dao.activeUser as? CKDiscoveredUserInfo)?.lastName ?? ""
         }
-        print("names")
-        print(senderFirstName)
-        print(senderLastName)
         
-//        if dataID != "" {
-//            EVCloudData.publicDB.disconnect(dataID)
-//        }
         dataID =  "Message_\(chatWithId)"
 
         initializeCommunication()
@@ -99,8 +93,6 @@ class ChatViewController: JSQMessagesViewController, MKMapViewDelegate {
 
         // Sender settings for the component
         self.senderId = recordIdMe
-        print("activeUser")
-        print(EVCloudData.publicDB.dao.activeUser)
         self.senderDisplayName = showNameFor(EVCloudData.publicDB.dao.activeUser)
 
         // The data connection to the conversation
@@ -205,9 +197,6 @@ class ChatViewController: JSQMessagesViewController, MKMapViewDelegate {
         } else {
             message.setFromFields((EVCloudData.publicDB.dao.activeUser as? CKDiscoveredUserInfo)?.userRecordID?.recordName ?? "")
         }
-        print("didpresssend")
-        print(senderFirstName)
-        print(senderLastName)
         message.FromFirstName = senderFirstName
         message.FromLastName = senderLastName
         message.setToFields(chatWithId)
@@ -283,8 +272,6 @@ class ChatViewController: JSQMessagesViewController, MKMapViewDelegate {
                 return nil
             }
         }
-        print("top label")
-        print(message.senderDisplayName)
         return NSAttributedString(string: message.senderDisplayName)
     }
 
@@ -390,10 +377,6 @@ class ChatViewController: JSQMessagesViewController, MKMapViewDelegate {
         var count: Int = 0
         let lockQueue = DispatchQueue(label: "nl.evict.AppMessage.ChatLockQueue", attributes: [])
         lockQueue.sync {
-//            print("!!!!!")
-//            print("publicdb.data")
-//            print(self.dataID)
-//            print(EVCloudData.publicDB.data[self.dataID])
             count = EVCloudData.publicDB.data[self.dataID]!.count
             if self.localData.count != count {
                 self.localData = [JSQMessage?](repeating: nil, count: count)
@@ -427,8 +410,7 @@ class ChatViewController: JSQMessagesViewController, MKMapViewDelegate {
         // receiving or sending..
         var sender = self.senderId
         var senderName = self.senderDisplayName
-        //print("getmessageforid")
-        //print(self.senderDisplayName)
+        
         if data.From_ID != self.senderId {
             sender = self.chatWithId
             senderName = data.FromFirstName + " " + data.FromLastName
