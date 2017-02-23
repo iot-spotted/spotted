@@ -23,9 +23,7 @@ class TestsViewController: UIViewController {
         getUserInfoTest() // will set the self.userId
 
         ingnoreFieldTest()
-        
-        subObjectTest()
-        
+                
         removeAllSubscriptionsTest()
 
         getAllContactsTest()
@@ -269,41 +267,6 @@ class TestsViewController: UIViewController {
         })
     }
 
-    func subObjectTest() {
-        let invoice = Invoice()
-        invoice.InvoiceNumber = "A123"
-        invoice.DeliveryAddress = Address()
-        invoice.DeliveryAddress?.Street = "The street"
-        invoice.DeliveryAddress?.City = "The city"
-        invoice.InvoiceAddress = Address()
-        invoice.InvoiceAddress?.Street = "The invoice street"
-        invoice.InvoiceAddress?.City = "The invoice city"
-        invoice.PostalAddress = Address()
-        invoice.PostalAddress?.Street = "The postal street"
-        invoice.PostalAddress?.City = "The postal city"
-        
-        // Save the invoice and wait for it to complete
-        let sema = DispatchSemaphore(value: 0);
-        self.dao.saveItem(invoice, completionHandler: {record in
-            EVLog("saveItem Invoice: \(record.recordID.recordName)");
-            sema.signal();
-        }, errorHandler: {error in
-                EVLog("<--- ERROR saveItem message");
-            sema.signal();
-        })
-        let _ = sema.wait(timeout: DispatchTime.distantFuture);
-        
-        
-        // Now see if we can query the invoice
-        // Get all records of a recordType
-        dao.query(Invoice(), completionHandler: { results, isFinished in
-            EVLog("query Invoice : result count = \(results.count), results = \(results)")
-            return false
-            }, errorHandler: { error in
-                EVLog("<--- ERROR query Invoice")
-        })
-    }
-    
     func ingnoreFieldTest() {
         let myObj = testObject()
         myObj.saveString = "save this"

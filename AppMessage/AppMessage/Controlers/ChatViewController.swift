@@ -192,6 +192,40 @@ class ChatViewController: JSQMessagesViewController, MKMapViewDelegate {
         JSQSystemSoundPlayer.jsq_playMessageSentSound()
         let message = Message()
         
+        if text == "create" {
+            var recordIdMe: String?
+            if #available(iOS 10.0, *) {
+                recordIdMe = (EVCloudData.publicDB.dao.activeUser as? CKUserIdentity)?.userRecordID?.recordName
+            } else {
+                recordIdMe = (EVCloudData.publicDB.dao.activeUser as? CKDiscoveredUserInfo)?.userRecordID?.recordName
+            }
+            
+            let user = GameUser()
+            user.User_Id = recordIdMe ?? ""
+            user.UserFirstName = senderFirstName
+            user.UserLastName = senderLastName
+
+            EVCloudData.publicDB.saveItem(user, completionHandler: {user in
+                print("Created user")
+                print(user)
+            }, errorHandler: {error in
+                Helper.showError("Could not create group!  \(error.localizedDescription)")
+            })
+            
+            let group = GroupState()
+            
+            group.Group_ID = "42"
+            group.It_User_ID = user.User_Id
+            
+            EVCloudData.publicDB.saveItem(group, completionHandler: {group in
+                print("Created group")
+                print(group)
+            }, errorHandler: { error in
+                Helper.showError("Could not create group!  \(error.localizedDescription)")
+            })
+
+        }
+        
         if #available(iOS 10.0, *) {
             message.setFromFields((EVCloudData.publicDB.dao.activeUser as? CKUserIdentity)?.userRecordID?.recordName ?? "")
         } else {

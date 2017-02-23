@@ -14,6 +14,7 @@
 		23C044031E5C9E8C0054C986 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23C044021E5C9E8C0054C986 /* MainViewController.swift */; };
 		2D064A7E1E5BDAB0001902B9 /* Test1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D064A7D1E5BDAB0001902B9 /* Test1@2x.png */; };
 		2D0932101E57B176004900EE /* PhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D09320F1E57B176004900EE /* PhotoViewController.swift */; };
+		2D759B321E5E5F7F00F7A1AD /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D759B311E5E5F7F00F7A1AD /* Game.swift */; };
 		2DD9105E1E5E5A6C00C6D1D8 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DD9105D1E5E5A6C00C6D1D8 /* Util.swift */; };
 		437210433C525AAAFE3EB76C /* Pods_AppMessage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 495AC817462253B57CD42BDB /* Pods_AppMessage.framework */; };
 		7F0791301E1CF12B00A015A7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F07912F1E1CF12B00A015A7 /* main.m */; };
@@ -48,6 +49,7 @@
 		23C044021E5C9E8C0054C986 /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		2D064A7D1E5BDAB0001902B9 /* Test1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Test1@2x.png"; sourceTree = "<group>"; };
 		2D09320F1E57B176004900EE /* PhotoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoViewController.swift; sourceTree = "<group>"; };
+		2D759B311E5E5F7F00F7A1AD /* Game.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
 		2DD9105D1E5E5A6C00C6D1D8 /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		318A421B62B0803009675CC1 /* Pods_OSXTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OSXTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F3763EA1FE6EAFCB50FEE13 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -153,6 +155,7 @@
 				7F434A4B1962AE780081F35C /* Message.swift */,
 				7F76554B197FF0FE008AD0D5 /* Asset.swift */,
 				7F44151D1E2A8C5D0077F033 /* CKAsset+UIImage.swift */,
+				2D759B311E5E5F7F00F7A1AD /* Game.swift */,
 			);
 			path = DataObjects;
 			sourceTree = "<group>";
@@ -377,6 +380,7 @@
 				7FFD4C0D1A222E9D00E03FAB /* Helper.swift in Sources */,
 				7F76554C197FF0FE008AD0D5 /* Asset.swift in Sources */,
 				2D0932101E57B176004900EE /* PhotoViewController.swift in Sources */,
+				2D759B321E5E5F7F00F7A1AD /* Game.swift in Sources */,
 				7F434A2919628D490081F35C /* AppDelegate.swift in Sources */,
 				7FC46F9019824285000A875F /* CameraViewController.swift in Sources */,
 				7F0791301E1CF12B00A015A7 /* main.m in Sources */,

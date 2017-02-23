@@ -8,6 +8,10 @@
 
 import UIKit
 import AVFoundation
+import CloudKit
+import EVCloudKitDao
+import EVReflection
+
 
 class HomeViewController: UIViewController {
     
@@ -87,6 +91,16 @@ class HomeViewController: UIViewController {
         zoomOutGestureRecognizer.direction = .left
         zoomOutGestureRecognizer.addTarget(self, action: #selector(zoomOut))
         view.addGestureRecognizer(zoomOutGestureRecognizer)
+        
+        
+        
+        EVCloudData.publicDB.dao.query(GroupState()
+            , completionHandler: { results, status in
+                EVLog("query : result count = \(results.count)")
+                return true
+        }, errorHandler: { error in
+            EVLog("<--- ERROR query Message")
+        })
     }
     
     override func viewDidAppear(_ animated: Bool) {
