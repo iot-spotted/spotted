@@ -14,7 +14,7 @@ class ProfileViewController: UIViewController {
     
     @IBOutlet var label: UILabel?
     
-    override func viewDidLayoutSubviews() {
+    override func viewDidLoad() {
         let topBar: UINavigationBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 60))
         topBar.barStyle = UIBarStyle.blackOpaque
         self.view.addSubview(topBar)

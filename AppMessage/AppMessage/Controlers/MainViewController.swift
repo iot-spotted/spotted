@@ -49,10 +49,6 @@ class MainViewController: UIViewController {
         self.scrollView!.addSubview((self.profileViewController?.view)!)
         self.profileViewController?.didMove(toParentViewController: self)
         
-    }
-    
-    override func viewDidLayoutSubviews() {
-        
         var profileFrame :CGRect = self.profileViewController!.view.frame
         profileFrame.origin.x = profileFrame.width
         self.cameraViewController?.view.frame = profileFrame
@@ -67,6 +63,12 @@ class MainViewController: UIViewController {
         self.scrollView!.keyboardDismissMode = .onDrag
         
         self.scrollView!.scrollRectToVisible(CGRect(x:profileFrame.origin.x,y:0,width:cameraFrame.width,height:cameraFrame.height), animated: false)
+        
+    }
+    
+    override func viewDidLayoutSubviews() {
+        
+        
     }
     
     func loadChat(notification: Notification) {
