@@ -28,6 +28,8 @@ class ChatViewController: JSQMessagesViewController, MKMapViewDelegate {
     var recordIdMeForConnection: String = ""
     var recordIdOtherForConnection: String = ""
     var viewAppeared = false
+    
+    var topBar: UINavigationBar = UINavigationBar()
 
     // Start the conversation
     func setContact(_ recordId: String, fakeGroupChatName: String) {
@@ -61,7 +63,6 @@ class ChatViewController: JSQMessagesViewController, MKMapViewDelegate {
         self.senderId = "~"
         self.senderDisplayName = "~"
         
-        let topBar: UINavigationBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 60))
         topBar.barStyle = UIBarStyle.blackOpaque
         self.view.addSubview(topBar)
         let barItem = UINavigationItem(title: groupChatName)
@@ -73,7 +74,7 @@ class ChatViewController: JSQMessagesViewController, MKMapViewDelegate {
     }
     
     override func viewDidLayoutSubviews() {
-        
+        topBar.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 60)
     }
 
     override func viewDidAppear(_ animated: Bool) {

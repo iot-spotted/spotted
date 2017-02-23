@@ -13,6 +13,7 @@ import Async
 
 class MainViewController: UIViewController {
     
+    
     @IBOutlet var scrollView: UIScrollView?
     
     var cameraViewController: CameraViewController?
@@ -36,10 +37,6 @@ class MainViewController: UIViewController {
         self.cameraViewController = UIStoryboard(name: "Storyboard", bundle: nil).instantiateViewController(withIdentifier: "cameraViewController") as! CameraViewController
         self.chatViewController = UIStoryboard(name: "Storyboard", bundle: nil).instantiateViewController(withIdentifier: "chatViewController") as! ChatViewController
         self.chatViewController?.setContact("", fakeGroupChatName: "lol")
-       
-        self.addChildViewController(self.chatViewController!)
-        self.scrollView!.addSubview((self.chatViewController?.view)!)
-        self.chatViewController?.didMove(toParentViewController: self)
         
         self.addChildViewController(self.cameraViewController!)
         self.scrollView!.addSubview((self.cameraViewController?.view)!)
@@ -48,6 +45,12 @@ class MainViewController: UIViewController {
         self.addChildViewController(self.profileViewController!)
         self.scrollView!.addSubview((self.profileViewController?.view)!)
         self.profileViewController?.didMove(toParentViewController: self)
+    
+        
+        self.addChildViewController(self.chatViewController!)
+        self.scrollView!.addSubview((self.chatViewController?.view)!)
+        self.chatViewController?.didMove(toParentViewController: self)
+        
         
         var profileFrame :CGRect = self.profileViewController!.view.frame
         profileFrame.origin.x = profileFrame.width
@@ -62,13 +65,12 @@ class MainViewController: UIViewController {
         self.scrollView!.contentSize = CGSize(width: scrollWidth, height: scrollHeight);
         self.scrollView!.keyboardDismissMode = .onDrag
         
-        self.scrollView!.scrollRectToVisible(CGRect(x:profileFrame.origin.x,y:0,width:cameraFrame.width,height:cameraFrame.height), animated: false)
+        self.scrollView!.contentOffset = CGPoint(x:self.view.frame.width,y:0)
         
     }
     
     override func viewDidLayoutSubviews() {
-        
-        
+        profileViewController?.view.frame = self.view.frame
     }
     
     func loadChat(notification: Notification) {
