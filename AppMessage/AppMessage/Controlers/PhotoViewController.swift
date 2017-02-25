@@ -31,7 +31,6 @@ class PhotoViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.gameController?.StartVote(Sender_User_ID: "me", Asset_ID: "lol")
         imageView.image = image
     }
 
@@ -95,6 +94,15 @@ class PhotoViewController: UIViewController {
                 message.setFromFields((EVCloudData.publicDB.dao.activeUser as? CKDiscoveredUserInfo)?.userRecordID?.recordName ?? "")
             }
             
+            var recordIdMe: String?
+            
+            if #available(iOS 10.0, *) {
+                recordIdMe = (EVCloudData.publicDB.dao.activeUser as? CKUserIdentity)?.userRecordID?.recordName
+            } else {
+                recordIdMe = (EVCloudData.publicDB.dao.activeUser as? CKDiscoveredUserInfo)?.userRecordID?.recordName
+            }
+            self.gameController?.StartVote(Sender_User_ID: recordIdMe!, Asset_ID: record.recordID.recordName)
+
             
             
             message.setToFields("42") //self.chatWithId)
