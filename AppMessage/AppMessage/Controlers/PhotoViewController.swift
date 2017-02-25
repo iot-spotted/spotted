@@ -20,18 +20,36 @@ import Async
 import EVCloudKitDao
 import EVReflection
 
-
+enum Mode: String {
+    case Sender = "Sender",
+    Receiver = "Receiver"
+}
 
 class PhotoViewController: UIViewController {
     @IBOutlet var imageView: UIImageView!
     
+    @IBOutlet var yes: UILabel!
+    @IBOutlet var no: UILabel!
+    @IBOutlet var heading: UILabel!
+    
     var image:UIImage?
+    var mode:Mode?
+    var itValue:String?
     
     var gameController: GameController? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        if mode == Mode.Sender {
+            yes.text = ""
+            no.text = ""
+        }
+        else {
+            yes.text = "0"
+            no.text = "0"
+        }
         imageView.image = image
+        heading.text = "Is this " + itValue! + "?"
     }
 
     override func didReceiveMemoryWarning() {
@@ -40,6 +58,28 @@ class PhotoViewController: UIViewController {
     }
     
 
+    func textToImage(drawText text: NSString, inImage image: UIImage, atPoint point: CGPoint) -> UIImage {
+        
+        let imageView = UIImageView(image: image)
+        imageView.backgroundColor = UIColor.clear
+        imageView.frame = CGRect(x:0, y:0, width:image.size.width, height:image.size.height)
+        
+        let label = UILabel(frame: CGRect(x:0, y:0, width:image.size.width, height:image.size.height))
+        label.backgroundColor = UIColor.clear
+        label.textAlignment = .center
+        label.textColor = UIColor.white
+        label.text = text as String
+        label.adjustsFontSizeToFitWidth = true
+        
+        UIGraphicsBeginImageContext(label.bounds.size);
+        imageView.layer.render(in: UIGraphicsGetCurrentContext()!)
+        label.layer.render(in: UIGraphicsGetCurrentContext()!)
+        let imageWithText = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext();
+        
+        return imageWithText!
+    }
+    
     // MARK: - Action methods
     
     @IBAction func saver(sender: UIButton) {
@@ -53,82 +93,100 @@ class PhotoViewController: UIViewController {
         }
     
     @IBAction func save(sender: UIButton) {
-        guard let imageToSave = image else {
-            return
-        }
         
-        //UIImageWriteToSavedPhotosAlbum(imageToSave, nil, nil, nil)
-        
-        
-        let docDirPath = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true)[0] as NSString
-        let filePath =  docDirPath.appendingPathComponent("Image_1.png")
-        print(filePath)
-        if let myData = UIImagePNGRepresentation(imageToSave) {
-            try? myData.write(to: URL(fileURLWithPath: filePath), options: [.atomic])
-        }
-        
-        // Create an asset object for the attached image
-        let assetC = Asset()
-        assetC.File = CKAsset(fileURL: URL(fileURLWithPath: filePath))
-        assetC.FileName = "Image_1.png"
-        assetC.FileType = "png"
-        
-        // Save the asset
-        EVCloudData.publicDB.saveItem(assetC, completionHandler: {record in
-            EVLog("saveItem Asset: \(record.recordID.recordName)")
+        if mode == Mode.Sender{
+            guard let imageToSave = image else {
+                return
+            }
+            //UIImageWriteToSavedPhotosAlbum(imageToSave, nil, nil, nil)
             
-            // rename the image to recordId for a quick cache reference
-            let filemanager = FileManager.default
-            let fromFilePath =  docDirPath.appendingPathComponent(record.FileName)
-            let toPath = docDirPath.appendingPathComponent(record.recordID.recordName + ".png")
-            do {
-                try filemanager.moveItem(atPath: fromFilePath, toPath: toPath)
-            } catch {}
+            let newImage = textToImage(drawText:"CHILL", inImage: imageToSave, atPoint: CGPoint(x:20, y:20))
             
-            // Create the message object that represents the asset
-            let message = Message()
-            
-            if #available(iOS 10.0, *) {
-                message.setFromFields((EVCloudData.publicDB.dao.activeUser as? CKUserIdentity)?.userRecordID?.recordName ?? "")
-            } else {
-                message.setFromFields((EVCloudData.publicDB.dao.activeUser as? CKDiscoveredUserInfo)?.userRecordID?.recordName ?? "")
+            let docDirPath = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true)[0] as NSString
+            let filePath =  docDirPath.appendingPathComponent("Image_1.png")
+            print(filePath)
+            if let myData = UIImagePNGRepresentation(newImage) {
+                try? myData.write(to: URL(fileURLWithPath: filePath), options: [.atomic])
             }
             
-            var recordIdMe: String?
+            // Create an asset object for the attached image
+            let assetC = Asset()
+            assetC.File = CKAsset(fileURL: URL(fileURLWithPath: filePath))
+            assetC.FileName = "Image_1.png"
+            assetC.FileType = "png"
             
-            if #available(iOS 10.0, *) {
-                recordIdMe = (EVCloudData.publicDB.dao.activeUser as? CKUserIdentity)?.userRecordID?.recordName
-            } else {
-                recordIdMe = (EVCloudData.publicDB.dao.activeUser as? CKDiscoveredUserInfo)?.userRecordID?.recordName
-            }
-            self.gameController?.StartVote(Sender_User_ID: recordIdMe!, Asset_ID: record.recordID.recordName)
-
-            
-            
-            message.setToFields("42") //self.chatWithId)
-            message.GroupChatName = "Spotted Group" // groupChatName
-            message.Text = "<foto>"
-            message.MessageType = MessageTypeEnum.Picture.rawValue
-            message.setAssetFields(record.recordID.recordName)
-            
-            EVCloudData.publicDB.saveItem(message, completionHandler: {record in
-                EVLog("saveItem Message: \(record.recordID.recordName)")
-               // self.finishSendingMessage()
+            // Save the asset
+            EVCloudData.publicDB.saveItem(assetC, completionHandler: {record in
+                EVLog("saveItem Asset: \(record.recordID.recordName)")
+                
+                // rename the image to recordId for a quick cache reference
+                let filemanager = FileManager.default
+                let fromFilePath =  docDirPath.appendingPathComponent(record.FileName)
+                let toPath = docDirPath.appendingPathComponent(record.recordID.recordName + ".png")
+                do {
+                    try filemanager.moveItem(atPath: fromFilePath, toPath: toPath)
+                } catch {}
+                
+                // Create the message object that represents the asset
+                let message = Message()
+                
+                if #available(iOS 10.0, *) {
+                    message.setFromFields((EVCloudData.publicDB.dao.activeUser as? CKUserIdentity)?.userRecordID?.recordName ?? "")
+                } else {
+                    message.setFromFields((EVCloudData.publicDB.dao.activeUser as? CKDiscoveredUserInfo)?.userRecordID?.recordName ?? "")
+                }
+                
+                var recordIdMe: String?
+                
+                if #available(iOS 10.0, *) {
+                    recordIdMe = (EVCloudData.publicDB.dao.activeUser as? CKUserIdentity)?.userRecordID?.recordName
+                } else {
+                    recordIdMe = (EVCloudData.publicDB.dao.activeUser as? CKDiscoveredUserInfo)?.userRecordID?.recordName
+                }
+                self.gameController?.StartVote(Sender_User_ID: recordIdMe!, Asset_ID: record.recordID.recordName)
+                
+                
+                
+                message.setToFields("42") //self.chatWithId)
+                message.GroupChatName = "Spotted Group" // groupChatName
+                message.Text = "<foto>"
+                message.MessageType = MessageTypeEnum.Picture.rawValue
+                message.setAssetFields(record.recordID.recordName)
+                
+                EVCloudData.publicDB.saveItem(message, completionHandler: {record in
+                    EVLog("saveItem Message: \(record.recordID.recordName)")
+                    // self.finishSendingMessage()
+                }, errorHandler: {error in
+                    Helper.showError("Could not send picture message!  \(error.localizedDescription)")
+                    //self.finishSendingMessage()
+                })
+                
             }, errorHandler: {error in
-                Helper.showError("Could not send picture message!  \(error.localizedDescription)")
+                Helper.showError("Could not send picture!  \(error.localizedDescription)")
                 //self.finishSendingMessage()
             })
             
-        }, errorHandler: {error in
-            Helper.showError("Could not send picture!  \(error.localizedDescription)")
-            //self.finishSendingMessage()
-        })
-
+            dismiss(animated: true, completion: nil)
+        }
+        else {
+            if (gameController?.VoteYes())! {
+                dismiss(animated: true, completion: nil)
+            }
+            
+        }
+    
+    }
+    
+    @IBAction func no(sender: UIButton) {
         
-        
-        
-        
-        dismiss(animated: true, completion: nil)
+        if mode == Mode.Sender{
+            dismiss(animated: true, completion: nil)
+        }
+        else {
+            if (gameController?.VoteNo())! {
+               dismiss(animated: true, completion: nil)
+            }
+        }
     }
     
     

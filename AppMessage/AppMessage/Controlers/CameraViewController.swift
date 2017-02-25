@@ -13,6 +13,7 @@ import EVCloudKitDao
 import EVReflection
 import Async
 
+
 class CameraViewController: UIViewController {
     
     @IBOutlet var cameraButton:UIButton!
@@ -206,6 +207,8 @@ class CameraViewController: UIViewController {
         if segue.identifier == "showPhoto" {
             let photoViewController = segue.destination as! PhotoViewController
             photoViewController.image = stillImage
+            photoViewController.itValue = self.itUserLabel.text
+            photoViewController.mode = Mode.Sender
             photoViewController.gameController = gameController
         }
     }

@@ -17,6 +17,7 @@ class GameController {
     var ItUserName: String = ""
     
     var parent: MainViewController
+    var photoViewController : PhotoViewController?
     
     init(parentView: MainViewController) {
         parent = parentView
@@ -70,7 +71,7 @@ class GameController {
         }, insertedHandler: { item in
             EVLog("Vote inserted \(item)")
             self.CurrentVote = item
-            self.StartVoteUI(vote)
+            self.StartVoteUI(vote: item)
 //            self.parent.StartVote()
             // TODO
         }, updatedHandler: { item, dataIndex in
@@ -141,6 +142,21 @@ class GameController {
     }
     
     func StartVoteUI(vote: Vote) {
+        self.photoViewController = UIStoryboard(name: "Storyboard", bundle: nil).instantiateViewController(withIdentifier: "photoViewController") as? PhotoViewController
+
+        self.photoViewController?.mode = Mode.Receiver
+        self.photoViewController?.gameController = self
+        self.photoViewController?.itValue = self.ItUserName
+        EVCloudData.publicDB.getItem(vote.Asset_ID, completionHandler: {item in
+            if let asset = item as? Asset {
+                self.photoViewController?.image = asset.File?.image()
+            }
+            self.parent.present(self.photoViewController!, animated: true, completion: nil)
+        }, errorHandler: { error in
+            Helper.showError("Could not load Asset: \(error.localizedDescription)")
+            self.parent.present(self.photoViewController!, animated: true, completion: nil)
+        })
+        
         
     }
     
@@ -151,7 +167,9 @@ class GameController {
         if CurrentVote.Yes == 2 {
             CurrentVote.Status = VoteStatusEnum.Pass.rawValue
             done = true
+            ChangeItUser()
         }
+        self.photoViewController?.yes.text = String(CurrentVote.Yes)
         SaveVote()
         return done
     }
@@ -164,6 +182,7 @@ class GameController {
             CurrentVote.Status = VoteStatusEnum.Fail.rawValue
             done = true
         }
+        self.photoViewController?.no.text = String(CurrentVote.No)
         SaveVote()
         return done
     }
@@ -172,6 +191,7 @@ class GameController {
         EVCloudData.publicDB.saveItem(CurrentVote, completionHandler: {record in
             let createdId = record.recordID.recordName;
             EVLog("vote saveItem : \(createdId)");
+            NSLog(" voted")
         }, errorHandler: {error in
             EVLog("<--- ERROR saveItem");
         })
