@@ -13,13 +13,14 @@ import Async
 class GameController {
     var Group_ID: String = "42"
     var LocalGroupState: GroupState? = nil
-    var CurrentVote: Vote? = nil
+    var CurrentVote: Vote
     var ItUserName: String = ""
     
     var parent: MainViewController
     
     init(parentView: MainViewController) {
         parent = parentView
+        CurrentVote = Vote()
         initializeCommunication()
     }
     
@@ -68,6 +69,8 @@ class GameController {
                 return true
         }, insertedHandler: { item in
             EVLog("Vote inserted \(item)")
+            self.CurrentVote = item
+            self.StartVoteUI(vote)
 //            self.parent.StartVote()
             // TODO
         }, updatedHandler: { item, dataIndex in
@@ -129,40 +132,44 @@ class GameController {
     
     func StartVote(Sender_User_ID: String, Asset_ID: String) {
         print("starting vote")
-        let vote = Vote()
-        vote.Group_ID = Group_ID
-        vote.It_User_ID = LocalGroupState!.It_User_ID
-        vote.Sender_User_ID = Sender_User_ID
-        vote.Asset_ID = Asset_ID
-        SaveVote(vote)
+        CurrentVote = Vote()
+        CurrentVote.Group_ID = Group_ID
+        CurrentVote.It_User_ID = LocalGroupState!.It_User_ID
+        CurrentVote.Sender_User_ID = Sender_User_ID
+        CurrentVote.Asset_ID = Asset_ID
+        SaveVote()
     }
     
-    func VoteYes(vote: Vote) -> Bool {
+    func StartVoteUI(vote: Vote) {
+        
+    }
+    
+    func VoteYes() -> Bool {
         print("voting yes")
-        vote.Yes += 1
+        CurrentVote.Yes += 1
         var done = false
-        if vote.Yes == 2 {
-            vote.Status = VoteStatusEnum.Pass.rawValue
+        if CurrentVote.Yes == 2 {
+            CurrentVote.Status = VoteStatusEnum.Pass.rawValue
             done = true
         }
-        SaveVote(vote)
+        SaveVote()
         return done
     }
     
-    func VoteNo(vote: Vote) -> Bool  {
+    func VoteNo() -> Bool  {
         print("voting no")
-        vote.No += 1
+        CurrentVote.No += 1
         var done = false
-        if vote.No == 2 {
-            vote.Status = VoteStatusEnum.Fail.rawValue
+        if CurrentVote.No == 2 {
+            CurrentVote.Status = VoteStatusEnum.Fail.rawValue
             done = true
         }
-        SaveVote(vote)
+        SaveVote()
         return done
     }
     
-    func SaveVote(_ vote: Vote) {
-        EVCloudData.publicDB.saveItem(vote, completionHandler: {record in
+    func SaveVote() {
+        EVCloudData.publicDB.saveItem(CurrentVote, completionHandler: {record in
             let createdId = record.recordID.recordName;
             EVLog("vote saveItem : \(createdId)");
         }, errorHandler: {error in
