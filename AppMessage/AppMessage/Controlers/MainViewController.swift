@@ -19,6 +19,7 @@ class MainViewController: UIViewController {
     var cameraViewController: CameraViewController?
     var chatViewController: ChatViewController?
     var profileViewController: ProfileViewController?
+    var gameController: GameController? = nil
     
     
     override func viewDidLoad() {
@@ -36,6 +37,11 @@ class MainViewController: UIViewController {
         self.profileViewController = UIStoryboard(name: "Storyboard", bundle: nil).instantiateViewController(withIdentifier: "profileViewController") as! ProfileViewController
         self.cameraViewController = UIStoryboard(name: "Storyboard", bundle: nil).instantiateViewController(withIdentifier: "cameraViewController") as! CameraViewController
         self.chatViewController = UIStoryboard(name: "Storyboard", bundle: nil).instantiateViewController(withIdentifier: "chatViewController") as! ChatViewController
+        
+        self.gameController = GameController(parentView: self)
+        self.cameraViewController?.gameController = self.gameController
+        
+        
         self.chatViewController?.setContact("", fakeGroupChatName: "lol")
         
         self.addChildViewController(self.cameraViewController!)

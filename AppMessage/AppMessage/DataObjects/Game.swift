@@ -17,6 +17,12 @@
 import CloudKit
 import EVReflection
 
+enum VoteStatusEnum: String {
+    case InProgress = "I",
+    Pass = "P",
+    Fail = "F"
+}
+
 class GameUser: CKDataObject {
     var User_Id: String = ""
     var UserFirstName: String = ""
@@ -28,3 +34,12 @@ class GroupState: CKDataObject {
     var It_User_ID: String = ""
 }
 
+class Vote: CKDataObject {
+    var Group_ID: String = ""
+    var It_User_ID: String = ""
+    var Sender_User_ID: String = ""
+    var Asset_ID: String = ""
+    var Status: String = VoteStatusEnum.InProgress.rawValue
+    var Yes: Int = 0
+    var No: Int = 0
+}

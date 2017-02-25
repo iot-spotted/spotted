@@ -27,9 +27,11 @@ class PhotoViewController: UIViewController {
     
     var image:UIImage?
     
+    var gameController: GameController? = nil
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.gameController?.StartVote(Sender_User_ID: "me", Asset_ID: "lol")
         imageView.image = image
     }
 
@@ -92,6 +94,8 @@ class PhotoViewController: UIViewController {
             } else {
                 message.setFromFields((EVCloudData.publicDB.dao.activeUser as? CKDiscoveredUserInfo)?.userRecordID?.recordName ?? "")
             }
+            
+            
             
             message.setToFields("42") //self.chatWithId)
             message.GroupChatName = "Spotted Group" // groupChatName

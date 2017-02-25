@@ -124,7 +124,7 @@ class ChatViewController: JSQMessagesViewController, MKMapViewDelegate {
                 self.scrollToBottom(animated: true)
                 return status == CompletionStatus.partialResult && results.count < 500 // Continue reading if we have less than 500 records and if there are more.
             }, insertedHandler: { item in
-                EVLog("Conversation message inserted \(item)")
+                EVLog("Conversation message inserted")
                 self.localData.insert(nil, at: 0)
                 if item.MessageType == MessageTypeEnum.Picture.rawValue {
                     self.getAttachment((item as Message).Asset_ID)
@@ -132,7 +132,7 @@ class ChatViewController: JSQMessagesViewController, MKMapViewDelegate {
                 JSQSystemSoundPlayer.jsq_playMessageReceivedSound()
                 self.finishReceivingMessage()
             }, updatedHandler: { item, dataIndex in
-                EVLog("Conversation message updated \(item)")
+                EVLog("Conversation message updated")
                 self.localData[dataIndex] = nil
             }, deletedHandler: { recordId, dataIndex in
                 EVLog("Conversation message deleted : \(recordId)")

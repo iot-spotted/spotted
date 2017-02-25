@@ -32,9 +32,8 @@ class CameraViewController: UIViewController {
     
     var zoomGestureRecognizer = UIPinchGestureRecognizer()
     var initialVideoZoomFactor: CGFloat = 0.0
-    
-    var gameController: GameController? = nil
 
+    var gameController: GameController? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -89,7 +88,6 @@ class CameraViewController: UIViewController {
         // Zoom In recognizer
         zoomGestureRecognizer.addTarget(self, action: #selector(zoom))
         view.addGestureRecognizer(zoomGestureRecognizer)
-        self.gameController = GameController(updateLabelHandler: self.updateLabel)
     }
     
     override func viewDidLayoutSubviews() {
@@ -123,7 +121,8 @@ class CameraViewController: UIViewController {
             
             if let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageDataSampleBuffer) {
                 self.stillImage = UIImage(data: imageData)
-                self.gameController?.ChangeItUser(self.updateLabel)
+//                self.gameController?.ChangeItUser(self.updateLabel)
+                
                 self.performSegue(withIdentifier: "showPhoto", sender: self)
             }
         })
@@ -207,6 +206,12 @@ class CameraViewController: UIViewController {
         if segue.identifier == "showPhoto" {
             let photoViewController = segue.destination as! PhotoViewController
             photoViewController.image = stillImage
+            photoViewController.gameController = gameController
         }
+    }
+    
+    
+    func StartVote() {
+        print("camera ui start vote")
     }
 }
