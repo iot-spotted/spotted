@@ -33,6 +33,9 @@ class CameraViewController: UIViewController {
     var zoomGestureRecognizer = UIPinchGestureRecognizer()
     var initialVideoZoomFactor: CGFloat = 0.0
     
+    var gameController: GameController? = nil
+
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -86,86 +89,7 @@ class CameraViewController: UIViewController {
         // Zoom In recognizer
         zoomGestureRecognizer.addTarget(self, action: #selector(zoom))
         view.addGestureRecognizer(zoomGestureRecognizer)
-        
-        var It_User_ID = ""
-        EVCloudData.publicDB.dao.query(GroupState(), predicate: NSPredicate(format: "Group_ID == '42'"),
-            completionHandler: { results, stats in
-                EVLog("query : result count = \(results.count)")
-                if (results.count >= 0) {
-                    print(results[0].Group_ID)
-                    print(results[0].It_User_ID)
-                    It_User_ID = results[0].It_User_ID
-                    print("It_User_ID1=\(It_User_ID)")
-                }
-                /// QUERY USER
-                print("It_User_ID2=\(It_User_ID)")
-                
-                EVCloudData.publicDB.dao.query(GameUser(), predicate: NSPredicate(format: "User_Id == '\(It_User_ID)'"),
-                                               completionHandler: { results, stats in
-                                                EVLog("query : result count = \(results.count)")
-                                                if (results.count >= 0) {
-                                                    print(results[0].UserFirstName)
-                                                    print(results[0].UserLastName)
-                                                    DispatchQueue.main.async {
-                                                        self.itUserLabel.text = results[0].UserFirstName + " " + results[0].UserLastName
-                                                        print("It_User1=\(results[0].UserFirstName + " " + results[0].UserLastName)")
-                                                    }
-                                                }
-                                                return true
-                }, errorHandler: { error in
-                    EVLog("<--- ERROR query Message")
-                })
-                
-                /// END QUERY USER
-                return true
-        }, errorHandler: { error in
-            EVLog("<--- ERROR query Message")
-        })
-        
-        print("CHANGING IT USER?")
-        EVCloudData.publicDB.dao.query(GroupState(), predicate: NSPredicate(format: "Group_ID == '42'"),
-                                       completionHandler: { group_results, stats in
-                                        EVLog("query : result count = \(group_results.count)")
-                                        if (group_results.count >= 0) {
-                                            print(group_results[0].Group_ID)
-                                            print(group_results[0].It_User_ID)
-                                            It_User_ID = group_results[0].It_User_ID
-                                            print("It_User_ID1=\(It_User_ID)")
-                                        }
-                                        /// QUERY USER
-                                        var It_User = ""
-                                        
-                                        EVCloudData.publicDB.dao.query(GameUser(), predicate: NSPredicate(format: "User_Id != '\(It_User_ID)'"),
-                                                                       completionHandler: { user_results, stats in
-                                                                        EVLog("query : result count = \(user_results.count)")
-                                                                        if (user_results.count >= 0) {
-                                                                            print(user_results[0].UserFirstName)
-                                                                            print(user_results[0].UserLastName)
-                                                                            It_User = user_results[0].UserFirstName + " " + user_results[0].UserLastName
-                                                                            print("New_It_User1=\(It_User)")
-                                                                            group_results[0].It_User_ID = user_results[0].User_Id
-                                                                            EVCloudData.publicDB.dao.saveItem(group_results[0], completionHandler: {record in
-                                                                                let createdId = record.recordID.recordName;
-                                                                                EVLog("saveItem : \(createdId)");
-                                                                            }, errorHandler: {error in
-                                                                                EVLog("<--- ERROR saveItem");
-                                                                            })
-                                                                        }
-                                                                        return true
-                                        }, errorHandler: { error in
-                                            EVLog("<--- ERROR query Message")
-                                        })
-                                        
-                                        /// END QUERY USER
-                                        return true
-        }, errorHandler: { error in
-            EVLog("<--- ERROR query Message")
-        })
-        
-        
-
-
-
+        self.gameController = GameController(updateLabelHandler: self.updateLabel)
     }
     
     override func viewDidLayoutSubviews() {
@@ -199,9 +123,17 @@ class CameraViewController: UIViewController {
             
             if let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageDataSampleBuffer) {
                 self.stillImage = UIImage(data: imageData)
+                self.gameController?.ChangeItUser(self.updateLabel)
                 self.performSegue(withIdentifier: "showPhoto", sender: self)
             }
         })
+    }
+    
+    func updateLabel(label: String) {
+        DispatchQueue.main.async {
+            self.itUserLabel.text = label
+            print("Set It User Label=\(label)")
+        }
     }
     
     func loadChat() {

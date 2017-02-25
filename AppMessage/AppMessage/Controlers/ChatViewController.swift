@@ -30,7 +30,8 @@ class ChatViewController: JSQMessagesViewController, MKMapViewDelegate {
     var viewAppeared = false
     
     var topBar: UINavigationBar = UINavigationBar()
-
+    
+    
     // Start the conversation
     func setContact(_ recordId: String, fakeGroupChatName: String) {
         chatWithId = "42"
@@ -70,7 +71,6 @@ class ChatViewController: JSQMessagesViewController, MKMapViewDelegate {
         barItem.leftBarButtonItem = back
         topBar.setItems([barItem], animated: false)
         
-
     }
     
     override func viewDidLayoutSubviews() {
@@ -86,6 +86,8 @@ class ChatViewController: JSQMessagesViewController, MKMapViewDelegate {
     func loadCamera() {
         NotificationCenter.default.post(name: Notification.Name(rawValue:"loadCamera"), object: nil)
     }
+    
+    
 
 
     // ------------------------------------------------------------------------

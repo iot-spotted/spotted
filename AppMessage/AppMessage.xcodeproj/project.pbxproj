@@ -17,6 +17,7 @@
 		2D0932101E57B176004900EE /* PhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D09320F1E57B176004900EE /* PhotoViewController.swift */; };
 		2D759B321E5E5F7F00F7A1AD /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D759B311E5E5F7F00F7A1AD /* Game.swift */; };
 		2DD9105E1E5E5A6C00C6D1D8 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DD9105D1E5E5A6C00C6D1D8 /* Util.swift */; };
+		2DF0200E1E5FED3C0024E507 /* GameController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF0200D1E5FED3C0024E507 /* GameController.swift */; };
 		437210433C525AAAFE3EB76C /* Pods_AppMessage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 495AC817462253B57CD42BDB /* Pods_AppMessage.framework */; };
 		7F0791301E1CF12B00A015A7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F07912F1E1CF12B00A015A7 /* main.m */; };
 		7F434A2919628D490081F35C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F434A2819628D490081F35C /* AppDelegate.swift */; };
@@ -53,6 +54,7 @@
 		2D09320F1E57B176004900EE /* PhotoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoViewController.swift; sourceTree = "<group>"; };
 		2D759B311E5E5F7F00F7A1AD /* Game.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
 		2DD9105D1E5E5A6C00C6D1D8 /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
+		2DF0200D1E5FED3C0024E507 /* GameController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameController.swift; sourceTree = "<group>"; };
 		318A421B62B0803009675CC1 /* Pods_OSXTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OSXTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F3763EA1FE6EAFCB50FEE13 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		495AC817462253B57CD42BDB /* Pods_AppMessage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AppMessage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -194,6 +196,7 @@
 				2D09320F1E57B176004900EE /* PhotoViewController.swift */,
 				7FF447431A16964C0003AE91 /* ChatViewController.swift */,
 				2DD9105D1E5E5A6C00C6D1D8 /* Util.swift */,
+				2DF0200D1E5FED3C0024E507 /* GameController.swift */,
 			);
 			name = Controllers;
 			path = Controlers;
@@ -388,6 +391,7 @@
 				2D759B321E5E5F7F00F7A1AD /* Game.swift in Sources */,
 				7F434A2919628D490081F35C /* AppDelegate.swift in Sources */,
 				7FC46F9019824285000A875F /* CameraViewController.swift in Sources */,
+				2DF0200E1E5FED3C0024E507 /* GameController.swift in Sources */,
 				7F0791301E1CF12B00A015A7 /* main.m in Sources */,
 				7F44151E1E2A8C5D0077F033 /* CKAsset+UIImage.swift in Sources */,
 			);
