@@ -38,6 +38,8 @@ class MainViewController: UIViewController {
         self.cameraViewController = UIStoryboard(name: "Storyboard", bundle: nil).instantiateViewController(withIdentifier: "cameraViewController") as! CameraViewController
         self.chatViewController = UIStoryboard(name: "Storyboard", bundle: nil).instantiateViewController(withIdentifier: "chatViewController") as! ChatViewController
         
+        
+        self.createGameUserIfNotExists()
         self.gameController = GameController(parentView: self)
         self.cameraViewController?.gameController = self.gameController
         
@@ -74,7 +76,7 @@ class MainViewController: UIViewController {
         self.scrollView!.contentOffset = CGPoint(x:self.view.frame.width,y:0)
         
     }
-    
+
     func createGameUserIfNotExists() {
         
         var recordIdMe: String
@@ -84,36 +86,57 @@ class MainViewController: UIViewController {
             recordIdMe = (EVCloudData.publicDB.dao.activeUser as? CKDiscoveredUserInfo)?.userRecordID?.recordName ?? "42"
         }
         
-        func GetItUser() {
-            EVCloudData.publicDB.dao.query(GameUser(), predicate: NSPredicate(format: "User_Id == '\(recordIdMe)'"),
-                                           completionHandler: { results, stats in
-                                            EVLog("query : result count = \(results.count)")
-                                            if (results.count == 0) {
-                                                print("creating user...")
-                                                let user = GameUser()
-                                                user.User_Id = recordIdMe
-                                                
-                                                if #available(iOS 10.0, *) {
-                                                    user.UserFirstName = (EVCloudData.publicDB.dao.activeUser as? CKUserIdentity)?.nameComponents?.givenName ?? ""
-                                                    user.UserLastName = (EVCloudData.publicDB.dao.activeUser as? CKUserIdentity)?.nameComponents?.familyName ?? ""
-                                                } else {
-                                                    user.UserLastName = (EVCloudData.publicDB.dao.activeUser as? CKDiscoveredUserInfo)?.firstName ?? ""
-                                                    user.UserLastName = (EVCloudData.publicDB.dao.activeUser as? CKDiscoveredUserInfo)?.lastName ?? ""
-                                                }
-                                                
-                                                EVCloudData.publicDB.saveItem(user, completionHandler: {user in
-                                                    print("Created user")
-                                                    print(user)
-                                                }, errorHandler: {error in
-                                                    Helper.showError("Could not create group!  \(error.localizedDescription)")
-                                                })
-                                        }
-                                            return true
-            }, errorHandler: { error in
-                EVLog("<--- ERROR query User")
-            })
+        EVCloudData.publicDB.dao.query(GameUser(), predicate: NSPredicate(format: "User_Id == '\(recordIdMe)'"),
+           completionHandler: { results, stats in
+            EVLog("query : result count = \(results.count)")
+            if (results.count == 0) {
+                print("creating user...")
+                let user = GameUser()
+                user.User_Id = recordIdMe
+                
+                if #available(iOS 10.0, *) {
+                    user.UserFirstName = (EVCloudData.publicDB.dao.activeUser as? CKUserIdentity)?.nameComponents?.givenName ?? ""
+                    user.UserLastName = (EVCloudData.publicDB.dao.activeUser as? CKUserIdentity)?.nameComponents?.familyName ?? ""
+                } else {
+                    user.UserLastName = (EVCloudData.publicDB.dao.activeUser as? CKDiscoveredUserInfo)?.firstName ?? ""
+                    user.UserLastName = (EVCloudData.publicDB.dao.activeUser as? CKDiscoveredUserInfo)?.lastName ?? ""
+                }
+                
+                EVCloudData.publicDB.saveItem(user, completionHandler: {user in
+                    print("Created user")
+                    print(user)
+                }, errorHandler: {error in
+                    Helper.showError("Could not create group!  \(error.localizedDescription)")
+                })
         }
-
+            return true
+        }, errorHandler: { error in
+            EVLog("<--- ERROR query User")
+        })
+                
+        EVCloudData.publicDB.dao.query(GroupState(), predicate: NSPredicate(format: "Group_ID == '\(GLOBAL_GROUP_ID)'"),
+           completionHandler: { results, stats in
+            EVLog("query : result count = \(results.count)")
+            if (results.count == 0) {
+                print("group does not exist")
+                let group = GroupState()
+                
+                group.Group_ID = GLOBAL_GROUP_ID
+                group.It_User_ID = recordIdMe
+                
+                EVCloudData.publicDB.saveItem(group, completionHandler: {group in
+                    print("Created group")
+                    print(group)
+                }, errorHandler: { error in
+                    Helper.showError("Could not create group!  \(error.localizedDescription)")
+                })
+            } else {
+                print("group already exists");
+            }
+            return true
+        }
+        );
+        
     }
     
     override func viewDidLayoutSubviews() {

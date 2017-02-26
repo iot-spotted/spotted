@@ -9,7 +9,7 @@
 import CloudKit
 import EVReflection
 
-let GLOBAL_GROUP_ID = "43"
+let GLOBAL_GROUP_ID = "44"
 
 enum MessageTypeEnum: String {
     case Text = "T",
