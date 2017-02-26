@@ -34,7 +34,7 @@ class ChatViewController: JSQMessagesViewController, MKMapViewDelegate {
     
     // Start the conversation
     func setContact(_ recordId: String, fakeGroupChatName: String) {
-        chatWithId = "42"
+        chatWithId = GLOBAL_GROUP_ID
         groupChatName = "Spotted Group"
         
         if #available(iOS 10.0, *) {
@@ -233,7 +233,7 @@ class ChatViewController: JSQMessagesViewController, MKMapViewDelegate {
             
             let group = GroupState()
             
-            group.Group_ID = "42"
+            group.Group_ID = GLOBAL_GROUP_ID
             group.It_User_ID = user.User_Id
             
             EVCloudData.publicDB.saveItem(group, completionHandler: {group in

@@ -35,6 +35,7 @@ class PhotoViewController: UIViewController {
     var image:UIImage?
     var mode:Mode?
     var itValue:String?
+    var viewLoadDone = false
     
     var gameController: GameController? = nil
     
@@ -50,6 +51,7 @@ class PhotoViewController: UIViewController {
         }
         imageView.image = image
         heading.text = "Is this " + itValue! + "?"
+        viewLoadDone = true
     }
 
     override func didReceiveMemoryWarning() {
@@ -80,6 +82,19 @@ class PhotoViewController: UIViewController {
         return imageWithText!
     }
     
+    func UpdateUI(_ vote: Vote) {
+        if (!viewLoadDone) {
+            print("view load not done! :O")
+            return
+        }
+        if vote.Status != VoteStatusEnum.InProgress.rawValue  {
+            dismiss(animated: true, completion: nil)
+        }
+        print("calling updateui")
+        yes.text = String(vote.Yes)
+        no.text = String(vote.No)
+    }
+    
     // MARK: - Action methods
     
     @IBAction func saver(sender: UIButton) {
@@ -100,7 +115,8 @@ class PhotoViewController: UIViewController {
             }
             //UIImageWriteToSavedPhotosAlbum(imageToSave, nil, nil, nil)
             
-            let newImage = textToImage(drawText:"CHILL", inImage: imageToSave, atPoint: CGPoint(x:20, y:20))
+            //let newImage = textToImage(drawText:"CHILL", inImage: imageToSave, atPoint: CGPoint(x:20, y:20))
+            let newImage = imageToSave
             
             let docDirPath = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true)[0] as NSString
             let filePath =  docDirPath.appendingPathComponent("Image_1.png")
@@ -147,7 +163,7 @@ class PhotoViewController: UIViewController {
                 
                 
                 
-                message.setToFields("42") //self.chatWithId)
+                message.setToFields(GLOBAL_GROUP_ID) //self.chatWithId)
                 message.GroupChatName = "Spotted Group" // groupChatName
                 message.Text = "<foto>"
                 message.MessageType = MessageTypeEnum.Picture.rawValue
@@ -169,10 +185,8 @@ class PhotoViewController: UIViewController {
             dismiss(animated: true, completion: nil)
         }
         else {
-            if (gameController?.VoteYes())! {
-                dismiss(animated: true, completion: nil)
-            }
-            
+            gameController?.VoteYes()
+            dismiss(animated: true, completion: nil)
         }
     
     }
@@ -183,9 +197,8 @@ class PhotoViewController: UIViewController {
             dismiss(animated: true, completion: nil)
         }
         else {
-            if (gameController?.VoteNo())! {
-               dismiss(animated: true, completion: nil)
-            }
+            gameController?.VoteNo()
+            dismiss(animated: true, completion: nil)
         }
     }
     

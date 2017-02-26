@@ -10,11 +10,13 @@ import EVCloudKitDao
 import EVReflection
 import Async
 
+
 class GameController {
-    var Group_ID: String = "42"
+    var Group_ID: String = GLOBAL_GROUP_ID
     var LocalGroupState: GroupState? = nil
     var CurrentVote: Vote
     var ItUserName: String = ""
+    var Voting: Bool = false
     
     var parent: MainViewController
     var photoViewController : PhotoViewController?
@@ -69,13 +71,23 @@ class GameController {
                 }
                 return true
         }, insertedHandler: { item in
-            EVLog("Vote inserted \(item)")
+            EVLog("Vote inserted " + item.recordID.recordName)
             self.CurrentVote = item
+            self.Voting = true
             self.StartVoteUI(vote: item)
 //            self.parent.StartVote()
             // TODO
         }, updatedHandler: { item, dataIndex in
-            EVLog("Vote updated")
+            EVLog("Vote updated " + item.recordID.recordName)
+            // TODO make sure it's the  same vote
+
+            if (self.Voting) {
+                print("in voting state...calling update")
+                self.CurrentVote = item
+                self.UpdateUI()
+            } else {
+                print("not in voting mode, ignoring")
+            }
         }, deletedHandler: { recordId, dataIndex in
             EVLog("Vote deleted!!! : \(recordId)")
             self.LocalGroupState = nil
@@ -160,31 +172,36 @@ class GameController {
         
     }
     
-    func VoteYes() -> Bool {
+    func UpdateUI() {
+        print("updating ui...")
+        if let controller = self.photoViewController {
+            controller.UpdateUI(self.CurrentVote)
+        } else{
+            print("controller is nil")
+        }
+    }
+    
+    func VoteYes() {
         print("voting yes")
         CurrentVote.Yes += 1
-        var done = false
         if CurrentVote.Yes == 2 {
             CurrentVote.Status = VoteStatusEnum.Pass.rawValue
-            done = true
             ChangeItUser()
         }
         self.photoViewController?.yes.text = String(CurrentVote.Yes)
         SaveVote()
-        return done
+        Voting = false
     }
     
-    func VoteNo() -> Bool  {
+    func VoteNo()  {
         print("voting no")
         CurrentVote.No += 1
-        var done = false
         if CurrentVote.No == 2 {
             CurrentVote.Status = VoteStatusEnum.Fail.rawValue
-            done = true
         }
         self.photoViewController?.no.text = String(CurrentVote.No)
         SaveVote()
-        return done
+        Voting = false
     }
     
     func SaveVote() {

@@ -9,6 +9,8 @@
 import CloudKit
 import EVReflection
 
+let GLOBAL_GROUP_ID = "43"
+
 enum MessageTypeEnum: String {
     case Text = "T",
     Picture = "P",
