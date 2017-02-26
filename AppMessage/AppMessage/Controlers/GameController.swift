@@ -7,6 +7,7 @@
 //
 
 import EVCloudKitDao
+import CloudKit
 import EVReflection
 import Async
 
@@ -124,22 +125,21 @@ class GameController {
     
 
     func ChangeItUser() {
-        EVCloudData.publicDB.dao.query(GameUser(), predicate: NSPredicate(format: "User_Id != '\(LocalGroupState!.It_User_ID)'"),
-           completionHandler: { user_results, stats in
-            EVLog("query : result count = \(user_results.count)")
-            if (user_results.count >= 0) {
-                self.LocalGroupState?.It_User_ID = user_results[0].User_Id
-                EVCloudData.publicDB.saveItem(self.LocalGroupState!, completionHandler: {record in
-                    let createdId = record.recordID.recordName;
-                    EVLog("saveItem : \(createdId)");
-                    self.GetItUser()
-                }, errorHandler: {error in
-                    EVLog("<--- ERROR saveItem");
-                })
-            }
-            return true
-        }, errorHandler: { error in
-            EVLog("<--- ERROR query Message")
+        var recordIdMe: String
+        if #available(iOS 10.0, *) {
+            recordIdMe = (EVCloudData.publicDB.dao.activeUser as? CKUserIdentity)?.userRecordID?.recordName ?? "42"
+        } else {
+            recordIdMe = (EVCloudData.publicDB.dao.activeUser as? CKDiscoveredUserInfo)?.userRecordID?.recordName ?? "42"
+        }
+
+        self.LocalGroupState?.It_User_ID = recordIdMe
+        print("setting user to me")
+        EVCloudData.publicDB.saveItem(self.LocalGroupState!, completionHandler: {record in
+            let createdId = record.recordID.recordName;
+            EVLog("saveItem : \(createdId)");
+            self.GetItUser()
+        }, errorHandler: {error in
+            EVLog("<--- ERROR saveItem");
         })
     }
     
@@ -154,6 +154,7 @@ class GameController {
     }
     
     func StartVoteUI(vote: Vote) {
+        print("StartVoteUI")
         self.photoViewController = UIStoryboard(name: "Storyboard", bundle: nil).instantiateViewController(withIdentifier: "photoViewController") as? PhotoViewController
 
         self.photoViewController?.mode = Mode.Receiver
@@ -184,7 +185,7 @@ class GameController {
     func VoteYes() {
         print("voting yes")
         CurrentVote.Yes += 1
-        if CurrentVote.Yes == 2 {
+        if CurrentVote.Yes == 1 {
             CurrentVote.Status = VoteStatusEnum.Pass.rawValue
             ChangeItUser()
         }
@@ -196,7 +197,7 @@ class GameController {
     func VoteNo()  {
         print("voting no")
         CurrentVote.No += 1
-        if CurrentVote.No == 2 {
+        if CurrentVote.No == 1 {
             CurrentVote.Status = VoteStatusEnum.Fail.rawValue
         }
         self.photoViewController?.no.text = String(CurrentVote.No)

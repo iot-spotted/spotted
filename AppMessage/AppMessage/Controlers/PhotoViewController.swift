@@ -87,6 +87,7 @@ class PhotoViewController: UIViewController {
             print("view load not done! :O")
             return
         }
+        print("UpdateUI vote.Status=" + vote.Status)
         if vote.Status != VoteStatusEnum.InProgress.rawValue  {
             dismiss(animated: true, completion: nil)
         }

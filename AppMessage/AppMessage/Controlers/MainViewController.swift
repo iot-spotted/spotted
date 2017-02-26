@@ -75,6 +75,47 @@ class MainViewController: UIViewController {
         
     }
     
+    func createGameUserIfNotExists() {
+        
+        var recordIdMe: String
+        if #available(iOS 10.0, *) {
+            recordIdMe = (EVCloudData.publicDB.dao.activeUser as? CKUserIdentity)?.userRecordID?.recordName ?? "42"
+        } else {
+            recordIdMe = (EVCloudData.publicDB.dao.activeUser as? CKDiscoveredUserInfo)?.userRecordID?.recordName ?? "42"
+        }
+        
+        func GetItUser() {
+            EVCloudData.publicDB.dao.query(GameUser(), predicate: NSPredicate(format: "User_Id == '\(recordIdMe)'"),
+                                           completionHandler: { results, stats in
+                                            EVLog("query : result count = \(results.count)")
+                                            if (results.count == 0) {
+                                                print("creating user...")
+                                                let user = GameUser()
+                                                user.User_Id = recordIdMe
+                                                
+                                                if #available(iOS 10.0, *) {
+                                                    user.UserFirstName = (EVCloudData.publicDB.dao.activeUser as? CKUserIdentity)?.nameComponents?.givenName ?? ""
+                                                    user.UserLastName = (EVCloudData.publicDB.dao.activeUser as? CKUserIdentity)?.nameComponents?.familyName ?? ""
+                                                } else {
+                                                    user.UserLastName = (EVCloudData.publicDB.dao.activeUser as? CKDiscoveredUserInfo)?.firstName ?? ""
+                                                    user.UserLastName = (EVCloudData.publicDB.dao.activeUser as? CKDiscoveredUserInfo)?.lastName ?? ""
+                                                }
+                                                
+                                                EVCloudData.publicDB.saveItem(user, completionHandler: {user in
+                                                    print("Created user")
+                                                    print(user)
+                                                }, errorHandler: {error in
+                                                    Helper.showError("Could not create group!  \(error.localizedDescription)")
+                                                })
+                                        }
+                                            return true
+            }, errorHandler: { error in
+                EVLog("<--- ERROR query User")
+            })
+        }
+
+    }
+    
     override func viewDidLayoutSubviews() {
         profileViewController?.view.frame = self.view.frame
     }
