@@ -122,6 +122,7 @@ class GameController {
         CurrentVote = Vote()
         CurrentVote.Group_ID = Group_ID
         CurrentVote.It_User_ID = LocalGroupState!.It_User_ID
+        CurrentVote.It_User_Name = LocalGroupState!.It_User_Name
         CurrentVote.Sender_User_ID = Sender_User_ID
         CurrentVote.Sender_Name = Sender_Name
         CurrentVote.Asset_ID = Asset_ID
