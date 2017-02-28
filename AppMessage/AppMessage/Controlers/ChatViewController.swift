@@ -35,7 +35,7 @@ class ChatViewController: JSQMessagesViewController, MKMapViewDelegate {
     // Start the conversation
     func setContact(_ recordId: String, fakeGroupChatName: String) {
         chatWithId = GLOBAL_GROUP_ID
-        groupChatName = "Spotted Group"
+        groupChatName = GLOBAL_GROUP_NAME
         
         if #available(iOS 10.0, *) {
             senderFirstName = (EVCloudData.publicDB.dao.activeUser as? CKUserIdentity)?.nameComponents?.givenName ?? ""

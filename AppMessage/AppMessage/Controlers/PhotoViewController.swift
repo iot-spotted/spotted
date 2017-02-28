@@ -44,13 +44,15 @@ class PhotoViewController: UIViewController {
         if mode == Mode.Sender {
             yes.text = ""
             no.text = ""
+            heading.text = "Send Photo?"
+            self.gameController?.photoViewController = self
         }
         else {
             yes.text = "0"
             no.text = "0"
+            heading.text = "Is this " + itValue! + "?"
         }
         imageView.image = image
-        heading.text = "Is this " + itValue! + "?"
         viewLoadDone = true
     }
 
@@ -111,6 +113,7 @@ class PhotoViewController: UIViewController {
     @IBAction func save(sender: UIButton) {
         
         if mode == Mode.Sender{
+            heading.text = "Sending..."
             guard let imageToSave = image else {
                 return
             }
@@ -163,6 +166,9 @@ class PhotoViewController: UIViewController {
                 self.gameController?.StartVote(Sender_User_ID: recordIdMe!, Asset_ID: record.recordID.recordName)
                 
                 
+                self.heading.text = "Voting in Progress"
+                self.yes.text = "0"
+                self.no.text = "0"
                 
                 message.setToFields(GLOBAL_GROUP_ID) //self.chatWithId)
                 message.GroupChatName = "Spotted Group" // groupChatName
@@ -183,7 +189,7 @@ class PhotoViewController: UIViewController {
                 //self.finishSendingMessage()
             })
             
-            dismiss(animated: true, completion: nil)
+            // dismiss(animated: true, completion: nil)
         }
         else {
             gameController?.VoteYes()

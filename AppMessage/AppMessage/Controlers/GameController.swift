@@ -18,6 +18,7 @@ class GameController {
     var CurrentVote: Vote
     var ItUserName: String = ""
     var Voting: Bool = false
+    var CurrentSender: Bool = false
     
     var parent: MainViewController
     var photoViewController : PhotoViewController?
@@ -75,7 +76,10 @@ class GameController {
             EVLog("Vote inserted " + item.recordID.recordName)
             self.CurrentVote = item
             self.Voting = true
-            self.StartVoteUI(vote: item)
+            // Only start UI if not current sender
+            if (!self.CurrentSender) {
+                self.StartVoteUI(vote: item)
+            }
 //            self.parent.StartVote()
             // TODO
         }, updatedHandler: { item, dataIndex in
@@ -145,6 +149,8 @@ class GameController {
     
     func StartVote(Sender_User_ID: String, Asset_ID: String) {
         print("starting vote")
+        self.CurrentSender = true
+        self.Voting = true
         CurrentVote = Vote()
         CurrentVote.Group_ID = Group_ID
         CurrentVote.It_User_ID = LocalGroupState!.It_User_ID
@@ -187,6 +193,7 @@ class GameController {
         CurrentVote.Yes += 1
         if CurrentVote.Yes == 1 {
             CurrentVote.Status = VoteStatusEnum.Pass.rawValue
+            SendMessage("Accepted! (\(CurrentVote.Yes) - \(CurrentVote.No))")
             ChangeItUser()
         }
         self.photoViewController?.yes.text = String(CurrentVote.Yes)
@@ -199,6 +206,7 @@ class GameController {
         CurrentVote.No += 1
         if CurrentVote.No == 1 {
             CurrentVote.Status = VoteStatusEnum.Fail.rawValue
+            SendMessage("Rejected! (\(CurrentVote.Yes) - \(CurrentVote.No))")
         }
         self.photoViewController?.no.text = String(CurrentVote.No)
         SaveVote()
@@ -213,6 +221,22 @@ class GameController {
         }, errorHandler: {error in
             EVLog("<--- ERROR saveItem");
         })
+    }
+    
+    func SendMessage(_ text: String) {
+        let message = Message()
+        message.FromFirstName = "bot"
+        message.FromLastName = ""
+        message.setToFields(GLOBAL_GROUP_ID)
+        message.GroupChatName = GLOBAL_GROUP_NAME
+        message.Text = text
+        EVCloudData.publicDB.saveItem(message, completionHandler: { message in
+            //self.finishSendingMessage()
+        }, errorHandler: { error in
+            //self.finishSendingMessage()
+            Helper.showError("Could not send message!  \(error.localizedDescription)")
+        })
+        //self.finishSendingMessage()
     }
 
 }
