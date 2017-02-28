@@ -166,8 +166,8 @@ class MainViewController: UIViewController {
     
     func registerForVoteNotifications(_ retryCount: Double = 1) {
         EVCloudData.publicDB.connect(Vote(), predicate: NSPredicate(format: "Group_ID = %@", GLOBAL_GROUP_ID), filterId: "Vote_ToGroup", configureNotificationInfo: { notificationInfo in
-            notificationInfo.alertLocalizationKey = "%1$@: Verify %2$@'s photo of %3$@!"
-            notificationInfo.alertLocalizationArgs = ["Group_ID", "Sender_User_ID", "It_User_ID"]
+            notificationInfo.alertLocalizationKey = "Verify %2$@'s photo of %3$@!"
+            notificationInfo.alertLocalizationArgs = ["Sender_User_Name", "It_User_Name"]
         }, completionHandler: { results, status in
             EVLog("Vote to group results = \(results.count)")
             return status == CompletionStatus.partialResult && results.count < 200 // Continue reading if we have less than 200 records and if there are more.
@@ -195,8 +195,8 @@ class MainViewController: UIViewController {
     
     func registerForItNotifications(_ retryCount: Double = 1) {
         EVCloudData.publicDB.connect(GroupState(), predicate: NSPredicate(format: "Group_ID = %@", GLOBAL_GROUP_ID), filterId: "It_Changed", configureNotificationInfo: { notificationInfo in
-            notificationInfo.alertLocalizationKey = "%1$@: Verify %2$@'s is now It!"
-            notificationInfo.alertLocalizationArgs = ["Group_ID", "It_User_ID"]
+            notificationInfo.alertLocalizationKey = "Verify %2$@'s is now It!"
+            notificationInfo.alertLocalizationArgs = ["It_User_Name"]
         }, completionHandler: { results, status in
             EVLog("It results = \(results.count)")
             return status == CompletionStatus.partialResult && results.count < 200 // Continue reading if we have less than 200 records and if there are more.
