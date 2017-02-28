@@ -16,7 +16,6 @@ class GameController {
     var Group_ID: String = GLOBAL_GROUP_ID
     var LocalGroupState: GroupState? = nil
     var CurrentVote: Vote
-    var ItUserName: String = ""
     var Voting: Bool = false
     var CurrentSender: Bool = false
     
@@ -37,7 +36,6 @@ class GameController {
                 if results.count > 0 {
                     self.LocalGroupState = results[0]
                     print("Got LocalGroupState for \(self.LocalGroupState!.Group_ID)")
-                    self.GetItUser()
                 }
                 return true
         }, insertedHandler: { item in
@@ -46,7 +44,6 @@ class GameController {
         }, updatedHandler: { item, dataIndex in
             EVLog("GroupState updated")
             self.LocalGroupState = item
-            self.GetItUser()
         }, deletedHandler: { recordId, dataIndex in
             EVLog("GroupState deleted!!! : \(recordId)")
             self.LocalGroupState = nil
@@ -73,36 +70,35 @@ class GameController {
                 }
                 return true
         }, insertedHandler: { item in
-            EVLog("Vote inserted " + item.recordID.recordName)
+            EVLog("VOTE inserted " + item.recordID.recordName)
             self.CurrentVote = item
             self.Voting = true
             // Only start UI if not current sender
             if (!self.CurrentSender) {
                 self.StartVoteUI(vote: item)
             }
-//            self.parent.StartVote()
-            // TODO
         }, updatedHandler: { item, dataIndex in
-            EVLog("Vote updated " + item.recordID.recordName)
+            EVLog("VOTE updated " + item.recordID.recordName)
             // TODO make sure it's the  same vote
 
             if (self.Voting) {
                 self.CurrentVote = item
-                print("in voting state...calling update")
+                print("VOTE in voting state...calling update")
                 
                 // SET VOTE TO FALSE
                 if self.CurrentVote.Status != VoteStatusEnum.InProgress.rawValue  {
                     self.Voting = false
+                    self.CurrentSender = false
                 }
                 self.UpdateUI()
             } else {
-                print("not in voting mode, ignoring")
+                print("VOTE not in voting mode, ignoring")
             }
         }, deletedHandler: { recordId, dataIndex in
-            EVLog("Vote deleted!!! : \(recordId)")
+            EVLog("VOTE deleted!!! : \(recordId)")
             self.LocalGroupState = nil
         }, dataChangedHandler: {
-            EVLog("Vote data changed!")
+            EVLog("VOTE data changed!")
         }, errorHandler: { error in
             switch EVCloudKitDao.handleCloudKitErrorAs(error, retryAttempt: retryCount) {
             case .retry(let timeToWait):
@@ -117,14 +113,15 @@ class GameController {
         });
     }
     
+    
+    // UNUSED
     func GetItUser() {
         EVCloudData.publicDB.dao.query(GameUser(), predicate: NSPredicate(format: "User_Id == '\(LocalGroupState!.It_User_ID)'"),
             completionHandler: { results, stats in
             EVLog("query : result count = \(results.count)")
             if (results.count >= 0) {
-                self.ItUserName = results[0].UserFirstName + " " + results[0].UserLastName
-                print("It_User=\(self.ItUserName)")
-                self.parent.cameraViewController?.updateLabel(label: self.ItUserName)
+                print("It_User=\(self.LocalGroupState?.It_Name ?? "")!")
+                self.parent.cameraViewController?.updateLabel(label: (self.LocalGroupState?.It_Name)!)
             }
             return true
         }, errorHandler: { error in
@@ -133,23 +130,21 @@ class GameController {
     }
     
 
-    func ChangeItUser(_ senderRecordID: String) {
-
-
-        self.LocalGroupState?.It_User_ID = senderRecordID
+    func ChangeItUser() {
+        self.LocalGroupState?.It_User_ID = CurrentVote.Sender_User_ID
+        self.LocalGroupState?.It_Name = CurrentVote.Sender_Name
         
-        SendMessage("Accepted! (\(CurrentVote.Yes) - \(CurrentVote.No)) \(senderRecordID) now it!")
+        SendMessage("Accepted! (\(CurrentVote.Yes) - \(CurrentVote.No)) \(CurrentVote.Sender_Name) now it!")
         print("setting user to senderrecordID")
         EVCloudData.publicDB.saveItem(self.LocalGroupState!, completionHandler: {record in
             let createdId = record.recordID.recordName;
             EVLog("saveItem : \(createdId)");
-            self.GetItUser()
         }, errorHandler: {error in
             EVLog("<--- ERROR saveItem");
         })
     }
     
-    func StartVote(Sender_User_ID: String, Asset_ID: String) {
+    func StartVote(Sender_User_ID: String, Sender_Name: String, Asset_ID: String) {
         print("starting vote")
         self.CurrentSender = true
         self.Voting = true
@@ -157,6 +152,7 @@ class GameController {
         CurrentVote.Group_ID = Group_ID
         CurrentVote.It_User_ID = LocalGroupState!.It_User_ID
         CurrentVote.Sender_User_ID = Sender_User_ID
+        CurrentVote.Sender_Name = Sender_Name
         CurrentVote.Asset_ID = Asset_ID
         SaveVote()
     }
@@ -167,7 +163,7 @@ class GameController {
 
         self.photoViewController?.mode = Mode.Receiver
         self.photoViewController?.gameController = self
-        self.photoViewController?.itValue = self.ItUserName
+        self.photoViewController?.itValue = self.LocalGroupState?.It_Name
         EVCloudData.publicDB.getItem(vote.Asset_ID, completionHandler: {item in
             if let asset = item as? Asset {
                 self.photoViewController?.image = asset.File?.image()
@@ -177,8 +173,6 @@ class GameController {
             Helper.showError("Could not load Asset: \(error.localizedDescription)")
             self.parent.present(self.photoViewController!, animated: true, completion: nil)
         })
-        
-        
     }
     
     func UpdateUI() {
@@ -195,8 +189,7 @@ class GameController {
         CurrentVote.Yes += 1
         if CurrentVote.Yes == 2 {
             CurrentVote.Status = VoteStatusEnum.Pass.rawValue
-            
-            ChangeItUser(CurrentVote.Sender_User_ID)
+            ChangeItUser()
         }
         self.photoViewController?.yes.text = String(CurrentVote.Yes)
         SaveVote()

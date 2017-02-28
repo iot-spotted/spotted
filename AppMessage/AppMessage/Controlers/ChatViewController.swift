@@ -37,13 +37,9 @@ class ChatViewController: JSQMessagesViewController, MKMapViewDelegate {
         chatWithId = GLOBAL_GROUP_ID
         groupChatName = GLOBAL_GROUP_NAME
         
-        if #available(iOS 10.0, *) {
-            senderFirstName = (EVCloudData.publicDB.dao.activeUser as? CKUserIdentity)?.nameComponents?.givenName ?? ""
-            senderLastName = (EVCloudData.publicDB.dao.activeUser as? CKUserIdentity)?.nameComponents?.familyName ?? ""
-        } else {
-            senderFirstName = (EVCloudData.publicDB.dao.activeUser as? CKDiscoveredUserInfo)?.firstName ?? ""
-            senderLastName    = (EVCloudData.publicDB.dao.activeUser as? CKDiscoveredUserInfo)?.lastName ?? ""
-        }
+        senderFirstName = getMyFirstName()
+        senderLastName = getMyLastName()
+
         
         dataID =  "Message_\(chatWithId)"
 
@@ -95,12 +91,7 @@ class ChatViewController: JSQMessagesViewController, MKMapViewDelegate {
     // ------------------------------------------------------------------------
 
     func initializeCommunication(_ retryCount: Double = 1) {
-        var recordIdMe: String?
-        if #available(iOS 10.0, *) {
-            recordIdMe = (EVCloudData.publicDB.dao.activeUser as? CKUserIdentity)?.userRecordID?.recordName
-        } else {
-            recordIdMe = (EVCloudData.publicDB.dao.activeUser as? CKDiscoveredUserInfo)?.userRecordID?.recordName
-        }
+        let recordIdMe = getMyRecordID()
         
         if !viewAppeared || (recordIdMeForConnection == recordIdMe && recordIdOtherForConnection == chatWithId) {
             return //Already connected or not ready yet
@@ -211,45 +202,9 @@ class ChatViewController: JSQMessagesViewController, MKMapViewDelegate {
         JSQSystemSoundPlayer.jsq_playMessageSentSound()
         let message = Message()
         
-        if text == "create" {
-            var recordIdMe: String?
-            if #available(iOS 10.0, *) {
-                recordIdMe = (EVCloudData.publicDB.dao.activeUser as? CKUserIdentity)?.userRecordID?.recordName
-            } else {
-                recordIdMe = (EVCloudData.publicDB.dao.activeUser as? CKDiscoveredUserInfo)?.userRecordID?.recordName
-            }
-            
-            let user = GameUser()
-            user.User_Id = recordIdMe ?? ""
-            user.UserFirstName = senderFirstName
-            user.UserLastName = senderLastName
-
-            EVCloudData.publicDB.saveItem(user, completionHandler: {user in
-                print("Created user")
-                print(user)
-            }, errorHandler: {error in
-                Helper.showError("Could not create group!  \(error.localizedDescription)")
-            })
-            
-            let group = GroupState()
-            
-            group.Group_ID = GLOBAL_GROUP_ID
-            group.It_User_ID = user.User_Id
-            
-            EVCloudData.publicDB.saveItem(group, completionHandler: {group in
-                print("Created group")
-                print(group)
-            }, errorHandler: { error in
-                Helper.showError("Could not create group!  \(error.localizedDescription)")
-            })
-
-        }
         
-        if #available(iOS 10.0, *) {
-            message.setFromFields((EVCloudData.publicDB.dao.activeUser as? CKUserIdentity)?.userRecordID?.recordName ?? "")
-        } else {
-            message.setFromFields((EVCloudData.publicDB.dao.activeUser as? CKDiscoveredUserInfo)?.userRecordID?.recordName ?? "")
-        }
+        message.setFromFields(recordIdMeForConnection)
+
         message.FromFirstName = senderFirstName
         message.FromLastName = senderLastName
         message.setToFields(chatWithId)
@@ -350,17 +305,9 @@ class ChatViewController: JSQMessagesViewController, MKMapViewDelegate {
         var initials: String = ""
 
          if message.senderId == self.senderId {
-            var firstName: String = ""
-            var lastName: String = ""
+            var firstName: String = getMyFirstName()
+            var lastName: String = getMyLastName()
             
-            if #available(iOS 10.0, *) {
-                firstName = (EVCloudData.publicDB.dao.activeUser as? CKUserIdentity)?.nameComponents?.givenName ?? ""
-                lastName = (EVCloudData.publicDB.dao.activeUser as? CKUserIdentity)?.nameComponents?.familyName ?? ""
-            } else {
-                firstName = (EVCloudData.publicDB.dao.activeUser as? CKDiscoveredUserInfo)?.firstName ?? ""
-                lastName    = (EVCloudData.publicDB.dao.activeUser as? CKDiscoveredUserInfo)?.lastName ?? ""
-            }
-
             initials = "\(String(describing: firstName.characters.first)) \(String(describing: lastName.characters.first))"
             //initials = "\(Array(arrayLiteral: firstName)[0]) \(Array(arrayLiteral: lastName)[0])"
         } else {

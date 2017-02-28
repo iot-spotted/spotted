@@ -16,7 +16,6 @@ func showNameFor(_ contact: AnyObject) -> String {
     } else {
         return showNameFor9(contact as! CKDiscoveredUserInfo)
     }
-    
 }
 
 @available(iOS 10.0, *)
@@ -46,3 +45,36 @@ func showNameFor9(_ contact: CKDiscoveredUserInfo) -> String {
     }
     return "\(firstName) \(lastName)"
 }
+
+
+func getMyRecordID() -> String {
+    var recordIdMe: String
+    
+    if #available(iOS 10.0, *) {
+        recordIdMe = (EVCloudData.publicDB.dao.activeUser as? CKUserIdentity)?.userRecordID?.recordName ?? "42"
+    } else {
+        recordIdMe = (EVCloudData.publicDB.dao.activeUser as? CKDiscoveredUserInfo)?.userRecordID?.recordName ?? "42"
+    }
+    return recordIdMe
+}
+
+func getMyFirstName() -> String {
+    if #available(iOS 10.0, *) {
+        return (EVCloudData.publicDB.dao.activeUser as? CKUserIdentity)?.nameComponents?.givenName ?? ""
+    } else {
+        return (EVCloudData.publicDB.dao.activeUser as? CKDiscoveredUserInfo)?.firstName ?? ""
+    }
+}
+
+func getMyLastName() -> String {
+    if #available(iOS 10.0, *) {
+        return (EVCloudData.publicDB.dao.activeUser as? CKUserIdentity)?.nameComponents?.familyName ?? ""
+    } else {
+        return (EVCloudData.publicDB.dao.activeUser as? CKDiscoveredUserInfo)?.lastName ?? ""
+    }
+}
+
+func getMyName() -> String {
+    return getMyFirstName() + " " + getMyLastName()
+}
+

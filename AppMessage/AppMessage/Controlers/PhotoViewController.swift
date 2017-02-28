@@ -147,23 +147,19 @@ class PhotoViewController: UIViewController {
                     try filemanager.moveItem(atPath: fromFilePath, toPath: toPath)
                 } catch {}
                 
+                
+                
+                var recordIdMe = getMyRecordID()
+                
                 // Create the message object that represents the asset
                 let message = Message()
                 
-                if #available(iOS 10.0, *) {
-                    message.setFromFields((EVCloudData.publicDB.dao.activeUser as? CKUserIdentity)?.userRecordID?.recordName ?? "")
-                } else {
-                    message.setFromFields((EVCloudData.publicDB.dao.activeUser as? CKDiscoveredUserInfo)?.userRecordID?.recordName ?? "")
-                }
+               
+                message.setFromFields(recordIdMe)
+
+                let name = getMyName()
                 
-                var recordIdMe: String?
-                
-                if #available(iOS 10.0, *) {
-                    recordIdMe = (EVCloudData.publicDB.dao.activeUser as? CKUserIdentity)?.userRecordID?.recordName
-                } else {
-                    recordIdMe = (EVCloudData.publicDB.dao.activeUser as? CKDiscoveredUserInfo)?.userRecordID?.recordName
-                }
-                self.gameController?.StartVote(Sender_User_ID: recordIdMe!, Asset_ID: record.recordID.recordName)
+                self.gameController?.StartVote(Sender_User_ID: recordIdMe, Sender_Name: name, Asset_ID: record.recordID.recordName)
                 
                 
                 self.heading.text = "Voting in Progress"
@@ -202,6 +198,7 @@ class PhotoViewController: UIViewController {
         
         if mode == Mode.Sender{
             gameController?.Voting = false
+            gameController?.CurrentSender = false
             dismiss(animated: true, completion: nil)
         }
         else {

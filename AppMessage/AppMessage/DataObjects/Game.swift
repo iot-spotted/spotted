@@ -24,20 +24,22 @@ enum VoteStatusEnum: String {
 }
 
 class GameUser: CKDataObject {
-    var User_Id: String = ""
-    var UserFirstName: String = ""
-    var UserLastName: String = ""
+    var User_ID: String = ""
+    var Name: String = ""
+    var Score: Int = 0
 }
 
 class GroupState: CKDataObject {
     var Group_ID: String = ""
     var It_User_ID: String = ""
+    var It_Name: String = ""
 }
 
 class Vote: CKDataObject {
     var Group_ID: String = ""
     var It_User_ID: String = ""
     var Sender_User_ID: String = ""
+    var Sender_Name: String = ""
     var Asset_ID: String = ""
     var Status: String = VoteStatusEnum.InProgress.rawValue
     var Yes: Int = 0

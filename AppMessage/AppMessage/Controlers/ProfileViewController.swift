@@ -23,18 +23,7 @@ class ProfileViewController: UIViewController {
         barItem.rightBarButtonItem = back
         topBar.setItems([barItem], animated: false)
         
-        var senderFirstName = ""
-        var senderLastName = ""
-        
-        if #available(iOS 10.0, *) {
-            senderFirstName = (EVCloudData.publicDB.dao.activeUser as? CKUserIdentity)?.nameComponents?.givenName ?? ""
-            senderLastName = (EVCloudData.publicDB.dao.activeUser as? CKUserIdentity)?.nameComponents?.familyName ?? ""
-        } else {
-            senderFirstName = (EVCloudData.publicDB.dao.activeUser as? CKDiscoveredUserInfo)?.firstName ?? ""
-            senderLastName    = (EVCloudData.publicDB.dao.activeUser as? CKDiscoveredUserInfo)?.lastName ?? ""
-        }
-        
-       label?.text = "\(senderFirstName) \(senderLastName)"
+       label?.text = getMyName()
         
     }
     
