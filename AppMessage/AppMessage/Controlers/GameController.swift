@@ -128,16 +128,13 @@ class GameController {
     }
     
 
-    func ChangeItUser() {
-        var recordIdMe: String
-        if #available(iOS 10.0, *) {
-            recordIdMe = (EVCloudData.publicDB.dao.activeUser as? CKUserIdentity)?.userRecordID?.recordName ?? "42"
-        } else {
-            recordIdMe = (EVCloudData.publicDB.dao.activeUser as? CKDiscoveredUserInfo)?.userRecordID?.recordName ?? "42"
-        }
+    func ChangeItUser(_ senderRecordID: String) {
 
-        self.LocalGroupState?.It_User_ID = recordIdMe
-        print("setting user to me")
+
+        self.LocalGroupState?.It_User_ID = senderRecordID
+        
+        SendMessage("Accepted! (\(CurrentVote.Yes) - \(CurrentVote.No)) \(senderRecordID) now it!")
+        print("setting user to senderrecordID")
         EVCloudData.publicDB.saveItem(self.LocalGroupState!, completionHandler: {record in
             let createdId = record.recordID.recordName;
             EVLog("saveItem : \(createdId)");
@@ -191,10 +188,10 @@ class GameController {
     func VoteYes() {
         print("voting yes")
         CurrentVote.Yes += 1
-        if CurrentVote.Yes == 1 {
+        if CurrentVote.Yes == 2 {
             CurrentVote.Status = VoteStatusEnum.Pass.rawValue
-            SendMessage("Accepted! (\(CurrentVote.Yes) - \(CurrentVote.No))")
-            ChangeItUser()
+            
+            ChangeItUser(CurrentVote.Sender_User_ID)
         }
         self.photoViewController?.yes.text = String(CurrentVote.Yes)
         SaveVote()
@@ -204,7 +201,7 @@ class GameController {
     func VoteNo()  {
         print("voting no")
         CurrentVote.No += 1
-        if CurrentVote.No == 1 {
+        if CurrentVote.No == 2 {
             CurrentVote.Status = VoteStatusEnum.Fail.rawValue
             SendMessage("Rejected! (\(CurrentVote.Yes) - \(CurrentVote.No))")
         }
