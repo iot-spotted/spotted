@@ -38,6 +38,7 @@ class GroupState: CKDataObject {
 class Vote: CKDataObject {
     var Group_ID: String = ""
     var It_User_ID: String = ""
+    var It_User_Name: String = ""
     var Sender_User_ID: String = ""
     var Sender_Name: String = ""
     var Asset_ID: String = ""
