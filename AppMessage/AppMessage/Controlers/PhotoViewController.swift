@@ -149,7 +149,7 @@ class PhotoViewController: UIViewController {
                 
                 
                 
-                var recordIdMe = getMyRecordID()
+                let recordIdMe = getMyRecordID()
                 
                 // Create the message object that represents the asset
                 let message = Message()
