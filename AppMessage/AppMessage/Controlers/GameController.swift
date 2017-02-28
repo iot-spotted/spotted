@@ -37,6 +37,7 @@ class GameController {
                 EVLog("GroupState results = \(results.count)")
                 if results.count > 0 {
                     self.LocalGroupState = results[0]
+                    self.parent.cameraViewController?.updateLabel(label: (self.LocalGroupState?.It_User_Name)!)
                     print("Got LocalGroupState for \(self.LocalGroupState!.Group_ID)")
                 }
                 return true
@@ -50,6 +51,7 @@ class GameController {
                 self.Voting = false
                 self.CurrentVote.Status = VoteStatusEnum.Pass.rawValue
             }
+            self.parent.cameraViewController?.updateLabel(label: (self.LocalGroupState?.It_User_Name)!)
         }, deletedHandler: { recordId, dataIndex in
             EVLog("GroupState deleted!!! : \(recordId)")
             self.LocalGroupState = nil
@@ -242,7 +244,6 @@ class GameController {
                     CurrentVote.Status = VoteStatusEnum.Pass.rawValue
                     self.Voting = false
                     self.CurrentSender = false
-                    SaveVote()
                     ChangeItUser()
                 }
                 if CurrentVote.No == 2 {
@@ -250,7 +251,6 @@ class GameController {
                     CurrentVote.Status = VoteStatusEnum.Fail.rawValue
                     self.Voting = false
                     self.CurrentSender = false
-                    SaveVote()
                     SendMessage("Rejected! (\(CurrentVote.Yes) - \(CurrentVote.No)) \(self.LocalGroupState?.It_User_Name ?? "") still it!")
                 }
 
@@ -266,7 +266,6 @@ class GameController {
         Voting = false
         CurrentSender = false
         CurrentVote.Status = VoteStatusEnum.Fail.rawValue
-        SaveVote()
     }
     
     // Save updated vote to cloud
@@ -283,6 +282,7 @@ class GameController {
     func ChangeItUser() {
         self.LocalGroupState?.It_User_ID = CurrentVote.Sender_User_ID
         self.LocalGroupState?.It_User_Name = CurrentVote.Sender_Name
+        self.parent.cameraViewController?.updateLabel(label: (self.LocalGroupState?.It_User_Name)!)
         
 //        SendMessage("Accepted! (\(CurrentVote.Yes) - \(CurrentVote.No)) \(CurrentVote.Sender_Name) now it!")
         print("setting user to senderrecordID")
