@@ -167,7 +167,7 @@ class MainViewController: UIViewController {
     func registerForVoteNotifications(_ retryCount: Double = 1) {
         EVCloudData.publicDB.connect(Vote(), predicate: NSPredicate(format: "Group_ID = %@", GLOBAL_GROUP_ID), filterId: "Vote_ToGroup", configureNotificationInfo: { notificationInfo in
             notificationInfo.alertLocalizationKey = "Verify %2$@'s photo of %3$@!"
-            notificationInfo.alertLocalizationArgs = ["Sender_User_Name", "It_User_Name"]
+            notificationInfo.alertLocalizationArgs = ["Sender_Name", "It_User_Name"]
         }, completionHandler: { results, status in
             EVLog("Vote to group results = \(results.count)")
             return status == CompletionStatus.partialResult && results.count < 200 // Continue reading if we have less than 200 records and if there are more.
