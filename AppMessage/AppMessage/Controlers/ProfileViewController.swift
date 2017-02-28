@@ -25,9 +25,20 @@ class ProfileViewController: UIViewController {
         barItem.rightBarButtonItem = back
         topBar.setItems([barItem], animated: false)
         
-       label?.text = getMyName()
-       scoreLabel?.text = "42"
+        label?.text = getMyName()
     
+        EVCloudData.publicDB.dao.query(GameUser(), predicate: NSPredicate(format: "User_Id == '\(getMyRecordID())'"),
+           completionHandler: { results, stats in
+            EVLog("query : result count = \(results.count)")
+            if (results.count == 1) {
+                print("creating user...")
+                let user = results[0]
+                self.scoreLabel?.text = String(user.Score)
+            }
+            return true
+        }, errorHandler: { error in
+            EVLog("<--- ERROR query User")
+        })
     }
     
     func loadCamera() {

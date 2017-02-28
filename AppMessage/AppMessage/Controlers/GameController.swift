@@ -28,6 +28,7 @@ class GameController {
         initializeCommunication()
     }
     
+    // Initialize CloudKit Handlers
     func initializeCommunication(_ retryCount: Double = 1) {
         // GroupState Connection
         EVCloudData.publicDB.connect(GroupState(), predicate: NSPredicate(format: "Group_ID == '\(Group_ID)'"), filterId: "Group_ID_\(Group_ID)",
@@ -112,38 +113,8 @@ class GameController {
             }
         });
     }
-    
-    
-    // UNUSED
-    func GetItUser() {
-        EVCloudData.publicDB.dao.query(GameUser(), predicate: NSPredicate(format: "User_Id == '\(LocalGroupState!.It_User_ID)'"),
-            completionHandler: { results, stats in
-            EVLog("query : result count = \(results.count)")
-            if (results.count >= 0) {
-                print("It_User=\(self.LocalGroupState?.It_Name ?? "")!")
-                self.parent.cameraViewController?.updateLabel(label: (self.LocalGroupState?.It_Name)!)
-            }
-            return true
-        }, errorHandler: { error in
-            EVLog("<--- ERROR query User")
-        })
-    }
-    
 
-    func ChangeItUser() {
-        self.LocalGroupState?.It_User_ID = CurrentVote.Sender_User_ID
-        self.LocalGroupState?.It_Name = CurrentVote.Sender_Name
-        
-        SendMessage("Accepted! (\(CurrentVote.Yes) - \(CurrentVote.No)) \(CurrentVote.Sender_Name) now it!")
-        print("setting user to senderrecordID")
-        EVCloudData.publicDB.saveItem(self.LocalGroupState!, completionHandler: {record in
-            let createdId = record.recordID.recordName;
-            EVLog("saveItem : \(createdId)");
-        }, errorHandler: {error in
-            EVLog("<--- ERROR saveItem");
-        })
-    }
-    
+    // Initialize vote object to send to cloud
     func StartVote(Sender_User_ID: String, Sender_Name: String, Asset_ID: String) {
         print("starting vote")
         self.CurrentSender = true
@@ -157,6 +128,7 @@ class GameController {
         SaveVote()
     }
     
+    // Popup Vote UI
     func StartVoteUI(vote: Vote) {
         print("StartVoteUI")
         self.photoViewController = UIStoryboard(name: "Storyboard", bundle: nil).instantiateViewController(withIdentifier: "photoViewController") as? PhotoViewController
@@ -175,6 +147,7 @@ class GameController {
         })
     }
     
+    // Send updated vote to photo controller
     func UpdateUI() {
         print("updating ui...")
         if let controller = self.photoViewController {
@@ -184,6 +157,7 @@ class GameController {
         }
     }
     
+    // Vote Yes and end vote if done
     func VoteYes() {
         print("voting yes")
         CurrentVote.Yes += 1
@@ -196,28 +170,79 @@ class GameController {
         Voting = false
     }
     
+    // Vote No and reject if done
     func VoteNo()  {
         print("voting no")
         CurrentVote.No += 1
         if CurrentVote.No == 2 {
             CurrentVote.Status = VoteStatusEnum.Fail.rawValue
-            SendMessage("Rejected! (\(CurrentVote.Yes) - \(CurrentVote.No))")
+            SendMessage("Rejected! (\(CurrentVote.Yes) - \(CurrentVote.No)) \(self.LocalGroupState?.It_Name ?? "") still it!")
         }
         self.photoViewController?.no.text = String(CurrentVote.No)
         SaveVote()
         Voting = false
     }
     
+    // Cancel vote and set to failed
+    func CancelVote() {
+        print("Cancelling vote...")
+        Voting = false
+        CurrentSender = false
+        CurrentVote.Status = VoteStatusEnum.Fail.rawValue
+        SaveVote()
+    }
+    
+    // Save updated vote to cloud
     func SaveVote() {
         EVCloudData.publicDB.saveItem(CurrentVote, completionHandler: {record in
             let createdId = record.recordID.recordName;
             EVLog("vote saveItem : \(createdId)");
-            NSLog(" voted")
+            NSLog("voted")
         }, errorHandler: {error in
             EVLog("<--- ERROR saveItem");
         })
     }
     
+    // Change it user on cloud and send message
+    func ChangeItUser() {
+        self.LocalGroupState?.It_User_ID = CurrentVote.Sender_User_ID
+        self.LocalGroupState?.It_Name = CurrentVote.Sender_Name
+        
+        SendMessage("Accepted! (\(CurrentVote.Yes) - \(CurrentVote.No)) \(CurrentVote.Sender_Name) now it!")
+        print("setting user to senderrecordID")
+        EVCloudData.publicDB.saveItem(self.LocalGroupState!, completionHandler: {record in
+            let createdId = record.recordID.recordName;
+            EVLog("saveItem : \(createdId)");
+        }, errorHandler: {error in
+            EVLog("<--- ERROR saveItem");
+        })
+        IncrementScore()
+    }
+    
+    // Increment score for user
+    func IncrementScore() {
+        EVCloudData.publicDB.dao.query(GameUser(), predicate: NSPredicate(format: "User_Id == '\(CurrentVote.Sender_User_ID)'"),
+           completionHandler: { results, stats in
+            EVLog("query : result count = \(results.count)")
+            if (results.count == 1) {
+                print("creating user...")
+                let user = results[0]
+                user.Score += 1
+                
+                EVCloudData.publicDB.saveItem(user, completionHandler: {user in
+                    print("Updated user score")
+                    print(user)
+                }, errorHandler: {error in
+                    Helper.showError("Could not update score!  \(error.localizedDescription)")
+                })
+            }
+            return true
+        }, errorHandler: { error in
+            EVLog("<--- ERROR query User")
+        })
+    }
+    
+    // Send message as 'bot'
     func SendMessage(_ text: String) {
         let message = Message()
         message.FromFirstName = "bot"
@@ -226,12 +251,9 @@ class GameController {
         message.GroupChatName = GLOBAL_GROUP_NAME
         message.Text = text
         EVCloudData.publicDB.saveItem(message, completionHandler: { message in
-            //self.finishSendingMessage()
         }, errorHandler: { error in
-            //self.finishSendingMessage()
             Helper.showError("Could not send message!  \(error.localizedDescription)")
         })
-        //self.finishSendingMessage()
     }
 
 }
