@@ -91,6 +91,26 @@ class PhotoViewController: UIViewController {
         }
         print("UpdateUI vote.Status=" + vote.Status)
         if vote.Status != VoteStatusEnum.InProgress.rawValue  {
+//            if mode == Mode.Sender {
+//                // Create the message object that represents the asset
+//                let message = Message()
+//                
+//                
+//                message.setFromFields(recordIdMe)
+//                message.setToFields(GLOBAL_GROUP_ID) //self.chatWithId)
+//                message.GroupChatName = "Spotted Group" // groupChatName
+//                message.Text = "<foto>"
+//                message.MessageType = MessageTypeEnum.Picture.rawValue
+//                message.setAssetFields(record.recordID.recordName)
+//                
+//                EVCloudData.publicDB.saveItem(message, completionHandler: {record in
+//                    EVLog("saveItem Message: \(record.recordID.recordName)")
+//                    // self.finishSendingMessage()
+//                }, errorHandler: {error in
+//                    Helper.showError("Could not send picture message!  \(error.localizedDescription)")
+//                    //self.finishSendingMessage()
+//                })
+//            }
             dismiss(animated: true, completion: nil)
         }
         print("calling updateui")
@@ -151,11 +171,7 @@ class PhotoViewController: UIViewController {
                 
                 let recordIdMe = getMyRecordID()
                 
-                // Create the message object that represents the asset
-                let message = Message()
-                
                
-                message.setFromFields(recordIdMe)
 
                 let name = getMyName()
                 
@@ -166,19 +182,7 @@ class PhotoViewController: UIViewController {
                 self.yes.text = "0"
                 self.no.text = "0"
                 
-                message.setToFields(GLOBAL_GROUP_ID) //self.chatWithId)
-                message.GroupChatName = "Spotted Group" // groupChatName
-                message.Text = "<foto>"
-                message.MessageType = MessageTypeEnum.Picture.rawValue
-                message.setAssetFields(record.recordID.recordName)
-                
-                EVCloudData.publicDB.saveItem(message, completionHandler: {record in
-                    EVLog("saveItem Message: \(record.recordID.recordName)")
-                    // self.finishSendingMessage()
-                }, errorHandler: {error in
-                    Helper.showError("Could not send picture message!  \(error.localizedDescription)")
-                    //self.finishSendingMessage()
-                })
+            
                 
             }, errorHandler: {error in
                 Helper.showError("Could not send picture!  \(error.localizedDescription)")

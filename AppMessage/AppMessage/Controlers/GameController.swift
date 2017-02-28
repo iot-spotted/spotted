@@ -164,6 +164,7 @@ class GameController {
         if CurrentVote.Yes == 2 {
             CurrentVote.Status = VoteStatusEnum.Pass.rawValue
             ChangeItUser()
+            
         }
         self.photoViewController?.yes.text = String(CurrentVote.Yes)
         SaveVote()
@@ -208,7 +209,7 @@ class GameController {
         self.LocalGroupState?.It_User_ID = CurrentVote.Sender_User_ID
         self.LocalGroupState?.It_User_Name = CurrentVote.Sender_Name
         
-        SendMessage("Accepted! (\(CurrentVote.Yes) - \(CurrentVote.No)) \(CurrentVote.Sender_Name) now it!")
+//        SendMessage("Accepted! (\(CurrentVote.Yes) - \(CurrentVote.No)) \(CurrentVote.Sender_Name) now it!")
         print("setting user to senderrecordID")
         EVCloudData.publicDB.saveItem(self.LocalGroupState!, completionHandler: {record in
             let createdId = record.recordID.recordName;

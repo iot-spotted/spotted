@@ -143,7 +143,7 @@ class MainViewController: UIViewController {
             EVLog("Message to group inserted \(item)")
             //self.startChat(item.From_ID, firstName: item.ToFirstName, lastName: item.ToLastName)
             //self.createGameUserIfNotExists()
-            self.scrollView!.contentOffset = CGPoint(x:self.view.frame.width*2,y:0)
+            //self.scrollView!.contentOffset = CGPoint(x:self.view.frame.width*2,y:0)
         }, updatedHandler: { item, dataIndex in
             EVLog("Message to group updated \(item)")
         }, deletedHandler: { recordId, dataIndex in
