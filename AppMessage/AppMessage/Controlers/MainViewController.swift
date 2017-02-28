@@ -75,6 +75,10 @@ class MainViewController: UIViewController {
         
         self.scrollView!.contentOffset = CGPoint(x:self.view.frame.width,y:0)
         
+        self.registerForMessageNotifications()
+        self.registerForVoteNotifications()
+        self.registerForItNotifications()
+        
     }
 
     func createGameUserIfNotExists() {
@@ -126,6 +130,96 @@ class MainViewController: UIViewController {
         }
         );
         
+    }
+    
+    func registerForMessageNotifications(_ retryCount: Double = 1) {
+        EVCloudData.publicDB.connect(Message(), predicate: NSPredicate(format: "To_ID = %@", GLOBAL_GROUP_ID), filterId: "Message_ToGroup", configureNotificationInfo: { notificationInfo in
+            notificationInfo.alertLocalizationKey = "%1$@ %2$@ : %3$@"
+            notificationInfo.alertLocalizationArgs = ["FromFirstName", "FromLastName", "Text"]
+        }, completionHandler: { results, status in
+            EVLog("Message to group results = \(results.count)")
+            return status == CompletionStatus.partialResult && results.count < 200 // Continue reading if we have less than 200 records and if there are more.
+        }, insertedHandler: { item in
+            EVLog("Message to group inserted \(item)")
+            //self.startChat(item.From_ID, firstName: item.ToFirstName, lastName: item.ToLastName)
+            //self.createGameUserIfNotExists()
+            self.scrollView!.contentOffset = CGPoint(x:self.view.frame.width*2,y:0)
+        }, updatedHandler: { item, dataIndex in
+            EVLog("Message to group updated \(item)")
+        }, deletedHandler: { recordId, dataIndex in
+            EVLog("Message to group deleted : \(recordId)")
+        }, errorHandler: { error in
+            switch EVCloudKitDao.handleCloudKitErrorAs(error, retryAttempt: retryCount) {
+            case .retry(let timeToWait):
+                Helper.showError("Could not load messages: \(error.localizedDescription)")
+                Async.background(after: timeToWait) {
+                    self.registerForMessageNotifications(retryCount + 1)
+                }
+            case .fail:
+                Helper.showError("Could not load messages: \(error.localizedDescription)")
+            default: // For here there is no need to handle the .Success and .RecoverableError
+                break
+            }
+            
+        })
+    }
+    
+    func registerForVoteNotifications(_ retryCount: Double = 1) {
+        EVCloudData.publicDB.connect(Vote(), predicate: NSPredicate(format: "Group_ID = %@", GLOBAL_GROUP_ID), filterId: "Vote_ToGroup", configureNotificationInfo: { notificationInfo in
+            notificationInfo.alertLocalizationKey = "%1$@: Verify %2$@'s photo of %3$@!"
+            notificationInfo.alertLocalizationArgs = ["Group_ID", "Sender_User_ID", "It_User_ID"]
+        }, completionHandler: { results, status in
+            EVLog("Vote to group results = \(results.count)")
+            return status == CompletionStatus.partialResult && results.count < 200 // Continue reading if we have less than 200 records and if there are more.
+        }, insertedHandler: { item in
+            EVLog("Vote to group inserted \(item)")
+        }, updatedHandler: { item, dataIndex in
+            EVLog("Vote to group updated \(item)")
+        }, deletedHandler: { recordId, dataIndex in
+            EVLog("Vote to group deleted : \(recordId)")
+        }, errorHandler: { error in
+            switch EVCloudKitDao.handleCloudKitErrorAs(error, retryAttempt: retryCount) {
+            case .retry(let timeToWait):
+                Helper.showError("Could not load vote: \(error.localizedDescription)")
+                Async.background(after: timeToWait) {
+                    self.registerForVoteNotifications(retryCount + 1)
+                }
+            case .fail:
+                Helper.showError("Could not load vote: \(error.localizedDescription)")
+            default: // For here there is no need to handle the .Success and .RecoverableError
+                break
+            }
+            
+        })
+    }
+    
+    func registerForItNotifications(_ retryCount: Double = 1) {
+        EVCloudData.publicDB.connect(GroupState(), predicate: NSPredicate(format: "Group_ID = %@", GLOBAL_GROUP_ID), filterId: "It_Changed", configureNotificationInfo: { notificationInfo in
+            notificationInfo.alertLocalizationKey = "%1$@: Verify %2$@'s is now It!"
+            notificationInfo.alertLocalizationArgs = ["Group_ID", "It_User_ID"]
+        }, completionHandler: { results, status in
+            EVLog("It results = \(results.count)")
+            return status == CompletionStatus.partialResult && results.count < 200 // Continue reading if we have less than 200 records and if there are more.
+        }, insertedHandler: { item in
+            EVLog("It inserted \(item)")
+        }, updatedHandler: { item, dataIndex in
+            EVLog("It updated \(item)")
+        }, deletedHandler: { recordId, dataIndex in
+            EVLog("It deleted : \(recordId)")
+        }, errorHandler: { error in
+            switch EVCloudKitDao.handleCloudKitErrorAs(error, retryAttempt: retryCount) {
+            case .retry(let timeToWait):
+                Helper.showError("Could not load it change: \(error.localizedDescription)")
+                Async.background(after: timeToWait) {
+                    self.registerForItNotifications(retryCount + 1)
+                }
+            case .fail:
+                Helper.showError("Could not load it change: \(error.localizedDescription)")
+            default: // For here there is no need to handle the .Success and .RecoverableError
+                break
+            }
+            
+        })
     }
     
     override func viewDidLayoutSubviews() {
