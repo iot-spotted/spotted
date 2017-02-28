@@ -32,7 +32,7 @@ class GameUser: CKDataObject {
 class GroupState: CKDataObject {
     var Group_ID: String = ""
     var It_User_ID: String = ""
-    var It_Name: String = ""
+    var It_User_Name: String = ""
 }
 
 class Vote: CKDataObject {

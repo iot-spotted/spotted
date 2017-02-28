@@ -135,7 +135,7 @@ class GameController {
 
         self.photoViewController?.mode = Mode.Receiver
         self.photoViewController?.gameController = self
-        self.photoViewController?.itValue = self.LocalGroupState?.It_Name
+        self.photoViewController?.itValue = self.LocalGroupState?.It_User_Name
         EVCloudData.publicDB.getItem(vote.Asset_ID, completionHandler: {item in
             if let asset = item as? Asset {
                 self.photoViewController?.image = asset.File?.image()
@@ -176,7 +176,7 @@ class GameController {
         CurrentVote.No += 1
         if CurrentVote.No == 2 {
             CurrentVote.Status = VoteStatusEnum.Fail.rawValue
-            SendMessage("Rejected! (\(CurrentVote.Yes) - \(CurrentVote.No)) \(self.LocalGroupState?.It_Name ?? "") still it!")
+            SendMessage("Rejected! (\(CurrentVote.Yes) - \(CurrentVote.No)) \(self.LocalGroupState?.It_User_Name ?? "") still it!")
         }
         self.photoViewController?.no.text = String(CurrentVote.No)
         SaveVote()
@@ -206,7 +206,7 @@ class GameController {
     // Change it user on cloud and send message
     func ChangeItUser() {
         self.LocalGroupState?.It_User_ID = CurrentVote.Sender_User_ID
-        self.LocalGroupState?.It_Name = CurrentVote.Sender_Name
+        self.LocalGroupState?.It_User_Name = CurrentVote.Sender_Name
         
         SendMessage("Accepted! (\(CurrentVote.Yes) - \(CurrentVote.No)) \(CurrentVote.Sender_Name) now it!")
         print("setting user to senderrecordID")

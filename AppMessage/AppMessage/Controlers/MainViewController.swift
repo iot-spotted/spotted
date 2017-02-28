@@ -115,7 +115,7 @@ class MainViewController: UIViewController {
                 
                 group.Group_ID = GLOBAL_GROUP_ID
                 group.It_User_ID = recordIdMe
-                group.It_Name = getMyName()
+                group.It_User_Name = getMyName()
                 
                 EVCloudData.publicDB.saveItem(group, completionHandler: {group in
                     print("Created group")
