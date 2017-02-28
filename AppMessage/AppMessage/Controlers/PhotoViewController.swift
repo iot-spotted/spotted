@@ -201,6 +201,7 @@ class PhotoViewController: UIViewController {
     @IBAction func no(sender: UIButton) {
         
         if mode == Mode.Sender{
+            gameController?.Voting = false
             dismiss(animated: true, completion: nil)
         }
         else {
