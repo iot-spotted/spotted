@@ -45,3 +45,8 @@ class Vote: CKDataObject {
     var Yes: Int = 0
     var No: Int = 0
 }
+
+//class Vote: CKDataObject {
+//    var Vote_ID: String = ""
+//    var Yes: Bool = false
+//}

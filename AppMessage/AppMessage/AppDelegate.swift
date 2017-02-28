@@ -21,8 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // After this, go to the iCloud dashboard and make all metadata for each recordType queryable and sortable!
         // If you use this in your own project, then make sure that the fields are not nil otherwise the field will not be created.
         //EVCloudKitDao.publicDB.createRecordTypes([Message(), Asset(), News(), Invoice()])
-        //EVCloudKitDao.publicDB.createRecordTypes([GameUser(), GroupState()])
-//        EVCloudKitDao.publicDB.createRecordTypes([Vote()])
+//        EVCloudKitDao.publicDB.createRecordTypes([GameUser(), GroupState(), Vote()])
         
 
 
