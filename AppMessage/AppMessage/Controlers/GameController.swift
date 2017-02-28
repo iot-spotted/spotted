@@ -14,6 +14,7 @@ import Async
 
 class GameController {
     var Group_ID: String = GLOBAL_GROUP_ID
+    var myRecordID: String = getMyRecordID()
     var LocalGroupState: GroupState? = nil
     var CurrentVote: Vote
     var Voting: Bool = false
@@ -45,6 +46,10 @@ class GameController {
         }, updatedHandler: { item, dataIndex in
             EVLog("GroupState updated")
             self.LocalGroupState = item
+            if self.Voting {
+                self.Voting = false
+                self.CurrentVote.Status = VoteStatusEnum.Pass.rawValue
+            }
         }, deletedHandler: { recordId, dataIndex in
             EVLog("GroupState deleted!!! : \(recordId)")
             self.LocalGroupState = nil
@@ -112,6 +117,38 @@ class GameController {
                 break
             }
         });
+        
+        EVCloudData.publicDB.connect(UserVote(), predicate: NSPredicate(value: true), filterId: "User_Vote_ALL",
+            completionHandler: { results, status in
+                EVLog("User Vote results = \(results.count)")
+                if results.count > 0 {
+                    // TODO check for in progress votes
+                }
+                return true
+        }, insertedHandler: { item in
+            EVLog("USER VOTE inserted " + item.recordID.recordName)
+            self.HandleNewUserVote(vote: item)
+        }, updatedHandler: { item, dataIndex in
+            EVLog("USER VOTE updated (shouldn't happen)" + item.recordID.recordName)
+        }, deletedHandler: { recordId, dataIndex in
+            EVLog("USER VOTE deleted!!! : \(recordId)")
+            self.LocalGroupState = nil
+        }, dataChangedHandler: {
+            EVLog("USER VOTE data changed!")
+        }, errorHandler: { error in
+            print("USER VOTE ERROR")
+            switch EVCloudKitDao.handleCloudKitErrorAs(error, retryAttempt: retryCount) {
+            case .retry(let timeToWait):
+                Async.background(after: timeToWait) {
+                    self.initializeCommunication(retryCount + 1)
+                }
+            case .fail:
+                Helper.showError("Could not load groupdata: \(error.localizedDescription)")
+            default: // For here there is no need to handle the .Success, and .RecoverableError
+                break
+            }
+        });
+
     }
 
     // Initialize vote object to send to cloud
@@ -161,14 +198,8 @@ class GameController {
     // Vote Yes and end vote if done
     func VoteYes() {
         print("voting yes")
-        CurrentVote.Yes += 1
-        if CurrentVote.Yes == 2 {
-            CurrentVote.Status = VoteStatusEnum.Pass.rawValue
-            ChangeItUser()
-            
-        }
         self.photoViewController?.yes.text = String(CurrentVote.Yes)
-        SaveVote()
+        SaveUserVote(Yes: true)
         Voting = false
     }
     
@@ -176,15 +207,59 @@ class GameController {
     func VoteNo()  {
         print("voting no")
         CurrentVote.No += 1
-        if CurrentVote.No == 2 {
-            CurrentVote.Status = VoteStatusEnum.Fail.rawValue
-            SendMessage("Rejected! (\(CurrentVote.Yes) - \(CurrentVote.No)) \(self.LocalGroupState?.It_User_Name ?? "") still it!")
-        }
+
         self.photoViewController?.no.text = String(CurrentVote.No)
-        SaveVote()
+        SaveUserVote(Yes: false)
+        
         Voting = false
     }
     
+    func SaveUserVote(Yes: Bool) {
+        let vote = UserVote()
+        vote.Vote_ID = CurrentVote.recordID.recordName
+        vote.Yes = Yes
+        
+        EVCloudData.publicDB.saveItem(vote, completionHandler: {record in
+            let createdId = record.recordID.recordName;
+            EVLog("user vote saveItem : \(createdId)");
+        }, errorHandler: {error in
+            EVLog("<--- ERROR saveItem");
+        })
+    }
+    
+    func HandleNewUserVote(vote: UserVote) {
+        if ((vote.Vote_ID == CurrentVote.recordID.recordName) && (vote.User_ID != myRecordID)) {
+            print("Got valid vote update")
+            if (vote.Yes) {
+                CurrentVote.Yes += 1
+            } else {
+                CurrentVote.No += 1
+            }
+            
+            if (self.CurrentSender) {
+                if CurrentVote.Yes == 2 {
+                    print("Vote yes at 2, done")
+                    CurrentVote.Status = VoteStatusEnum.Pass.rawValue
+                    self.Voting = false
+                    self.CurrentSender = false
+                    SaveVote()
+                    ChangeItUser()
+                }
+                if CurrentVote.No == 2 {
+                    print("Vote nos at 2")
+                    CurrentVote.Status = VoteStatusEnum.Fail.rawValue
+                    self.Voting = false
+                    self.CurrentSender = false
+                    SaveVote()
+                    SendMessage("Rejected! (\(CurrentVote.Yes) - \(CurrentVote.No)) \(self.LocalGroupState?.It_User_Name ?? "") still it!")
+                }
+
+            }
+            self.UpdateUI()
+        } else {
+            print("Bad vote id \(vote.Vote_ID) != \(CurrentVote.recordID.recordName) or \(vote.User_ID) == \(myRecordID)")
+        }
+    }
     // Cancel vote and set to failed
     func CancelVote() {
         print("Cancelling vote...")
@@ -199,7 +274,6 @@ class GameController {
         EVCloudData.publicDB.saveItem(CurrentVote, completionHandler: {record in
             let createdId = record.recordID.recordName;
             EVLog("vote saveItem : \(createdId)");
-            NSLog("voted")
         }, errorHandler: {error in
             EVLog("<--- ERROR saveItem");
         })

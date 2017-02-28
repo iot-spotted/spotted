@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // If you use this in your own project, then make sure that the fields are not nil otherwise the field will not be created.
         //EVCloudKitDao.publicDB.createRecordTypes([Message(), Asset(), News(), Invoice()])
 //        EVCloudKitDao.publicDB.createRecordTypes([GameUser(), GroupState(), Vote()])
-//         EVCloudKitDao.publicDB.createRecordTypes([ GroupState()])
+         //EVCloudKitDao.publicDB.createRecordTypes([ UserVote()])
 
 
 

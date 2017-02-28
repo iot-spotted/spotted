@@ -47,7 +47,8 @@ class Vote: CKDataObject {
     var No: Int = 0
 }
 
-//class Vote: CKDataObject {
-//    var Vote_ID: String = ""
-//    var Yes: Bool = false
-//}
+class UserVote: CKDataObject {
+    var User_ID: String = ""
+    var Vote_ID: String = ""
+    var Yes: Bool = false
+}
