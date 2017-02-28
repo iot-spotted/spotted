@@ -87,8 +87,13 @@ class GameController {
             // TODO make sure it's the  same vote
 
             if (self.Voting) {
-                print("in voting state...calling update")
                 self.CurrentVote = item
+                print("in voting state...calling update")
+                
+                // SET VOTE TO FALSE
+                if self.CurrentVote.Status != VoteStatusEnum.InProgress.rawValue  {
+                    self.Voting = false
+                }
                 self.UpdateUI()
             } else {
                 print("not in voting mode, ignoring")
