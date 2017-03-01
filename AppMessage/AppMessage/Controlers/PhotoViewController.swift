@@ -128,7 +128,7 @@ class PhotoViewController: UIViewController {
     @IBAction func saver(sender: UIButton) {
 
         if #available(iOS 10.3, *) {
-            UIApplication.shared.setAlternateIconName("Test1", completionHandler: nil)
+            //UIApplication.shared.setAlternateIconName("Test1", completionHandler: nil)
         } else {
             // Fallback on earlier versions
         }
