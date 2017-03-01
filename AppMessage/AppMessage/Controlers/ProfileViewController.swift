@@ -53,13 +53,14 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func initializeCommunication(){
-        EVCloudData.publicDB.connect(GameUser(), predicate: NSPredicate(value: true), orderBy: Descending(field: "creationDate"),filterId: "Score",
+        EVCloudData.publicDB.connect(GameUser(), predicate: NSPredicate(value: true), orderBy: Descending(field: "Score"),filterId: "Score",
                                      completionHandler: { results, status in
                                         EVLog("Game User results = \(results.count)")
                                         if results.count > 0 {
                                             // TODO check for in progress votes
                                         }
                                         self.users = results
+                                        self.scoreboardTable.reloadData()
                                         var position = 1
                                         var LeaderBoard = ""
                                         for user in results{
@@ -71,11 +72,14 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         }, insertedHandler: { item in
             EVLog("USER VOTE inserted " + item.recordID.recordName)
             //self.HandleNewUserVote(vote: item)
+            self.users.insert(item, at: 0)
         }, updatedHandler: { item, dataIndex in
-            EVLog("USER VOTE updated (shouldn't happen)" + item.recordID.recordName)
+            NSLog("USER VOTE updated (shouldn't happen)" + item.recordID.recordName + " name:" + item.Name + " score:" + String(item.Score) + " index:" + String(dataIndex))
             if (item.User_ID == getMyRecordID()) {
                 self.scoreLabel?.text = String(item.Score)
             }
+            self.users[dataIndex] = item
+            self.scoreboardTable.reloadData()
         }, deletedHandler: { recordId, dataIndex in
             EVLog("USER VOTE deleted!!! : \(recordId)")
             //self.LocalGroupState = nil
