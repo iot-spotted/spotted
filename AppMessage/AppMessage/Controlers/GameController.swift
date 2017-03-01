@@ -50,6 +50,7 @@ class GameController {
             if self.Voting {
                 self.Voting = false
                 self.CurrentVote.Status = VoteStatusEnum.Pass.rawValue
+                self.UpdateUI()
             }
             self.parent.cameraViewController?.updateLabel(label: (self.LocalGroupState?.It_User_Name)!)
         }, deletedHandler: { recordId, dataIndex in
@@ -290,18 +291,18 @@ class GameController {
         }, errorHandler: {error in
             EVLog("<--- ERROR saveItem");
         })
-        IncrementScore()
+        IncrementScore(BECOMING_IT_SCORE)
     }
     
     // Increment score for user
-    func IncrementScore() {
-        EVCloudData.publicDB.dao.query(GameUser(), predicate: NSPredicate(format: "User_Id == '\(CurrentVote.Sender_User_ID)'"),
+    func IncrementScore(_ amount: Int) {
+        EVCloudData.publicDB.dao.query(GameUser(), predicate: NSPredicate(format: "User_ID == '\(CurrentVote.Sender_User_ID)'"),
            completionHandler: { results, stats in
             EVLog("query : result count = \(results.count)")
             if (results.count == 1) {
                 print("creating user...")
                 let user = results[0]
-                user.Score += 1
+                user.Score += amount
                 
                 EVCloudData.publicDB.saveItem(user, completionHandler: {user in
                     print("Updated user score")

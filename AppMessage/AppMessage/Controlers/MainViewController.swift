@@ -84,7 +84,7 @@ class MainViewController: UIViewController {
         
         let recordIdMe = getMyRecordID()
         
-        EVCloudData.publicDB.dao.query(GameUser(), predicate: NSPredicate(format: "User_Id == '\(recordIdMe)'"),
+        EVCloudData.publicDB.dao.query(GameUser(), predicate: NSPredicate(format: "User_ID == '\(recordIdMe)'"),
            completionHandler: { results, stats in
             EVLog("query : result count = \(results.count)")
             if (results.count == 0) {

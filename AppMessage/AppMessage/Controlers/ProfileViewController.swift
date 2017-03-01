@@ -13,7 +13,6 @@ import EVCloudKitDao
 class ProfileViewController: UIViewController {
     
     @IBOutlet var label: UILabel?
-    
     @IBOutlet var scoreLabel: UILabel?
         
     override func viewDidLoad() {
@@ -27,11 +26,11 @@ class ProfileViewController: UIViewController {
         
         label?.text = getMyName()
     
-        EVCloudData.publicDB.dao.query(GameUser(), predicate: NSPredicate(format: "User_Id == '\(getMyRecordID())'"),
+        EVCloudData.publicDB.dao.query(GameUser(), predicate: NSPredicate(format: "User_ID == '\(getMyRecordID())'"),
            completionHandler: { results, stats in
             EVLog("query : result count = \(results.count)")
             if (results.count == 1) {
-                print("creating user...")
+                print("setting user...")
                 let user = results[0]
                 self.scoreLabel?.text = String(user.Score)
             }

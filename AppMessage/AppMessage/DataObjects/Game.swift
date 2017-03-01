@@ -17,6 +17,8 @@
 import CloudKit
 import EVReflection
 
+let BECOMING_IT_SCORE = 10
+
 enum VoteStatusEnum: String {
     case InProgress = "I",
     Pass = "P",
