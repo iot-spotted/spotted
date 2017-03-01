@@ -73,6 +73,9 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
             //self.HandleNewUserVote(vote: item)
         }, updatedHandler: { item, dataIndex in
             EVLog("USER VOTE updated (shouldn't happen)" + item.recordID.recordName)
+            if (item.User_ID == getMyRecordID()) {
+                self.scoreLabel?.text = String(item.Score)
+            }
         }, deletedHandler: { recordId, dataIndex in
             EVLog("USER VOTE deleted!!! : \(recordId)")
             //self.LocalGroupState = nil
