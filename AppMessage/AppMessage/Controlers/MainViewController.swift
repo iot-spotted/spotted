@@ -164,7 +164,7 @@ class MainViewController: UIViewController {
     }
     
     func registerForVoteNotifications(_ retryCount: Double = 1) {
-        EVCloudData.publicDB.connect(Vote(), predicate: NSPredicate(format: "Group_ID = %@", GLOBAL_GROUP_ID), filterId: "Vote_ToGroup", configureNotificationInfo: { notificationInfo in
+        EVCloudData.publicDB.connect(Vote(), predicate: NSPredicate(format: "Group_ID = %@ AND Status == 'I'", GLOBAL_GROUP_ID), filterId: "Vote_ToGroup", configureNotificationInfo: { notificationInfo in
             notificationInfo.alertLocalizationKey = "Verify %1$@'s photo of %2$@!"
             notificationInfo.alertLocalizationArgs = ["Sender_Name", "It_User_Name"]
         }, completionHandler: { results, status in

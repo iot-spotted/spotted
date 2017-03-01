@@ -250,7 +250,7 @@ class GameController {
                     CurrentVote.Status = VoteStatusEnum.Fail.rawValue
                     self.Voting = false
                     self.CurrentSender = false
-                    SendMessage("Rejected! (\(CurrentVote.Yes) - \(CurrentVote.No)) \(self.LocalGroupState?.It_User_Name ?? "") still it!")
+                    SaveVote()
                 }
 
             }
@@ -265,6 +265,7 @@ class GameController {
         Voting = false
         CurrentSender = false
         CurrentVote.Status = VoteStatusEnum.Fail.rawValue
+        SaveVote()
     }
     
     // Save updated vote to cloud
