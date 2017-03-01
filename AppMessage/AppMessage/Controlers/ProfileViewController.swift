@@ -15,7 +15,7 @@ class ProfileViewController: UIViewController {
     @IBOutlet var label: UILabel?
     
     @IBOutlet var scoreLabel: UILabel?
-    
+        
     override func viewDidLoad() {
         let topBar: UINavigationBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 60))
         topBar.barStyle = UIBarStyle.blackOpaque

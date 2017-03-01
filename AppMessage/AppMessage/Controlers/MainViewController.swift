@@ -38,7 +38,6 @@ class MainViewController: UIViewController {
         self.cameraViewController = UIStoryboard(name: "Storyboard", bundle: nil).instantiateViewController(withIdentifier: "cameraViewController") as! CameraViewController
         self.chatViewController = UIStoryboard(name: "Storyboard", bundle: nil).instantiateViewController(withIdentifier: "chatViewController") as! ChatViewController
         
-        
         self.createGameUserIfNotExists()
         self.gameController = GameController(parentView: self)
         self.cameraViewController?.gameController = self.gameController

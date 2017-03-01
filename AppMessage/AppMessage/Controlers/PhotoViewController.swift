@@ -38,7 +38,7 @@ class PhotoViewController: UIViewController {
     var viewLoadDone = false
     
     var gameController: GameController? = nil
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         if mode == Mode.Sender {
@@ -48,8 +48,8 @@ class PhotoViewController: UIViewController {
             self.gameController?.photoViewController = self
         }
         else {
-            yes.text = "0"
-            no.text = "0"
+            yes.isHidden = true
+            no.isHidden = true
             heading.text = "Is this " + itValue! + "?"
         }
         imageView.image = image
