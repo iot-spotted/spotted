@@ -110,7 +110,7 @@
                     </view>
                     <connections>
                         <outlet property="label" destination="thy-U3-OWT" id="hqx-fm-x4G"/>
-                        <outlet property="scoreLabel" destination="Lo5-cd-NiG" id="k6l-eX-zQZ"/>
+                        <outlet property="scoreLabel" destination="Lo5-cd-NiG" id="zai-sZ-5vE"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="akj-pV-1BU" userLabel="First Responder" sceneMemberID="firstResponder"/>
