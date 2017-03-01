@@ -28,6 +28,10 @@ enum Mode: String {
 class PhotoViewController: UIViewController {
     @IBOutlet var imageView: UIImageView!
     
+    @IBOutlet var cancelButton: UIButton!
+    @IBOutlet var yesButton: UIButton!
+    @IBOutlet var noButton: UIButton!
+    
     @IBOutlet var yes: UILabel!
     @IBOutlet var no: UILabel!
     @IBOutlet var heading: UILabel!
@@ -41,6 +45,7 @@ class PhotoViewController: UIViewController {
         
     override func viewDidLoad() {
         super.viewDidLoad()
+        cancelButton.isHidden = true
         if mode == Mode.Sender {
             yes.text = ""
             no.text = ""
@@ -114,8 +119,8 @@ class PhotoViewController: UIViewController {
             dismiss(animated: true, completion: nil)
         }
         print("calling updateui")
-        yes.text = String(vote.Yes)
-        no.text = String(vote.No)
+        yes.text = "Yes: " + String(vote.Yes)
+        no.text = "No: " + String(vote.No)
     }
     
     // MARK: - Action methods
@@ -134,6 +139,9 @@ class PhotoViewController: UIViewController {
         
         if mode == Mode.Sender{
             heading.text = "Sending..."
+            yesButton.isHidden = true
+            noButton.isHidden = true
+            cancelButton.isHidden = false
             guard let imageToSave = image else {
                 return
             }
@@ -200,14 +208,16 @@ class PhotoViewController: UIViewController {
     
     @IBAction func no(sender: UIButton) {
         
-        if mode == Mode.Sender{
-            gameController?.CancelVote()
-            dismiss(animated: true, completion: nil)
-        }
-        else {
+        if mode == Mode.Receiver{
             gameController?.VoteNo()
             dismiss(animated: true, completion: nil)
         }
+        dismiss(animated: true, completion: nil)
+    }
+    
+    @IBAction func cancel(sender: UIButton) {
+        gameController?.CancelVote()
+        dismiss(animated: true, completion: nil)
     }
     
     

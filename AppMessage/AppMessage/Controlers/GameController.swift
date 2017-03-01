@@ -200,7 +200,6 @@ class GameController {
     // Vote Yes and end vote if done
     func VoteYes() {
         print("voting yes")
-        self.photoViewController?.yes.text = String(CurrentVote.Yes)
         SaveUserVote(Yes: true)
         Voting = false
     }
@@ -210,7 +209,6 @@ class GameController {
         print("voting no")
         CurrentVote.No += 1
 
-        self.photoViewController?.no.text = String(CurrentVote.No)
         SaveUserVote(Yes: false)
         
         Voting = false
