@@ -19,6 +19,8 @@ class GameController {
     var CurrentVote: Vote
     var Voting: Bool = false
     var CurrentSender: Bool = false
+    var LastVote: Bool?
+
     
     var parent: MainViewController
     var photoViewController : PhotoViewController?
@@ -47,6 +49,16 @@ class GameController {
         }, updatedHandler: { item, dataIndex in
             EVLog("GroupState updated")
             self.LocalGroupState = item
+            if let v = self.LastVote {
+                if (v) {
+                    print("Voted yes correctly, incrementing score")
+                    self.IncrementScore(CORRECT_VOTE_SCORE)
+                } else {
+                    print("Voted no incorrectly, decrementing score")
+                    self.IncrementScore(INCORRECT_VOTE_SCORE)
+                }
+
+            }
             if self.Voting {
                 self.Voting = false
                 self.CurrentVote.Status = VoteStatusEnum.Pass.rawValue
@@ -82,6 +94,7 @@ class GameController {
             EVLog("VOTE inserted " + item.recordID.recordName)
             self.CurrentVote = item
             self.Voting = true
+            self.LastVote = nil
             // Only start UI if not current sender
             if (!self.CurrentSender) {
                 self.StartVoteUI(vote: item)
@@ -99,6 +112,20 @@ class GameController {
                     self.Voting = false
                     self.CurrentSender = false
                 }
+
+                if self.CurrentVote.Status == VoteStatusEnum.Fail.rawValue {
+                    if let v = self.LastVote {
+                        if (v) {
+                            print("Voted no correctly, incrementing score")
+                            self.IncrementScore(INCORRECT_VOTE_SCORE)
+                        } else {
+                            print("Voted yes incorrectly, decrementing score")
+                            self.IncrementScore(CORRECT_VOTE_SCORE)
+                        }
+
+                    }
+                }
+
                 self.UpdateUI()
             } else {
                 print("VOTE not in voting mode, ignoring")
@@ -201,18 +228,17 @@ class GameController {
     // Vote Yes and end vote if done
     func VoteYes() {
         print("voting yes")
-        SaveUserVote(Yes: true)
+        LastVote = true
         Voting = false
+        SaveUserVote(Yes: true)
     }
     
     // Vote No and reject if done
     func VoteNo()  {
         print("voting no")
-        CurrentVote.No += 1
-
-        SaveUserVote(Yes: false)
-        
+        LastVote = false
         Voting = false
+        SaveUserVote(Yes: false)
     }
     
     func SaveUserVote(Yes: Bool) {
@@ -238,14 +264,14 @@ class GameController {
             }
             
             if (self.CurrentSender) {
-                if CurrentVote.Yes == 2 {
+                if CurrentVote.Yes == 1 {
                     print("Vote yes at 2, done")
                     CurrentVote.Status = VoteStatusEnum.Pass.rawValue
                     self.Voting = false
                     self.CurrentSender = false
                     ChangeItUser()
                 }
-                if CurrentVote.No == 2 {
+                if CurrentVote.No == 1 {
                     print("Vote nos at 2")
                     CurrentVote.Status = VoteStatusEnum.Fail.rawValue
                     self.Voting = false

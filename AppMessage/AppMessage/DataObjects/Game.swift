@@ -18,6 +18,8 @@ import CloudKit
 import EVReflection
 
 let BECOMING_IT_SCORE = 10
+let CORRECT_VOTE_SCORE = 1
+let INCORRECT_VOTE_SCORE = -2
 
 enum VoteStatusEnum: String {
     case InProgress = "I",
