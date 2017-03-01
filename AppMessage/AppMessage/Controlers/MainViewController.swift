@@ -41,7 +41,7 @@ class MainViewController: UIViewController {
         self.createGameUserIfNotExists()
         self.gameController = GameController(parentView: self)
         self.cameraViewController?.gameController = self.gameController
-        
+        self.chatViewController?.gameController = self.gameController
         
         self.chatViewController?.setContact("", fakeGroupChatName: "lol")
         

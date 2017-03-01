@@ -296,7 +296,7 @@ class GameController {
     
     // Increment score for user
     func IncrementScore(_ amount: Int) {
-        EVCloudData.publicDB.dao.query(GameUser(), predicate: NSPredicate(format: "User_ID == '\(CurrentVote.Sender_User_ID)'"),
+        EVCloudData.publicDB.dao.query(GameUser(), predicate: NSPredicate(format: "User_ID == '\(myRecordID)'"),
            completionHandler: { results, stats in
             EVLog("query : result count = \(results.count)")
             if (results.count == 1) {

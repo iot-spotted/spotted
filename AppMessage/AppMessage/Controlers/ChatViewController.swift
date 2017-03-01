@@ -31,6 +31,8 @@ class ChatViewController: JSQMessagesViewController, MKMapViewDelegate {
     
     var topBar: UINavigationBar = UINavigationBar()
     
+    var gameController: GameController? = nil
+    
     
     // Start the conversation
     func setContact(_ recordId: String, fakeGroupChatName: String) {
@@ -210,6 +212,11 @@ class ChatViewController: JSQMessagesViewController, MKMapViewDelegate {
         message.setToFields(chatWithId)
         message.GroupChatName = groupChatName
         message.Text = text
+        
+        if (text == "++") {
+            gameController?.IncrementScore(10)
+        }
+        
         EVCloudData.publicDB.saveItem(message, completionHandler: { message in
                 self.finishSendingMessage()
             }, errorHandler: { error in
