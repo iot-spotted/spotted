@@ -114,7 +114,15 @@ class CameraViewController: UIViewController {
         self.navTitle?.rightBarButtonItem = chat
         self.navTitle?.leftBarButtonItem = profile
         topBar.setItems([self.navTitle!], animated: false)
-        titleLabel.text = "Find " + (self.gameController?.LocalGroupState.It_User_Name)! + "!"
+        if ((self.gameController?.LocalGroupState.It_User_Name) == getMyName()){
+            self.titleLabel.text = "You're it!"
+            self.disableCamera()
+        }
+        else{
+            self.titleLabel.text = "Find " + (self.gameController?.LocalGroupState.It_User_Name)! + "!"
+            self.enableCamera()
+        }
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -180,7 +188,14 @@ class CameraViewController: UIViewController {
     func updateLabel(label: String) {
         DispatchQueue.main.async {
 //            self.navTitle?.title = "Find " + label + "!"
-            self.titleLabel.text = "Find " + (self.gameController?.LocalGroupState.It_User_Name)! + "!"
+            if ((self.gameController?.LocalGroupState.It_User_Name) == getMyName()){
+                self.titleLabel.text = "You're it!"
+                self.disableCamera()
+            }
+            else{
+                self.titleLabel.text = "Find " + (self.gameController?.LocalGroupState.It_User_Name)! + "!"
+                self.enableCamera()
+            }
             print("Set It User Label=\(label)")
         }
     }
@@ -265,5 +280,13 @@ class CameraViewController: UIViewController {
     
     func StartVote() {
         print("camera ui start vote")
+    }
+    
+    func disableCamera(){
+        cameraButton.isEnabled = false
+    }
+    
+    func enableCamera(){
+        cameraButton.isEnabled = true
     }
 }
