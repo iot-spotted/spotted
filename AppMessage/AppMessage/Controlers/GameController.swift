@@ -89,6 +89,9 @@ class GameController {
                 return true
         }, insertedHandler: { item in
             EVLog("VOTE inserted " + item.recordID.recordName)
+            if (self.Voting) {
+                return
+            }
             self.CurrentVote = item
             self.Voting = true
             self.LastVote = nil
