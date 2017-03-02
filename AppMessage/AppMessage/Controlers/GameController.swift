@@ -125,6 +125,8 @@ class GameController {
                         }
 
                     }
+                    self.Voting = false
+                    self.CurrentSender = false
                 }
 
                 self.UpdateUI()
@@ -265,7 +267,7 @@ class GameController {
             }
             
             if (self.CurrentSender) {
-                if CurrentVote.Yes == 1 {
+                if CurrentVote.Yes == YES_VOTE_LIMIT {
                     print("Vote yes at 2, done")
                     CurrentVote.Status = VoteStatusEnum.Pass.rawValue
                     self.Voting = false
@@ -273,7 +275,7 @@ class GameController {
                     ChangeItUser()
                     self.IncrementScore(BECOMING_IT_SCORE)
                 }
-                if CurrentVote.No == 1 {
+                if CurrentVote.No == NO_VOTE_LIMIT {
                     print("Vote nos at 2")
                     CurrentVote.Status = VoteStatusEnum.Fail.rawValue
                     self.Voting = false
