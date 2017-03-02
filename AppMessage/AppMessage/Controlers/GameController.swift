@@ -58,10 +58,7 @@ class GameController {
                     self.IncrementScore(INCORRECT_VOTE_SCORE)
                 }
             }
-            if (self.LocalGroupState?.It_User_ID == self.myRecordID) {
-                print("I became it!")
-                self.IncrementScore(BECOMING_IT_SCORE)
-            }
+
             if self.Voting {
                 self.Voting = false
                 self.CurrentVote.Status = VoteStatusEnum.Pass.rawValue
@@ -273,6 +270,7 @@ class GameController {
                     self.Voting = false
                     self.CurrentSender = false
                     ChangeItUser()
+                    self.IncrementScore(BECOMING_IT_SCORE)
                 }
                 if CurrentVote.No == 1 {
                     print("Vote nos at 2")
