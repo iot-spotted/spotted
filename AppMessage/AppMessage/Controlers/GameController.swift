@@ -36,11 +36,10 @@ class GameController {
         // GroupState Connection
         EVCloudData.publicDB.connect(GroupState(), predicate: NSPredicate(format: "Group_ID == '\(Group_ID)'"), filterId: "Group_ID_\(Group_ID)",
             completionHandler: { results, status in
-                EVLog("GroupState results = \(results.count)")
                 if results.count > 0 {
                     self.LocalGroupState = results[0]
                     self.parent.cameraViewController?.updateLabel(label: (self.LocalGroupState?.It_User_Name)!)
-                    print("Got LocalGroupState for \(self.LocalGroupState!.Group_ID)")
+                    print("LocalGroupState set for \(self.LocalGroupState!.Group_ID)")
                 }
                 return true
         }, insertedHandler: { item in
@@ -86,10 +85,7 @@ class GameController {
         
         EVCloudData.publicDB.connect(Vote(), predicate: NSPredicate(format: "Group_ID == '\(Group_ID)'"), filterId: "Vote_Group_ID_\(Group_ID)",
             completionHandler: { results, status in
-                EVLog("Vote results = \(results.count)")
-                if results.count > 0 {
-                    // TODO check for in progress votes
-                }
+                // TODO check for in progress votes
                 return true
         }, insertedHandler: { item in
             EVLog("VOTE inserted " + item.recordID.recordName)
@@ -153,10 +149,7 @@ class GameController {
         
         EVCloudData.publicDB.connect(UserVote(), predicate: NSPredicate(value: true), filterId: "User_Vote_ALL",
             completionHandler: { results, status in
-                EVLog("User Vote results = \(results.count)")
-                if results.count > 0 {
-                    // TODO check for in progress votes
-                }
+                // TODO check for in progress votes
                 return true
         }, insertedHandler: { item in
             EVLog("USER VOTE inserted " + item.recordID.recordName)
@@ -220,7 +213,7 @@ class GameController {
     
     // Send updated vote to photo controller
     func UpdateUI() {
-        print("updating ui...")
+        print("UpdateUI...")
         if let controller = self.photoViewController {
             controller.UpdateUI(self.CurrentVote)
         } else{
@@ -230,7 +223,7 @@ class GameController {
     
     // Vote Yes and end vote if done
     func VoteYes() {
-        print("voting yes")
+        print("VoteYes")
         LastVote = true
         Voting = false
         SaveUserVote(Yes: true)
@@ -238,7 +231,7 @@ class GameController {
     
     // Vote No and reject if done
     func VoteNo()  {
-        print("voting no")
+        print("VoteNo")
         LastVote = false
         Voting = false
         SaveUserVote(Yes: false)
@@ -251,7 +244,7 @@ class GameController {
         
         EVCloudData.publicDB.saveItem(vote, completionHandler: {record in
             let createdId = record.recordID.recordName;
-            EVLog("user vote saveItem : \(createdId)");
+            EVLog("SaveUserVote saveItem : \(createdId)");
         }, errorHandler: {error in
             EVLog("<--- ERROR saveItem");
         })
@@ -259,7 +252,7 @@ class GameController {
     
     func HandleNewUserVote(vote: UserVote) {
         if ((vote.Vote_ID == CurrentVote.recordID.recordName) && (vote.User_ID != myRecordID)) {
-            print("Got valid vote update")
+            print("HandleNewUserVote Got valid vote update")
             if (vote.Yes) {
                 CurrentVote.Yes += 1
             } else {
@@ -268,7 +261,7 @@ class GameController {
             
             if (self.CurrentSender) {
                 if CurrentVote.Yes == YES_VOTE_LIMIT {
-                    print("Vote yes at 2, done")
+                    print("Vote yes at limit, done")
                     CurrentVote.Status = VoteStatusEnum.Pass.rawValue
                     self.Voting = false
                     self.CurrentSender = false
@@ -276,7 +269,7 @@ class GameController {
                     self.IncrementScore(BECOMING_IT_SCORE)
                 }
                 if CurrentVote.No == NO_VOTE_LIMIT {
-                    print("Vote nos at 2")
+                    print("Vote no at limit")
                     CurrentVote.Status = VoteStatusEnum.Fail.rawValue
                     self.Voting = false
                     self.CurrentSender = false
@@ -291,7 +284,7 @@ class GameController {
     }
     // Cancel vote and set to failed
     func CancelVote() {
-        print("Cancelling vote...")
+        print("CancelVote...")
         Voting = false
         CurrentSender = false
         CurrentVote.Status = VoteStatusEnum.Fail.rawValue
@@ -303,7 +296,7 @@ class GameController {
         EVCloudData.publicDB.saveItem(CurrentVote, completionHandler: {record in
             let createdId = record.recordID.recordName;
             self.CurrentVote = record
-            EVLog("vote saveItem : \(createdId)");
+            EVLog("SaveVote saveItem : \(createdId)");
         }, errorHandler: {error in
             EVLog("<--- ERROR saveItem");
         })
@@ -315,11 +308,10 @@ class GameController {
         self.LocalGroupState?.It_User_Name = CurrentVote.Sender_Name
         self.parent.cameraViewController?.updateLabel(label: (self.LocalGroupState?.It_User_Name)!)
         
-//        SendMessage("Accepted! (\(CurrentVote.Yes) - \(CurrentVote.No)) \(CurrentVote.Sender_Name) now it!")
-        print("setting user to senderrecordID")
+        print("ChangeItUser setting user to ItUser")
         EVCloudData.publicDB.saveItem(self.LocalGroupState!, completionHandler: {record in
             let createdId = record.recordID.recordName;
-            EVLog("saveItem : \(createdId)");
+            EVLog("ChangeItUser Changed: \(createdId)");
         }, errorHandler: {error in
             EVLog("<--- ERROR saveItem");
         })
@@ -327,22 +319,19 @@ class GameController {
     
     // Increment score for user
     func IncrementScore(_ amount: Int) {
-        print("Increment Score by " + String(amount))
+        print("IncrementScore by " + String(amount))
         EVCloudData.publicDB.dao.query(GameUser(), predicate: NSPredicate(format: "User_ID == '\(myRecordID)'"),
            completionHandler: { results, stats in
-            EVLog("query : result count = \(results.count)")
-            if (results.count == 1) {
-                print("Updating user score...")
-                let user = results[0]
-                user.Score += amount
-                
-                EVCloudData.publicDB.saveItem(user, completionHandler: {user in
-                    print("Updated user score")
-                    print(user)
-                }, errorHandler: {error in
-                    Helper.showError("Could not update score!  \(error.localizedDescription)")
-                })
-            }
+            print("IncrementScore Updating user score...")
+            let user = results[0]
+            user.Score += amount
+            
+            EVCloudData.publicDB.saveItem(user, completionHandler: {user in
+                print("IncrementScore Updated user score")
+                print(user)
+            }, errorHandler: {error in
+                Helper.showError("IncrementScore Could not update score!  \(error.localizedDescription)")
+            })
             return true
         }, errorHandler: { error in
             EVLog("<--- ERROR query User")
