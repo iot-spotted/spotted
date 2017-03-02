@@ -47,6 +47,7 @@ class GameController {
             self.LocalGroupState = item
         }, updatedHandler: { item, dataIndex in
             EVLog("GroupState updated")
+            self.parent.cameraViewController.enableCamera()
             self.LocalGroupState = item
             if let v = self.LastVote {
                 if (v) {
@@ -102,7 +103,7 @@ class GameController {
         }, updatedHandler: { item, dataIndex in
             EVLog("VOTE updated " + item.recordID.recordName)
             // TODO make sure it's the  same vote
-
+            self.parent.cameraViewController.enableCamera()
             if (self.Voting) {
                 self.CurrentVote = item
                 print("VOTE in voting state...calling update")
@@ -236,6 +237,7 @@ class GameController {
         LastVote = true
         Voting = false
         SaveUserVote(Yes: true)
+        self.parent.cameraViewController.disableCamera()
     }
     
     // Vote No and reject if done
@@ -244,6 +246,7 @@ class GameController {
         LastVote = false
         Voting = false
         SaveUserVote(Yes: false)
+        self.parent.cameraViewController.disableCamera()
     }
     
     func SaveUserVote(Yes: Bool) {
