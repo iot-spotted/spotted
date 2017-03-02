@@ -22,7 +22,8 @@ import EVReflection
 
 enum Mode: String {
     case Sender = "Sender",
-    Receiver = "Receiver"
+    Receiver = "Receiver",
+    ItUser = "ItUser"
 }
 
 class PhotoViewController: UIViewController {
@@ -50,15 +51,20 @@ class PhotoViewController: UIViewController {
             yes.text = ""
             no.text = ""
             self.gameController.photoViewController = self
-        }
-        else {
+        } else if mode == Mode.ItUser {
+            heading.text = "\(gameController.CurrentVote.Sender_Name) Spotted You!"
+            yesButton.isHidden = true
+            noButton.isHidden = true
+            yes.text = "Yes:0"
+            no.text = "No:0"
+        } else {
+            yes.isHidden = true
+            no.isHidden = true
             yesButton.setTitle("Confirm", for: UIControlState.normal)
             yesButton.setTitleColor(UIColor.green, for: UIControlState.normal)
             noButton.setTitle("Deny", for: UIControlState.normal)
             noButton.titleLabel?.textColor = UIColor.red
             noButton.setTitleColor(UIColor.red, for: UIControlState.normal)
-            yes.isHidden = true
-            no.isHidden = true
         }
         heading.text = ""
         imageView.image = image
