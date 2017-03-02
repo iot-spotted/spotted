@@ -197,7 +197,11 @@ class GameController {
         print("StartVoteUI")
         self.photoViewController = UIStoryboard(name: "Storyboard", bundle: nil).instantiateViewController(withIdentifier: "photoViewController") as? PhotoViewController
 
-        self.photoViewController?.mode = Mode.Receiver
+        if (vote.It_User_ID == myRecordID) {
+            self.photoViewController?.mode = Mode.ItUser
+        } else {
+            self.photoViewController?.mode = Mode.Receiver
+        }
         self.photoViewController?.gameController = self
         self.photoViewController?.itValue = self.LocalGroupState?.It_User_Name
         EVCloudData.publicDB.getItem(vote.Asset_ID, completionHandler: {item in
