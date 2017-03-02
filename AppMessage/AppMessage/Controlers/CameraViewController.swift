@@ -17,7 +17,6 @@ import Async
 class CameraViewController: UIViewController {
     
     @IBOutlet var cameraButton:UIButton!
-    @IBOutlet var itUserLabel:UILabel!
     
     let captureSession = AVCaptureSession()
     
@@ -27,6 +26,7 @@ class CameraViewController: UIViewController {
     
     var stillImageOutput: AVCaptureStillImageOutput?
     var stillImage: UIImage?
+    var navTitle: UINavigationItem?
     
     var cameraPreviewLayer:AVCaptureVideoPreviewLayer?
     //var toggleCameraGestureRecognizer = UISwipeGestureRecognizer()
@@ -73,8 +73,6 @@ class CameraViewController: UIViewController {
             // Bring the camera button to front
             view.bringSubview(toFront: cameraButton)
             
-            view.bringSubview(toFront: itUserLabel)
-
             captureSession.startRunning()
         } catch {
             print(error)
@@ -94,13 +92,21 @@ class CameraViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         let topBar: UINavigationBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 60))
         topBar.barStyle = UIBarStyle.blackOpaque
+        topBar.isTranslucent = true
+        topBar.setBackgroundImage(UIImage(), for: .default)
+        topBar.shadowImage = UIImage()
+        topBar.tintColor = UIColor.white
+        topBar.layer.shadowColor = UIColor.black.cgColor
+        topBar.layer.shadowRadius = 50
+        topBar.layer.shadowOpacity = 50
+        //topBar.layer.shadowOffset = CGSize(width:100, height:100)
         self.view.addSubview(topBar)
-        let barItem = UINavigationItem(title: "Spotted")
+        self.navTitle = UINavigationItem(title: ("Find " + (self.gameController?.LocalGroupState.It_User_Name)!) + "!")
         let chat = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.compose, target: nil, action: #selector(loadChat))
         let profile = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.organize, target: nil, action: #selector(loadProfile))
-        barItem.rightBarButtonItem = chat
-        barItem.leftBarButtonItem = profile
-        topBar.setItems([barItem], animated: false)
+        self.navTitle?.rightBarButtonItem = chat
+        self.navTitle?.leftBarButtonItem = profile
+        topBar.setItems([self.navTitle!], animated: false)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -130,7 +136,7 @@ class CameraViewController: UIViewController {
     
     func updateLabel(label: String) {
         DispatchQueue.main.async {
-            self.itUserLabel.text = label
+            self.navTitle?.title = "Find " + label + "!"
             print("Set It User Label=\(label)")
         }
     }
@@ -206,7 +212,7 @@ class CameraViewController: UIViewController {
         if segue.identifier == "showPhoto" {
             let photoViewController = segue.destination as! PhotoViewController
             photoViewController.image = stillImage
-            photoViewController.itValue = self.itUserLabel.text
+            photoViewController.itValue = self.gameController?.LocalGroupState.It_User_Name
             photoViewController.mode = Mode.Sender
             photoViewController.gameController = gameController
         }

@@ -23,6 +23,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     override func viewDidLoad() {
         let topBar: UINavigationBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 60))
+        topBar.tintColor = UIColor.white
         topBar.barStyle = UIBarStyle.blackOpaque
         self.view.addSubview(topBar)
         let barItem = UINavigationItem(title: "Profile")

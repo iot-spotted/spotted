@@ -63,6 +63,7 @@ class ChatViewController: JSQMessagesViewController, MKMapViewDelegate {
         self.senderDisplayName = "~"
         
         topBar.barStyle = UIBarStyle.blackOpaque
+        topBar.tintColor = UIColor.white
         self.view.addSubview(topBar)
         let barItem = UINavigationItem(title: groupChatName)
         let back = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.camera, target: nil, action: #selector(loadCamera))
