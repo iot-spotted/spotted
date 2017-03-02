@@ -359,13 +359,13 @@ class ChatViewController: JSQMessagesViewController, MKMapViewDelegate {
         let viewController = UIViewController()
         viewController.view.backgroundColor = UIColor.white
 
-        if data.MessageType == MessageTypeEnum.Picture.rawValue {
-            viewController.title = "Photo"
-            let photoView = VIPhotoView(frame:self.navigationController!.view.bounds, andImage:(message.media as? JSQPhotoMediaItem)?.image)
-            photoView?.autoresizingMask = UIViewAutoresizing(rawValue:1 << 6 - 1)
-            viewController.view.addSubview(photoView!)
-            self.navigationController!.pushViewController(viewController, animated: true)
-        }
+//        if data.MessageType == MessageTypeEnum.Picture.rawValue {
+//            viewController.title = "Photo"
+//            let photoView = VIPhotoView(frame:self.navigationController!.view.bounds, andImage:(message.media as? JSQPhotoMediaItem)?.image)
+//            photoView?.autoresizingMask = UIViewAutoresizing(rawValue:1 << 6 - 1)
+//            viewController.view.addSubview(photoView!)
+//            self.navigationController!.pushViewController(viewController, animated: true)
+//        }
     }
 
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, didChange newState: MKAnnotationViewDragState, fromOldState oldState: MKAnnotationViewDragState) {
