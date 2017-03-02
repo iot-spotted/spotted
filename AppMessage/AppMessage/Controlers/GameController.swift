@@ -57,6 +57,7 @@ class GameController {
                     print("Voted no incorrectly, decrementing score")
                     self.IncrementScore(INCORRECT_VOTE_SCORE)
                 }
+                self.LastVote = nil
             }
 
             if self.Voting {
@@ -124,6 +125,8 @@ class GameController {
                         }
 
                     }
+                    self.Voting = false
+                    self.CurrentSender = false
                 }
 
                 self.UpdateUI()
@@ -264,7 +267,7 @@ class GameController {
             }
             
             if (self.CurrentSender) {
-                if CurrentVote.Yes == 1 {
+                if CurrentVote.Yes == YES_VOTE_LIMIT {
                     print("Vote yes at 2, done")
                     CurrentVote.Status = VoteStatusEnum.Pass.rawValue
                     self.Voting = false
@@ -272,7 +275,7 @@ class GameController {
                     ChangeItUser()
                     self.IncrementScore(BECOMING_IT_SCORE)
                 }
-                if CurrentVote.No == 1 {
+                if CurrentVote.No == NO_VOTE_LIMIT {
                     print("Vote nos at 2")
                     CurrentVote.Status = VoteStatusEnum.Fail.rawValue
                     self.Voting = false
@@ -324,11 +327,12 @@ class GameController {
     
     // Increment score for user
     func IncrementScore(_ amount: Int) {
+        print("Increment Score by " + String(amount))
         EVCloudData.publicDB.dao.query(GameUser(), predicate: NSPredicate(format: "User_ID == '\(myRecordID)'"),
            completionHandler: { results, stats in
             EVLog("query : result count = \(results.count)")
             if (results.count == 1) {
-                print("creating user...")
+                print("Updating user score...")
                 let user = results[0]
                 user.Score += amount
                 
