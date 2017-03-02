@@ -57,6 +57,7 @@ class GameController {
                     print("Voted no incorrectly, decrementing score")
                     self.IncrementScore(INCORRECT_VOTE_SCORE)
                 }
+                self.LastVote = nil
             }
 
             if self.Voting {
@@ -324,11 +325,12 @@ class GameController {
     
     // Increment score for user
     func IncrementScore(_ amount: Int) {
+        print("Increment Score by " + String(amount))
         EVCloudData.publicDB.dao.query(GameUser(), predicate: NSPredicate(format: "User_ID == '\(myRecordID)'"),
            completionHandler: { results, stats in
             EVLog("query : result count = \(results.count)")
             if (results.count == 1) {
-                print("creating user...")
+                print("Updating user score...")
                 let user = results[0]
                 user.Score += amount
                 
