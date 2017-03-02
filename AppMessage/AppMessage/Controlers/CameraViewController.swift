@@ -122,7 +122,6 @@ class CameraViewController: UIViewController {
             
             if let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageDataSampleBuffer) {
                 self.stillImage = UIImage(data: imageData)
-//                self.gameController?.ChangeItUser(self.updateLabel)
                 
                 self.performSegue(withIdentifier: "showPhoto", sender: self)
             }

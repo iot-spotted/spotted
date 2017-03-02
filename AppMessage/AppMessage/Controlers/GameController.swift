@@ -57,7 +57,10 @@ class GameController {
                     print("Voted no incorrectly, decrementing score")
                     self.IncrementScore(INCORRECT_VOTE_SCORE)
                 }
-
+            }
+            if (self.LocalGroupState?.It_User_ID == self.myRecordID) {
+                print("I became it!")
+                self.IncrementScore(BECOMING_IT_SCORE)
             }
             if self.Voting {
                 self.Voting = false
@@ -298,6 +301,7 @@ class GameController {
     func SaveVote() {
         EVCloudData.publicDB.saveItem(CurrentVote, completionHandler: {record in
             let createdId = record.recordID.recordName;
+            self.CurrentVote = record
             EVLog("vote saveItem : \(createdId)");
         }, errorHandler: {error in
             EVLog("<--- ERROR saveItem");
@@ -318,7 +322,6 @@ class GameController {
         }, errorHandler: {error in
             EVLog("<--- ERROR saveItem");
         })
-        IncrementScore(BECOMING_IT_SCORE)
     }
     
     // Increment score for user
