@@ -276,6 +276,7 @@ class GameController {
                     self.CurrentSender = false
                     ChangeItUser()
                     self.IncrementScore(BECOMING_IT_SCORE)
+                    self.SendPic(CurrentVote.Asset_ID)
                 }
                 if CurrentVote.No == NO_VOTE_LIMIT {
                     print("Vote no at limit")
@@ -386,6 +387,28 @@ class GameController {
         }, errorHandler: { error in
             Helper.showError("Could not send message!  \(error.localizedDescription)")
         })
+    }
+
+    func SendPic(_ imageAsset: String) {
+        // Create the message object that represents the asset
+        let message = Message()
+
+
+        message.setFromFields(getMyRecordID())
+        message.setToFields(GLOBAL_GROUP_ID) //self.chatWithId)
+        message.GroupChatName = "Spotted Group" // groupChatName
+        message.Text = "<foto>"
+        message.MessageType = MessageTypeEnum.Picture.rawValue
+        message.setAssetFields(imageAsset)
+
+        EVCloudData.publicDB.saveItem(message, completionHandler: {record in
+            EVLog("saveItem Message: \(record.recordID.recordName)")
+            // self.finishSendingMessage()
+        }, errorHandler: {error in
+            Helper.showError("Could not send picture message!  \(error.localizedDescription)")
+            //self.finishSendingMessage()
+        })
+
     }
 
 }
