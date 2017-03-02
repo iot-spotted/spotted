@@ -192,6 +192,8 @@ class GameController {
         CurrentVote.Sender_User_ID = Sender_User_ID
         CurrentVote.Sender_Name = Sender_Name
         CurrentVote.Asset_ID = Asset_ID
+//        var gameTimer: Timer!
+//        gameTimer = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(GetUserVotes), userInfo: nil, repeats: true)
         SaveVote()
     }
     
@@ -345,6 +347,33 @@ class GameController {
         })
     }
     
+    @objc func GetUserVotes() {
+        EVCloudData.publicDB.dao.query(UserVote(), predicate: NSPredicate(format: "Vote_ID == '\(CurrentVote.recordID.recordName)'"),
+           completionHandler: { results, stats in
+            print("Got some UserVotes...")
+            var no = 0
+            var yes = 0
+
+            for vote in results {
+                if vote.Yes {
+                    yes += 1
+                } else {
+                    no += 1
+                }
+            }
+            print("Updating yes from \(self.CurrentVote.Yes) to \(yes)")
+            print("Updating no from \(self.CurrentVote.No) to \(no)")
+
+            self.CurrentVote.Yes = yes
+            self.CurrentVote.No = no
+            self.UpdateUI()
+
+            return true
+        }, errorHandler: { error in
+            EVLog("<--- ERROR query User")
+        })
+    }
+
     // Send message as 'bot'
     func SendMessage(_ text: String) {
         let message = Message()
