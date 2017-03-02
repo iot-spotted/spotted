@@ -14,6 +14,8 @@
 		2D064A7E1E5BDAB0001902B9 /* Test1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D064A7D1E5BDAB0001902B9 /* Test1@2x.png */; };
 		2D0932101E57B176004900EE /* PhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D09320F1E57B176004900EE /* PhotoViewController.swift */; };
 		2D759B321E5E5F7F00F7A1AD /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D759B311E5E5F7F00F7A1AD /* Game.swift */; };
+		2D978F381E67F24D0054C3EC /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D978F371E67F24D0054C3EC /* icon.png */; };
+		2D978F3A1E67F5B60054C3EC /* hands.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D978F391E67F5B60054C3EC /* hands.png */; };
 		2DD9105E1E5E5A6C00C6D1D8 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DD9105D1E5E5A6C00C6D1D8 /* Util.swift */; };
 		2DF0200E1E5FED3C0024E507 /* GameController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF0200D1E5FED3C0024E507 /* GameController.swift */; };
 		437210433C525AAAFE3EB76C /* Pods_AppMessage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 495AC817462253B57CD42BDB /* Pods_AppMessage.framework */; };
@@ -49,6 +51,8 @@
 		2D064A7D1E5BDAB0001902B9 /* Test1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Test1@2x.png"; sourceTree = "<group>"; };
 		2D09320F1E57B176004900EE /* PhotoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoViewController.swift; sourceTree = "<group>"; };
 		2D759B311E5E5F7F00F7A1AD /* Game.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
+		2D978F371E67F24D0054C3EC /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
+		2D978F391E67F5B60054C3EC /* hands.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hands.png; sourceTree = "<group>"; };
 		2DD9105D1E5E5A6C00C6D1D8 /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		2DF0200D1E5FED3C0024E507 /* GameController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameController.swift; sourceTree = "<group>"; };
 		318A421B62B0803009675CC1 /* Pods_OSXTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OSXTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -163,6 +167,8 @@
 		7FC46F6819813282000A875F /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				2D978F391E67F5B60054C3EC /* hands.png */,
+				2D978F371E67F24D0054C3EC /* icon.png */,
 				23AD4DA81E5E4FFA007EDCA7 /* CameraButton.png */,
 				2D064A7D1E5BDAB0001902B9 /* Test1@2x.png */,
 				7F5DFB511A86C04100628235 /* JSQMessagesViewController.xib */,
@@ -308,7 +314,9 @@
 				7FC46F7B198134C8000A875F /* Storyboard.storyboard in Resources */,
 				7FC46F9419825B33000A875F /* Default-568h@2x.png in Resources */,
 				7FEC7BFD1AEA5EE50004F81D /* LaunchScreen.xib in Resources */,
+				2D978F3A1E67F5B60054C3EC /* hands.png in Resources */,
 				2D064A7E1E5BDAB0001902B9 /* Test1@2x.png in Resources */,
+				2D978F381E67F24D0054C3EC /* icon.png in Resources */,
 				23AD4DAF1E5E517C007EDCA7 /* chatIcon.png in Resources */,
 				7FD051C119C591B2009B7FEE /* image-not-available.jpg in Resources */,
 				23AD4DAB1E5E4FFA007EDCA7 /* CameraButton.png in Resources */,
@@ -485,7 +493,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 833539F8FEB264408D2BA9E0 /* Pods-AppMessage.debug.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = AppMessage/AppMessage.entitlements;
@@ -509,7 +516,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = F6C8B12BC4A097CEAA0D7304 /* Pods-AppMessage.release.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = AppMessage/AppMessage.entitlements;
