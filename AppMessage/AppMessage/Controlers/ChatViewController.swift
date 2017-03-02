@@ -419,7 +419,7 @@ class ChatViewController: JSQMessagesViewController, MKMapViewDelegate {
         var senderName = self.senderDisplayName
         
         if data.From_ID != self.senderId {
-            sender = self.chatWithId
+            sender = data.From_ID
             senderName = data.FromFirstName + " " + data.FromLastName
         }
 
