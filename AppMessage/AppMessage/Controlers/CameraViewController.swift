@@ -17,6 +17,7 @@ import Async
 class CameraViewController: UIViewController {
     
     @IBOutlet var cameraButton:UIButton!
+    @IBOutlet var titleLabel:UILabel!
     
     let captureSession = AVCaptureSession()
     
@@ -38,9 +39,13 @@ class CameraViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        titleLabel.layer.shadowColor = UIColor.black.cgColor
+        titleLabel.layer.shadowRadius = 50
+        titleLabel.layer.shadowOpacity = 50
         
         // Preset the session for taking photo in full resolution
-        captureSession.sessionPreset = AVCaptureSessionPresetPhoto
+        captureSession.sessionPreset = AVCaptureSessionPresetiFrame960x540
+        
         
         let devices = AVCaptureDevice.devices(withMediaType: AVMediaTypeVideo) as! [AVCaptureDevice]
         
@@ -72,6 +77,7 @@ class CameraViewController: UIViewController {
             
             // Bring the camera button to front
             view.bringSubview(toFront: cameraButton)
+            view.bringSubview(toFront: titleLabel)
             
             captureSession.startRunning()
         } catch {
@@ -101,12 +107,14 @@ class CameraViewController: UIViewController {
         topBar.layer.shadowOpacity = 50
         //topBar.layer.shadowOffset = CGSize(width:100, height:100)
         self.view.addSubview(topBar)
-        self.navTitle = UINavigationItem(title: ("Find " + (self.gameController?.LocalGroupState.It_User_Name)!) + "!")
+//        self.navTitle = UINavigationItem(title: ("Find " + (self.gameController?.LocalGroupState.It_User_Name)!) + "!")
+        self.navTitle = UINavigationItem(title: (""))
         let chat = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.compose, target: nil, action: #selector(loadChat))
         let profile = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.organize, target: nil, action: #selector(loadProfile))
         self.navTitle?.rightBarButtonItem = chat
         self.navTitle?.leftBarButtonItem = profile
         topBar.setItems([self.navTitle!], animated: false)
+        titleLabel.text = "Find " + (self.gameController?.LocalGroupState.It_User_Name)! + "!"
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -119,6 +127,41 @@ class CameraViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    func addText(inImage image: UIImage) -> UIImage {
+        
+        let textColor = UIColor.white
+        let textFont = UIFont(name: "Helvetica Bold", size: 100)!
+        let style = NSMutableParagraphStyle()
+        style.alignment = NSTextAlignment.center
+        
+        let scale = UIScreen.main.scale
+        UIGraphicsBeginImageContextWithOptions(image.size, false, scale)
+        
+        var textFontAttributes = [
+            NSFontAttributeName: textFont,
+            NSForegroundColorAttributeName: textColor, NSParagraphStyleAttributeName:
+            style] as [String : Any]
+        image.draw(in: CGRect(origin: CGPoint.zero, size: image.size))
+        
+        var rect = CGRect(origin: CGPoint(x:0, y:150), size: image.size)
+        var text = self.gameController?.LocalGroupState.It_User_Name.components(separatedBy: " ").first?.uppercased()
+        text?.draw(in: rect, withAttributes: textFontAttributes)
+        
+        rect = CGRect(origin: CGPoint(x:0, y:image.size.height-250), size: image.size)
+        text = "SPOTTED"
+        textFontAttributes = [
+            NSFontAttributeName: textFont,
+            NSForegroundColorAttributeName: textColor, NSParagraphStyleAttributeName:
+            style] as [String : Any]
+        text?.draw(in: rect, withAttributes: textFontAttributes)
+
+        
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return newImage!
+    }
+    
     // MARK: - Action methods
 
     @IBAction func capture(sender: UIButton) {
@@ -127,8 +170,8 @@ class CameraViewController: UIViewController {
         stillImageOutput?.captureStillImageAsynchronously(from: videoConnection, completionHandler: { (imageDataSampleBuffer, error) -> Void in
             
             if let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageDataSampleBuffer) {
-                self.stillImage = UIImage(data: imageData)
-                
+                let image = UIImage(data: imageData)
+                self.stillImage = self.addText(inImage: image!)
                 self.performSegue(withIdentifier: "showPhoto", sender: self)
             }
         })
@@ -136,7 +179,8 @@ class CameraViewController: UIViewController {
     
     func updateLabel(label: String) {
         DispatchQueue.main.async {
-            self.navTitle?.title = "Find " + label + "!"
+//            self.navTitle?.title = "Find " + label + "!"
+            self.titleLabel.text = "Find " + (self.gameController?.LocalGroupState.It_User_Name)! + "!"
             print("Set It User Label=\(label)")
         }
     }

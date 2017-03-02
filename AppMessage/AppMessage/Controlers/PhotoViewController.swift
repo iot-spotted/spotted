@@ -49,14 +49,18 @@ class PhotoViewController: UIViewController {
         if mode == Mode.Sender {
             yes.text = ""
             no.text = ""
-            heading.text = "Send Photo?"
             self.gameController.photoViewController = self
         }
         else {
+            yesButton.setTitle("Confirm", for: UIControlState.normal)
+            yesButton.setTitleColor(UIColor.green, for: UIControlState.normal)
+            noButton.setTitle("Deny", for: UIControlState.normal)
+            noButton.titleLabel?.textColor = UIColor.red
+            noButton.setTitleColor(UIColor.red, for: UIControlState.normal)
             yes.isHidden = true
             no.isHidden = true
-            heading.text = "Is this " + itValue! + "?"
         }
+        heading.text = ""
         imageView.image = image
         viewLoadDone = true
     }
@@ -67,27 +71,6 @@ class PhotoViewController: UIViewController {
     }
     
 
-    func textToImage(drawText text: NSString, inImage image: UIImage, atPoint point: CGPoint) -> UIImage {
-        
-        let imageView = UIImageView(image: image)
-        imageView.backgroundColor = UIColor.clear
-        imageView.frame = CGRect(x:0, y:0, width:image.size.width, height:image.size.height)
-        
-        let label = UILabel(frame: CGRect(x:0, y:0, width:image.size.width, height:image.size.height))
-        label.backgroundColor = UIColor.clear
-        label.textAlignment = .center
-        label.textColor = UIColor.white
-        label.text = text as String
-        label.adjustsFontSizeToFitWidth = true
-        
-        UIGraphicsBeginImageContext(label.bounds.size);
-        imageView.layer.render(in: UIGraphicsGetCurrentContext()!)
-        label.layer.render(in: UIGraphicsGetCurrentContext()!)
-        let imageWithText = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext();
-        
-        return imageWithText!
-    }
     
     func UpdateUI(_ vote: Vote) {
         if (!viewLoadDone) {
@@ -145,15 +128,11 @@ class PhotoViewController: UIViewController {
             guard let imageToSave = image else {
                 return
             }
-            //UIImageWriteToSavedPhotosAlbum(imageToSave, nil, nil, nil)
-            
-            //let newImage = textToImage(drawText:"CHILL", inImage: imageToSave, atPoint: CGPoint(x:20, y:20))
-            let newImage = imageToSave
             
             let docDirPath = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true)[0] as NSString
             let filePath =  docDirPath.appendingPathComponent("Image_1.png")
             print(filePath)
-            if let myData = UIImagePNGRepresentation(newImage) {
+            if let myData = UIImagePNGRepresentation(imageToSave) {
                 try? myData.write(to: URL(fileURLWithPath: filePath), options: [.atomic])
             }
             
