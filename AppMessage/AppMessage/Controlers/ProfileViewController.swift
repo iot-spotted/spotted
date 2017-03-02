@@ -46,6 +46,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
                 print("setting user...")
                 let user = results[0]
                 self.scoreLabel.text = String(user.Score)
+                self.scoreLabel?.font = UIFont(name: "Avenir-Black", size: 50)
             }
             return true
         }, errorHandler: { error in
@@ -124,11 +125,12 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         // create a new cell if needed or reuse an old one
         let cell:UITableViewCell = self.scoreboardTable.dequeueReusableCell(withIdentifier: cellReuseIdentifier) as UITableViewCell!
+        cell.selectionStyle = UITableViewCellSelectionStyle.none
         let maxSpace = 24
         var blanks = 1
         if (self.users[indexPath.row].Name.characters.count > maxSpace) {blanks = 1}
         else {blanks = maxSpace - self.users[indexPath.row].Name.characters.count}
-        // set the text from the data model
+
         var text = self.users[indexPath.row].Name
         for _ in 1...blanks{
             text += " "
@@ -142,7 +144,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     // method to run when table view cell is tapped
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ scoreboardTable: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("You tapped cell number \(indexPath.row).")
     }
 
