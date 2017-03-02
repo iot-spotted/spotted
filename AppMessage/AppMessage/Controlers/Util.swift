@@ -59,18 +59,30 @@ func getMyRecordID() -> String {
 }
 
 func getMyFirstName() -> String {
+    var name: String
     if #available(iOS 10.0, *) {
-        return (EVCloudData.publicDB.dao.activeUser as? CKUserIdentity)?.nameComponents?.givenName ?? ""
+        name = (EVCloudData.publicDB.dao.activeUser as? CKUserIdentity)?.nameComponents?.givenName ?? ""
     } else {
-        return (EVCloudData.publicDB.dao.activeUser as? CKDiscoveredUserInfo)?.firstName ?? ""
+        name = (EVCloudData.publicDB.dao.activeUser as? CKDiscoveredUserInfo)?.firstName ?? ""
+    }
+    if (name == "Mobilecommerce") {
+        return "Norman"
+    } else {
+        return name
     }
 }
 
 func getMyLastName() -> String {
+    var name: String
     if #available(iOS 10.0, *) {
-        return (EVCloudData.publicDB.dao.activeUser as? CKUserIdentity)?.nameComponents?.familyName ?? ""
+        name =  (EVCloudData.publicDB.dao.activeUser as? CKUserIdentity)?.nameComponents?.familyName ?? ""
     } else {
-        return (EVCloudData.publicDB.dao.activeUser as? CKDiscoveredUserInfo)?.lastName ?? ""
+        name = (EVCloudData.publicDB.dao.activeUser as? CKDiscoveredUserInfo)?.lastName ?? ""
+    }
+    if name == "Lab" {
+        return "Sadeh"
+    } else {
+        return name
     }
 }
 
