@@ -12,8 +12,8 @@ import EVCloudKitDao
 
 class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-    @IBOutlet var label: UILabel?
-    @IBOutlet var scoreLabel: UILabel?
+    @IBOutlet var label: UILabel!
+    @IBOutlet var scoreLabel: UILabel!
     @IBOutlet var scoreboardLabel: UILabel?
         
     @IBOutlet weak var scoreboardTable: UITableView!
@@ -36,7 +36,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         initializeCommunication()
         
-        label?.text = getMyName()
+        label.text = getMyName()
     
         EVCloudData.publicDB.dao.query(GameUser(), predicate: NSPredicate(format: "User_ID == '\(getMyRecordID())'"),
            completionHandler: { results, stats in
@@ -44,7 +44,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
             if (results.count == 1) {
                 print("setting user...")
                 let user = results[0]
-                self.scoreLabel?.text = String(user.Score)
+                self.scoreLabel.text = String(user.Score)
             }
             return true
         }, errorHandler: { error in
@@ -78,7 +78,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
             NSLog("USER VOTE updated (shouldn't happen)" + item.recordID.recordName + " name:" + item.Name + " score:" + String(item.Score) + " index:" + String(dataIndex))
             self.updateGameUsers()
             if (item.User_ID == getMyRecordID()) {
-                self.scoreLabel?.text = String(item.Score)
+                self.scoreLabel.text = String(item.Score)
             }
         }, deletedHandler: { recordId, dataIndex in
             EVLog("USER VOTE deleted!!! : \(recordId)")

@@ -13,7 +13,7 @@ class RootViewController: UIViewController {
 
     @IBOutlet weak var loginLabel: UILabel!
 
-    var viewController: UIViewController?
+    var viewController: UIViewController!
 
     override func viewDidLoad() {
         reactToiCloudloginChanges()
@@ -29,7 +29,7 @@ class RootViewController: UIViewController {
         NotificationCenter.default.addObserver(forName: NSNotification.Name.NSUbiquityIdentityDidChange, object: nil, queue: nil) { _ in
             EVLog("The user’s iCloud login changed: should refresh all user data.")
             Async.main {
-                self.viewController?.removeFromParentViewController()
+                self.viewController.removeFromParentViewController()
             }
             return
         }
@@ -54,7 +54,7 @@ class RootViewController: UIViewController {
                 Async.main {
                     let storyboard = UIStoryboard(name: "Storyboard", bundle: nil);
                      self.viewController = storyboard.instantiateViewController(withIdentifier: "mainViewController")
-                        self.present(self.viewController!, animated: false, completion: nil)
+                        self.present(self.viewController, animated: false, completion: nil)
                     
                 }
             }, errorHandler: { error in

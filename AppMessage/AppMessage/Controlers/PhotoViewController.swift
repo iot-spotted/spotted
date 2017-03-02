@@ -36,12 +36,12 @@ class PhotoViewController: UIViewController {
     @IBOutlet var no: UILabel!
     @IBOutlet var heading: UILabel!
     
-    var image:UIImage?
-    var mode:Mode?
-    var itValue:String?
+    var image:UIImage!
+    var mode:Mode!
+    var itValue:String!
     var viewLoadDone = false
     
-    var gameController: GameController? = nil
+    var gameController: GameController!
         
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,7 +50,7 @@ class PhotoViewController: UIViewController {
             yes.text = ""
             no.text = ""
             heading.text = "Send Photo?"
-            self.gameController?.photoViewController = self
+            self.gameController.photoViewController = self
         }
         else {
             yes.isHidden = true
@@ -183,7 +183,7 @@ class PhotoViewController: UIViewController {
 
                 let name = getMyName()
                 
-                self.gameController?.StartVote(Sender_User_ID: recordIdMe, Sender_Name: name, Asset_ID: record.recordID.recordName)
+                self.gameController.StartVote(Sender_User_ID: recordIdMe, Sender_Name: name, Asset_ID: record.recordID.recordName)
                 
                 
                 self.heading.text = "Voting in Progress"
@@ -200,7 +200,7 @@ class PhotoViewController: UIViewController {
             // dismiss(animated: true, completion: nil)
         }
         else {
-            gameController?.VoteYes()
+            gameController.VoteYes()
             dismiss(animated: true, completion: nil)
         }
     
@@ -209,14 +209,14 @@ class PhotoViewController: UIViewController {
     @IBAction func no(sender: UIButton) {
         
         if mode == Mode.Receiver{
-            gameController?.VoteNo()
+            gameController.VoteNo()
             dismiss(animated: true, completion: nil)
         }
         dismiss(animated: true, completion: nil)
     }
     
     @IBAction func cancel(sender: UIButton) {
-        gameController?.CancelVote()
+        gameController.CancelVote()
         dismiss(animated: true, completion: nil)
     }
     
