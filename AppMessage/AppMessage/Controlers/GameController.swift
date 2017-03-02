@@ -15,7 +15,7 @@ import Async
 class GameController {
     var Group_ID: String = GLOBAL_GROUP_ID
     var myRecordID: String = getMyRecordID()
-    var LocalGroupState: GroupState? = nil
+    var LocalGroupState: GroupState!
     var CurrentVote: Vote
     var Voting: Bool = false
     var CurrentSender: Bool = false

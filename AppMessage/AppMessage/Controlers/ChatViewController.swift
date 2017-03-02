@@ -31,7 +31,7 @@ class ChatViewController: JSQMessagesViewController, MKMapViewDelegate {
     
     var topBar: UINavigationBar = UINavigationBar()
     
-    var gameController: GameController? = nil
+    var gameController: GameController!
     
     
     // Start the conversation
@@ -100,7 +100,7 @@ class ChatViewController: JSQMessagesViewController, MKMapViewDelegate {
         }
 
         // Setup conversation for
-        recordIdMeForConnection = recordIdMe ?? ""
+        recordIdMeForConnection = recordIdMe 
         recordIdOtherForConnection = chatWithId
 
         // Sender settings for the component
@@ -214,7 +214,7 @@ class ChatViewController: JSQMessagesViewController, MKMapViewDelegate {
         message.Text = text
         
         if (text == "++") {
-            gameController?.IncrementScore(10)
+            gameController.IncrementScore(10)
         }
         
         EVCloudData.publicDB.saveItem(message, completionHandler: { message in

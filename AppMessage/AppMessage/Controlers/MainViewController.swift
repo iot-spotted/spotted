@@ -14,12 +14,12 @@ import Async
 class MainViewController: UIViewController {
     
     
-    @IBOutlet var scrollView: UIScrollView?
+    @IBOutlet var scrollView: UIScrollView!
     
-    var cameraViewController: CameraViewController?
-    var chatViewController: ChatViewController?
-    var profileViewController: ProfileViewController?
-    var gameController: GameController? = nil
+    var cameraViewController: CameraViewController!
+    var chatViewController: ChatViewController!
+    var profileViewController: ProfileViewController!
+    var gameController: GameController!
     
     
     override func viewDidLoad() {
@@ -40,39 +40,39 @@ class MainViewController: UIViewController {
         
         self.createGameUserIfNotExists()
         self.gameController = GameController(parentView: self)
-        self.cameraViewController?.gameController = self.gameController
-        self.chatViewController?.gameController = self.gameController
+        self.cameraViewController.gameController = self.gameController
+        self.chatViewController.gameController = self.gameController
         
-        self.chatViewController?.setContact("", fakeGroupChatName: "lol")
+        self.chatViewController.setContact("", fakeGroupChatName: "lol")
         
-        self.addChildViewController(self.cameraViewController!)
-        self.scrollView!.addSubview((self.cameraViewController?.view)!)
-        self.cameraViewController?.didMove(toParentViewController: self)
+        self.addChildViewController(self.cameraViewController)
+        self.scrollView.addSubview(self.cameraViewController.view)
+        self.cameraViewController.didMove(toParentViewController: self)
         
-        self.addChildViewController(self.profileViewController!)
-        self.scrollView!.addSubview((self.profileViewController?.view)!)
-        self.profileViewController?.didMove(toParentViewController: self)
+        self.addChildViewController(self.profileViewController)
+        self.scrollView!.addSubview(self.profileViewController.view)
+        self.profileViewController.didMove(toParentViewController: self)
     
         
-        self.addChildViewController(self.chatViewController!)
-        self.scrollView!.addSubview((self.chatViewController?.view)!)
-        self.chatViewController?.didMove(toParentViewController: self)
+        self.addChildViewController(self.chatViewController)
+        self.scrollView!.addSubview(self.chatViewController.view)
+        self.chatViewController.didMove(toParentViewController: self)
         
         
-        var profileFrame :CGRect = self.profileViewController!.view.frame
+        var profileFrame :CGRect = self.profileViewController.view.frame
         profileFrame.origin.x = profileFrame.width
-        self.cameraViewController?.view.frame = profileFrame
+        self.cameraViewController.view.frame = profileFrame
         
-        var cameraFrame :CGRect = self.cameraViewController!.view.frame
+        var cameraFrame :CGRect = self.cameraViewController.view.frame
         cameraFrame.origin.x = 2*cameraFrame.width;
-        self.chatViewController?.view.frame = cameraFrame;
+        self.chatViewController.view.frame = cameraFrame;
         
         let scrollWidth: CGFloat  = 3 * self.view.frame.width
         let scrollHeight: CGFloat  = self.view.frame.height
-        self.scrollView!.contentSize = CGSize(width: scrollWidth, height: scrollHeight);
-        self.scrollView!.keyboardDismissMode = .onDrag
+        self.scrollView.contentSize = CGSize(width: scrollWidth, height: scrollHeight);
+        self.scrollView.keyboardDismissMode = .onDrag
         
-        self.scrollView!.contentOffset = CGPoint(x:self.view.frame.width,y:0)
+        self.scrollView.contentOffset = CGPoint(x:self.view.frame.width,y:0)
         
         self.registerForMessageNotifications()
         self.registerForVoteNotifications()
@@ -222,17 +222,17 @@ class MainViewController: UIViewController {
     }
     
     override func viewDidLayoutSubviews() {
-        profileViewController?.view.frame = self.view.frame
+        profileViewController.view.frame = self.view.frame
     }
     
     func loadChat(notification: Notification) {
-        self.scrollView!.scrollRectToVisible(CGRect(x:(self.chatViewController?.view.frame.origin.x)!,y:0,width:(self.chatViewController?.view.frame.width)!,height:(self.chatViewController?.view.frame.height)!), animated: true)
+        self.scrollView.scrollRectToVisible(CGRect(x:self.chatViewController.view.frame.origin.x,y:0,width:self.chatViewController.view.frame.width,height:self.chatViewController.view.frame.height), animated: true)
     }
     func loadCamera(notification: Notification) {
-        self.scrollView!.scrollRectToVisible(CGRect(x:(self.cameraViewController?.view.frame.origin.x)!,y:0,width:(self.cameraViewController?.view.frame.origin.x)!,height:(self.cameraViewController?.view.frame.height)!), animated: true)
+        self.scrollView.scrollRectToVisible(CGRect(x:self.cameraViewController.view.frame.origin.x,y:0,width:self.cameraViewController.view.frame.origin.x,height:self.cameraViewController.view.frame.height), animated: true)
     }
     func loadProfile(notification: Notification) {
-        self.scrollView!.scrollRectToVisible(CGRect(x:0,y:0,width:(self.profileViewController?.view.frame.width)!,height:(self.profileViewController?.view.frame.height)!), animated: true)
+        self.scrollView.scrollRectToVisible(CGRect(x:0,y:0,width:self.profileViewController.view.frame.width,height:self.profileViewController.view.frame.height), animated: true)
     }
 
 }
