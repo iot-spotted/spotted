@@ -9,8 +9,9 @@
 import UIKit
 import CloudKit
 import EVCloudKitDao
+import MessageUI
 
-class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, MFMessageComposeViewControllerDelegate {
     
     @IBOutlet var label: UILabel!
     @IBOutlet var scoreLabel: UILabel!
@@ -151,6 +152,23 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     func loadCamera() {
         NotificationCenter.default.post(name: Notification.Name(rawValue:"loadCamera"), object: nil)
+    }
+    
+    @IBAction func addFriend(sender: UIButton) {
+        if MFMessageComposeViewController.canSendText() == true {
+        //let recipients:[String] = [""]
+        let messageController = MFMessageComposeViewController()
+        messageController.messageComposeDelegate  = self
+        //messageController.recipients = recipients
+        messageController.body = "Join me and " + GLOBAL_GROUP_NAME + " in our Spotted game!\n" + "URL"
+        self.present(messageController, animated: true, completion: nil)
+    } else {
+        //handle text messaging not available
+    }
+    }
+    
+    func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
+        controller.dismiss(animated: true, completion: nil)
     }
 }
 
