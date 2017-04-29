@@ -79,5 +79,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Just to make sure that all updates are written do the cache.
         EVCloudData.publicDB.backupAllData()
     }
+    
+
+    
+    func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool{
+        let urlComponents = NSURLComponents(url: url as URL, resolvingAgainstBaseURL: false)
+        let items = (urlComponents?.queryItems)! as [NSURLQueryItem]
+        //propertyValue = items.first?.value
+        EVLog("opening url")
+        print(urlComponents?.queryItems)
+        return true
+    }
+
 
 }
