@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12072"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -111,7 +112,7 @@
                                         <rect key="frame" x="0.0" y="28" width="291" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="9a9-VF-5Cu" id="NbR-gi-SLN">
-                                            <rect key="frame" x="0.0" y="0.0" width="291" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="291" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -119,7 +120,7 @@
                                         <rect key="frame" x="0.0" y="72" width="291" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="WhZ-Rg-IXU" id="sGM-fV-ME2">
-                                            <rect key="frame" x="0.0" y="0.0" width="291" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="291" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -127,7 +128,7 @@
                                         <rect key="frame" x="0.0" y="116" width="291" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Uzd-Po-HRq" id="Mt0-yI-yK3">
-                                            <rect key="frame" x="0.0" y="0.0" width="291" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="291" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -138,7 +139,7 @@
                                 </connections>
                             </tableView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="E2g-gf-KrD">
-                                <rect key="frame" x="127" y="627" width="142" height="30"/>
+                                <rect key="frame" x="116.5" y="627" width="142" height="30"/>
                                 <state key="normal" title="Add Friend To Group"/>
                                 <connections>
                                     <action selector="addFriendWithSender:" destination="M9V-yA-GEW" eventType="touchUpInside" id="XL6-sd-OPL"/>
@@ -153,15 +154,14 @@
                             <constraint firstItem="E2g-gf-KrD" firstAttribute="top" secondItem="EkO-ub-j6M" secondAttribute="bottom" constant="8" symbolic="YES" id="FZH-rh-AnP"/>
                             <constraint firstItem="thy-U3-OWT" firstAttribute="top" secondItem="J38-Ed-Vsi" secondAttribute="bottom" constant="80" id="JMN-Q2-qHM"/>
                             <constraint firstItem="EkO-ub-j6M" firstAttribute="leading" secondItem="mcb-Ja-KBg" secondAttribute="leadingMargin" constant="26" id="Nr5-DS-6l2"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="E2g-gf-KrD" secondAttribute="trailing" constant="90" id="QSu-BX-NZG"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Lo5-cd-NiG" secondAttribute="trailing" constant="122" id="Vns-0L-gwz"/>
                             <constraint firstItem="EkO-ub-j6M" firstAttribute="top" secondItem="Lo5-cd-NiG" secondAttribute="bottom" constant="8" symbolic="YES" id="Wbf-MN-FQ5"/>
                             <constraint firstItem="thy-U3-OWT" firstAttribute="leading" secondItem="mcb-Ja-KBg" secondAttribute="leading" constant="20" symbolic="YES" id="Y9w-jj-Mpd"/>
                             <constraint firstAttribute="trailing" secondItem="thy-U3-OWT" secondAttribute="trailing" constant="20" symbolic="YES" id="Yaa-Uu-lpB"/>
                             <constraint firstItem="Lo5-cd-NiG" firstAttribute="leading" secondItem="mcb-Ja-KBg" secondAttribute="leadingMargin" constant="122" id="cpN-Ep-RW4"/>
+                            <constraint firstItem="E2g-gf-KrD" firstAttribute="centerX" secondItem="thy-U3-OWT" secondAttribute="centerX" id="hgo-My-EQr"/>
                             <constraint firstItem="Lo5-cd-NiG" firstAttribute="top" secondItem="thy-U3-OWT" secondAttribute="bottom" constant="8" symbolic="YES" id="m7P-Xs-5HZ"/>
                             <constraint firstItem="KKN-fN-3cn" firstAttribute="top" secondItem="E2g-gf-KrD" secondAttribute="bottom" constant="10" id="wPX-O3-6T4"/>
-                            <constraint firstItem="E2g-gf-KrD" firstAttribute="leading" secondItem="mcb-Ja-KBg" secondAttribute="leadingMargin" constant="111" id="xhd-RX-rcM"/>
                             <constraint firstAttribute="trailingMargin" secondItem="EkO-ub-j6M" secondAttribute="trailing" constant="26" id="ybG-Xq-OSk"/>
                         </constraints>
                     </view>
