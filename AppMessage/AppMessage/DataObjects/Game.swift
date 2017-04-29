@@ -21,8 +21,8 @@ let BECOMING_IT_SCORE = 10
 let CORRECT_VOTE_SCORE = 1
 let INCORRECT_VOTE_SCORE = -2
 
-let YES_VOTE_LIMIT = 2
-let NO_VOTE_LIMIT = 2
+let YES_VOTE_LIMIT = 1
+let NO_VOTE_LIMIT = 1
 
 enum VoteStatusEnum: String {
     case InProgress = "I",

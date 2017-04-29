@@ -315,13 +315,23 @@ class ChatViewController: JSQMessagesViewController, MKMapViewDelegate {
          if message.senderId == self.senderId {
             var firstName: String = getMyFirstName()
             var lastName: String = getMyLastName()
+            print("Me: " + firstName + "," + lastName);
             
-            initials = "\(String(describing: firstName.characters.first)) \(String(describing: lastName.characters.first))"
+            initials = String(describing: firstName.characters.first!) + String(describing: lastName.characters.first!)
+            print(initials)
             //initials = "\(Array(arrayLiteral: firstName)[0]) \(Array(arrayLiteral: lastName)[0])"
         } else {
             //initials = "\(Array(arrayLiteral: chatWithFirstName)[0]) \(Array(arrayLiteral: chatWithLastName)[0])"
-            initials = "\(String(describing: message.senderDisplayName.characters.first)) \(String(describing: message.senderDisplayName.characters.first))"
+            print("Someone: " + message.senderDisplayName);
+            // http://stackoverflow.com/questions/25678373/swift-split-a-string-into-an-array
+            let firstLast : [String] = message.senderDisplayName.components(separatedBy: " ")
+            let firstName : String = firstLast[0]
+            let lastName : String = firstLast[1]
+            initials = "\(firstName.characters.first!)\(lastName.characters.first!)"
+            print(initials)
         }
+
+//        initials = "RM"
 
         let size: CGFloat = 14
         let avatar = JSQMessagesAvatarImageFactory.avatarImage(withUserInitials: initials, backgroundColor: UIColor.lightGray, textColor: UIColor.white, font: UIFont.systemFont(ofSize: size), diameter: 30)
