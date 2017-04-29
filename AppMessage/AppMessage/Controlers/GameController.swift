@@ -398,6 +398,8 @@ class GameController {
 
 
         message.setFromFields(getMyRecordID())
+        message.FromFirstName = getMyFirstName()
+        message.FromLastName = getMyLastName()
         message.setToFields(GLOBAL_GROUP_ID) //self.chatWithId)
         message.GroupChatName = "Spotted Group" // groupChatName
         message.Text = "<foto>"
