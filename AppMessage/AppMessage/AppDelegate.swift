@@ -85,8 +85,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool{
         let urlComponents = NSURLComponents(url: url as URL, resolvingAgainstBaseURL: false)
         let items = (urlComponents?.queryItems)! as [NSURLQueryItem]
-        let propertyValue = items.first?.value
-        EVLog("opening url with token \(propertyValue)")
+        GLOBAL_GROUP_ID = (items.first?.value)!
+        GLOBAL_GROUP_NAME = items[1].value!.removingPercentEncoding!
+        EVLog("opening url with token \(items.first?.value) \(items[1].value!.removingPercentEncoding!)")
         return true
     }
 

@@ -160,7 +160,8 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         let messageController = MFMessageComposeViewController()
         messageController.messageComposeDelegate  = self
         //messageController.recipients = recipients
-        messageController.body = "Join me and " + GLOBAL_GROUP_NAME + " in our Spotted game!\n" + "URL"
+        let groupName =  "&name=" + GLOBAL_GROUP_NAME.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+        messageController.body = "Join me and " + GLOBAL_GROUP_NAME + " in our Spotted game!\n" + "iotSpotted://?group=" + GLOBAL_GROUP_ID + groupName
         self.present(messageController, animated: true, completion: nil)
     } else {
         //handle text messaging not available
