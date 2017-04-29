@@ -85,9 +85,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool{
         let urlComponents = NSURLComponents(url: url as URL, resolvingAgainstBaseURL: false)
         let items = (urlComponents?.queryItems)! as [NSURLQueryItem]
-        //propertyValue = items.first?.value
-        EVLog("opening url")
-        print(urlComponents?.queryItems)
+        let propertyValue = items.first?.value
+        EVLog("opening url with token \(propertyValue)")
         return true
     }
 
