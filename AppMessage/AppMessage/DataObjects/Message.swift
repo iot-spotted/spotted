@@ -9,7 +9,7 @@
 import CloudKit
 import EVReflection
 
-let GLOBAL_GROUP_ID = "46"
+let GLOBAL_GROUP_ID = "42"
 let GLOBAL_GROUP_NAME = "Spotted Group"
 
 enum MessageTypeEnum: String {

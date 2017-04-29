@@ -114,14 +114,14 @@ class CameraViewController: UIViewController {
         self.navTitle?.rightBarButtonItem = chat
         self.navTitle?.leftBarButtonItem = profile
         topBar.setItems([self.navTitle!], animated: false)
-        if ((self.gameController?.LocalGroupState.It_User_Name) == getMyName()){
-            self.titleLabel.text = "You're it!"
-            self.disableCamera()
-        }
-        else{
-            self.titleLabel.text = "Find " + (self.gameController?.LocalGroupState.It_User_Name)! + "!"
-            self.enableCamera()
-        }
+//        if ((self.gameController?.LocalGroupState.It_User_Name) == getMyName()){
+//            self.titleLabel.text = "You're it!"
+//            self.disableCamera()
+//        }
+//        else{
+//            self.titleLabel.text = "Find " + (self.gameController?.LocalGroupState.It_User_Name)! + "!"
+//            self.enableCamera()
+//        }
         
     }
     

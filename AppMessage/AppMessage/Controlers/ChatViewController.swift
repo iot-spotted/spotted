@@ -322,7 +322,9 @@ class ChatViewController: JSQMessagesViewController, MKMapViewDelegate {
             //initials = "\(Array(arrayLiteral: firstName)[0]) \(Array(arrayLiteral: lastName)[0])"
         } else {
             //initials = "\(Array(arrayLiteral: chatWithFirstName)[0]) \(Array(arrayLiteral: chatWithLastName)[0])"
-            print("Someone: " + message.senderDisplayName);
+            print("Someone: " + message.senderDisplayName)
+            print(message.senderDisplayName)
+
             // http://stackoverflow.com/questions/25678373/swift-split-a-string-into-an-array
             let firstLast : [String] = message.senderDisplayName.components(separatedBy: " ")
             let firstName : String = firstLast[0]
