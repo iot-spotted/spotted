@@ -41,6 +41,10 @@
 		7FEC7BFD1AEA5EE50004F81D /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7FEC7BFC1AEA5EE50004F81D /* LaunchScreen.xib */; };
 		7FF447441A16964C0003AE91 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FF447431A16964C0003AE91 /* ChatViewController.swift */; };
 		7FFD4C0D1A222E9D00E03FAB /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FFD4C0C1A222E9D00E03FAB /* Helper.swift */; };
+		A7FFFEF11EB95B290042A0F9 /* NewGroupController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FFFEF01EB95B290042A0F9 /* NewGroupController.swift */; };
+		A7FFFEF31EB960AD0042A0F9 /* greenbutton.png in Resources */ = {isa = PBXBuildFile; fileRef = A7FFFEF21EB960AD0042A0F9 /* greenbutton.png */; };
+		A7FFFEF51EB96A040042A0F9 /* crown.png in Resources */ = {isa = PBXBuildFile; fileRef = A7FFFEF41EB96A040042A0F9 /* crown.png */; };
+		A7FFFEF71EB96FE20042A0F9 /* crown2.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = A7FFFEF61EB96FE20042A0F9 /* crown2.jpeg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -90,6 +94,10 @@
 		7FFD4C0C1A222E9D00E03FAB /* Helper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		833539F8FEB264408D2BA9E0 /* Pods-AppMessage.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AppMessage.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-AppMessage/Pods-AppMessage.debug.xcconfig"; sourceTree = "<group>"; };
 		8C5A528F57F9FC15B6FB0AB1 /* Pods_tvOSTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_tvOSTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A7FFFEF01EB95B290042A0F9 /* NewGroupController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewGroupController.swift; sourceTree = "<group>"; };
+		A7FFFEF21EB960AD0042A0F9 /* greenbutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = greenbutton.png; sourceTree = "<group>"; };
+		A7FFFEF41EB96A040042A0F9 /* crown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = crown.png; sourceTree = "<group>"; };
+		A7FFFEF61EB96FE20042A0F9 /* crown2.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = crown2.jpeg; sourceTree = "<group>"; };
 		CA87045DC3B55E2BD1BFB441 /* Pods-OSXTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OSXTest.release.xcconfig"; path = "Pods/Target Support Files/Pods-OSXTest/Pods-OSXTest.release.xcconfig"; sourceTree = "<group>"; };
 		E3D7D5BA450A98468299F193 /* Pods-OSXTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OSXTest.debug.xcconfig"; path = "Pods/Target Support Files/Pods-OSXTest/Pods-OSXTest.debug.xcconfig"; sourceTree = "<group>"; };
 		EC96F6AF35160C66E41AA545 /* Pods-AppMessage.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AppMessage.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AppMessage/Pods-AppMessage.debug.xcconfig"; sourceTree = "<group>"; };
@@ -168,6 +176,9 @@
 			isa = PBXGroup;
 			children = (
 				2D978F391E67F5B60054C3EC /* hands.png */,
+				A7FFFEF61EB96FE20042A0F9 /* crown2.jpeg */,
+				A7FFFEF41EB96A040042A0F9 /* crown.png */,
+				A7FFFEF21EB960AD0042A0F9 /* greenbutton.png */,
 				2D978F371E67F24D0054C3EC /* icon.png */,
 				23AD4DA81E5E4FFA007EDCA7 /* CameraButton.png */,
 				2D064A7D1E5BDAB0001902B9 /* Test1@2x.png */,
@@ -197,6 +208,7 @@
 				7FF447431A16964C0003AE91 /* ChatViewController.swift */,
 				2DD9105D1E5E5A6C00C6D1D8 /* Util.swift */,
 				2DF0200D1E5FED3C0024E507 /* GameController.swift */,
+				A7FFFEF01EB95B290042A0F9 /* NewGroupController.swift */,
 			);
 			name = Controllers;
 			path = Controlers;
@@ -313,10 +325,13 @@
 				7FC46F651981259A000A875F /* test.png in Resources */,
 				7FC46F7B198134C8000A875F /* Storyboard.storyboard in Resources */,
 				7FC46F9419825B33000A875F /* Default-568h@2x.png in Resources */,
+				A7FFFEF71EB96FE20042A0F9 /* crown2.jpeg in Resources */,
+				A7FFFEF51EB96A040042A0F9 /* crown.png in Resources */,
 				7FEC7BFD1AEA5EE50004F81D /* LaunchScreen.xib in Resources */,
 				2D978F3A1E67F5B60054C3EC /* hands.png in Resources */,
 				2D064A7E1E5BDAB0001902B9 /* Test1@2x.png in Resources */,
 				2D978F381E67F24D0054C3EC /* icon.png in Resources */,
+				A7FFFEF31EB960AD0042A0F9 /* greenbutton.png in Resources */,
 				23AD4DAF1E5E517C007EDCA7 /* chatIcon.png in Resources */,
 				7FD051C119C591B2009B7FEE /* image-not-available.jpg in Resources */,
 				23AD4DAB1E5E4FFA007EDCA7 /* CameraButton.png in Resources */,
@@ -389,6 +404,7 @@
 				7F76554C197FF0FE008AD0D5 /* Asset.swift in Sources */,
 				2D0932101E57B176004900EE /* PhotoViewController.swift in Sources */,
 				2D759B321E5E5F7F00F7A1AD /* Game.swift in Sources */,
+				A7FFFEF11EB95B290042A0F9 /* NewGroupController.swift in Sources */,
 				7F434A2919628D490081F35C /* AppDelegate.swift in Sources */,
 				7FC46F9019824285000A875F /* CameraViewController.swift in Sources */,
 				2DF0200E1E5FED3C0024E507 /* GameController.swift in Sources */,

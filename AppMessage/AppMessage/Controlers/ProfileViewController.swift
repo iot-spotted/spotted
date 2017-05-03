@@ -13,6 +13,7 @@ import MessageUI
 
 class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, MFMessageComposeViewControllerDelegate {
     
+    @IBOutlet weak var crown: UIImageView!
     @IBOutlet var label: UILabel!
     @IBOutlet var scoreLabel: UILabel!
     @IBOutlet var scoreboardLabel: UILabel?
@@ -110,6 +111,12 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
                                         
                                         self.users = results
                                         self.scoreboardTable.reloadData()
+                                        if (self.users[0].Name == getMyName()){
+                                            self.label.text = getMyName() + " 👑"
+                                        }
+                                        else{
+                                            self.label.text = getMyName()
+                                        }
                                         return true
         }, errorHandler: { error in
             EVLog("<--- ERROR query User")
@@ -146,6 +153,12 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     // method to run when table view cell is tapped
     func tableView(_ scoreboardTable: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if (self.users[0].Name == getMyName()){
+            self.label.text = getMyName() + " 👑"
+        }
+        else{
+            self.label.text = getMyName()
+        }
         print("You tapped cell number \(indexPath.row).")
     }
 
