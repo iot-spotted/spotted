@@ -20,6 +20,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     @IBOutlet weak var scoreboardTable: UITableView!
     
     let cellReuseIdentifier = "cell"
+    var gameController: GameController? = nil
     var users:[GameUser] = []
     
     override func viewDidLoad() {
@@ -160,13 +161,13 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         let messageController = MFMessageComposeViewController()
         messageController.messageComposeDelegate  = self
         //messageController.recipients = recipients
-        let groupName =  "&name=" + GLOBAL_GROUP_NAME.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-        messageController.body = "Join me and " + GLOBAL_GROUP_NAME + " in our Spotted game!\n" + "iotSpotted://?group=" + GLOBAL_GROUP_ID + groupName
+        messageController.body = "Join me and " + GLOBAL_GROUP_NAME + " in our Spotted game!\n" + "iotSpotted://?token=" + (self.gameController?.LocalGroupState.recordID.recordName)!
         self.present(messageController, animated: true, completion: nil)
     } else {
         //handle text messaging not available
     }
     }
+
     
     func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
         controller.dismiss(animated: true, completion: nil)
