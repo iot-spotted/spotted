@@ -42,6 +42,7 @@ class MainViewController: UIViewController {
         self.gameController = GameController(parentView: self)
         self.cameraViewController.gameController = self.gameController
         self.chatViewController.gameController = self.gameController
+        self.profileViewController.gameController = self.gameController
         
         self.chatViewController.setContact("", fakeGroupChatName: "lol")
         
