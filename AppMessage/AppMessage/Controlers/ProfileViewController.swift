@@ -154,13 +154,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     // method to run when table view cell is tapped
     func tableView(_ scoreboardTable: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if (self.users[0].Name == getMyName()){
-            self.label.text = getMyName() + " 👑"
-        }
-        else{
-            self.label.text = getMyName()
-        }
-        print("You tapped cell number \(indexPath.row).")
+                print("You tapped cell number \(indexPath.row).")
     }
 
     
@@ -184,6 +178,17 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
         controller.dismiss(animated: true, completion: nil)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if (self.users[0].Name == getMyName()){
+            self.label.text = getMyName() + " 👑"
+        }
+        else{
+            self.label.text = getMyName()
+        }
+
     }
 }
 
